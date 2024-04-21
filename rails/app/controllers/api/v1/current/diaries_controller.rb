@@ -1,5 +1,6 @@
 class Api::V1::Current::DiariesController < Api::V1::BaseController
   before_action :authenticate_user!
+  before_action :set_diary, only: [:show, :update, :destroy]
 
   def index
     diaries = current_user.diaries.not_unsaved.order(created_at: :desc)
@@ -7,8 +8,7 @@ class Api::V1::Current::DiariesController < Api::V1::BaseController
   end
 
   def show
-    diary = current_user.diaries.find(params[:id])
-    render json: diary
+    render json: @diary
   end
 
   def create
@@ -17,14 +17,22 @@ class Api::V1::Current::DiariesController < Api::V1::BaseController
   end
 
   def update
-    diary = current_user.diaries.find(params[:id])
-    diary.update!(diary_params)
-    render json: diary
+    @diary.update!(diary_params)
+    render json: @diary
+  end
+
+  def destroy
+    @diary.destroy!
+    render json: @diary
   end
 
   private
 
     def diary_params
       params.require(:diary).permit(:title, :content, :image_url, :word_count, :status)
+    end
+
+    def set_diary
+      @diary = current_user.diaries.find(params[:id])
     end
 end
