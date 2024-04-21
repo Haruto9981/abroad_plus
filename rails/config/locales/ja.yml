@@ -5,3 +5,9 @@ ja:
         title: タイトル
         content: 本文
         word_count: 単語数
+  enums:
+    diary:
+      status:
+        unsaved: 未保存
+        personal: 非公開
+        shared: 公開
