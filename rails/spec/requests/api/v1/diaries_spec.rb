@@ -26,7 +26,7 @@ RSpec.describe "Api::V1::Diaries", type: :request do
       end
     end
 
-    context "page を params で送信した時" do
+    context "pageをparams で送信した時" do
       let(:params) { { page: 2 } }
 
       it "該当ページ目のレコード10件取得できる" do
@@ -49,10 +49,10 @@ RSpec.describe "Api::V1::Diaries", type: :request do
 
     let(:diary) { create(:diary, status:) }
 
-    context "diary_id に対応する diaries レコードが存在する時" do
+    context "diary_id に対応するdiariesレコードが存在する時" do
       let(:diary_id) { diary.id }
 
-      context "diaries レコードのステータスが公開の場合" do
+      context "diariesレコードのステータスが公開の場合" do
         let(:status) { :shared }
 
         it "正常にレコードを取得できる" do
@@ -64,7 +64,7 @@ RSpec.describe "Api::V1::Diaries", type: :request do
         end
       end
 
-      context "diaries レコードのステータスが非公開の場合" do
+      context "diariesレコードのステータスが非公開の場合" do
         let(:status) { :personal }
 
         it "ActiveRecord::RecordNotFound エラーが返る" do
@@ -73,7 +73,7 @@ RSpec.describe "Api::V1::Diaries", type: :request do
       end
     end
 
-    context "diary_id に対応する articles レコードが存在しない時" do
+    context "diary_idに対応する articlesレコードが存在しない時" do
       let(:diary_id) { 10_000_000_000 }
 
       it "ActiveRecord::RecordNotFound エラーが返る" do

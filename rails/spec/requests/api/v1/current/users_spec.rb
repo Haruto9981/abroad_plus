@@ -19,7 +19,7 @@ RSpec.describe "Api::V1::Current::Users", type: :request do
     context "ヘッダー情報が空のままリクエストが送信された時" do
       let(:headers) { nil }
 
-      it "unauthorized エラーが返る" do
+      it "unauthorizedエラーが返る" do
         subject
         res = JSON.parse(response.body)
         expect(res["errors"]).to eq ["ログインもしくはアカウント登録してください。"]
