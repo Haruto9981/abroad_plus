@@ -5,7 +5,7 @@ import Link from 'next/link'
 const Header = () => {
   return (
     <AppBar
-      position="static"
+      position="sticky"
       sx={{
         backgroundColor: 'white',
         color: 'black',
@@ -22,7 +22,7 @@ const Header = () => {
         >
           <Box>
             <Link href="/">
-              <Image src="/logo.png" width={100} height={100} alt="logo" />
+              <Image src="/logo.png" width={85} height={85} alt="logo" />
             </Link>
           </Box>
           <Box>

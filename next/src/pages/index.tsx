@@ -7,6 +7,7 @@ import useSWR from 'swr'
 import DiaryCard from '@/components/DiaryCard'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
+import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
 type DiaryProps = {
@@ -39,7 +40,7 @@ const Index: NextPage = () => {
   }
 
   return (
-    <Box sx={{ backgroundColor: '#ffe0b6', minHeight: '100vh' }}>
+    <Box css={styles.pageMinHeight} sx={{ backgroundColor: '#ffe0b6' }}>
       <Container maxWidth="md" sx={{ pt: 6 }}>
         <Grid container spacing={4}>
           {diaries.map((diary: DiaryProps, i: number) => (
@@ -48,6 +49,7 @@ const Index: NextPage = () => {
                 <DiaryCard
                   title={diary.title}
                   content={diary.content}
+                  imageUrl={diary.imageUrl}
                   wordCount={diary.wordCount}
                   fromToday={diary.fromToday}
                   userName={diary.user.name}
