@@ -27,10 +27,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/hello_mui": [
+    "/diaries/[id]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/hello_mui.js"
+      "static/chunks/pages/diaries/[id].js"
     ]
   },
   "ampFirstPages": []
