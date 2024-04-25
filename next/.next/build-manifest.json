@@ -36,6 +36,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/sign_in.js"
+    ],
+    "/sign_out": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/sign_out.js"
     ]
   },
   "ampFirstPages": []
