@@ -27,20 +27,20 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
+    "/confirmation": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/confirmation.js"
+    ],
     "/current/diaries": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/current/diaries.js"
     ],
-    "/current/diaries/edit/[id]": [
+    "/sign_in": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/current/diaries/edit/[id].js"
-    ],
-    "/diaries/[id]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/diaries/[id].js"
+      "static/chunks/pages/sign_in.js"
     ]
   },
   "ampFirstPages": []

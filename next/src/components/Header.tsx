@@ -97,20 +97,22 @@ const Header = () => {
                       Sign in
                     </Button>
                   </Link>
-                  <Button
-                    color="warning"
-                    variant="outlined"
-                    sx={{
-                      textTransform: 'none',
-                      fontSize: 16,
-                      borderRadius: 2,
-                      boxShadow: 'none',
-                      border: '1.5px solid #f5a500',
-                      ml: 2,
-                    }}
-                  >
-                    Sign Up
-                  </Button>
+                  <Link href="/sign_up">
+                    <Button
+                      color="warning"
+                      variant="outlined"
+                      sx={{
+                        textTransform: 'none',
+                        fontSize: 16,
+                        borderRadius: 2,
+                        boxShadow: 'none',
+                        border: '1.5px solid #f5a500',
+                        ml: 2,
+                      }}
+                    >
+                      Sign Up
+                    </Button>
+                  </Link>
                 </Box>
               )}
               {user.isSignedIn && (
