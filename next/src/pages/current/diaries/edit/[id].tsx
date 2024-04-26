@@ -84,7 +84,7 @@ const CurrentDiariesEdit: NextPage = () => {
   const onSubmit: SubmitHandler<DiaryFormData> = (data) => {
     if (data.title == '') {
       return setSnackbar({
-        message: '記事の保存にはタイトルが必要です',
+        message: '日記の保存にはタイトルが必要です',
         severity: 'error',
         pathname: '/current/diaries/edit/[id]',
       })
@@ -124,7 +124,7 @@ const CurrentDiariesEdit: NextPage = () => {
     })
       .then(() => {
         setSnackbar({
-          message: '記事を保存しました',
+          message: '日記を保存しました',
           severity: 'success',
           pathname: '/current/diaries/edit/[id]',
         })
@@ -132,7 +132,7 @@ const CurrentDiariesEdit: NextPage = () => {
       .catch((err: AxiosError<{ error: string }>) => {
         console.log(err.message)
         setSnackbar({
-          message: '記事の保存に失敗しました',
+          message: '日記の保存に失敗しました',
           severity: 'error',
           pathname: '/current/diaries/edit/[id]',
         })
@@ -237,7 +237,7 @@ const CurrentDiariesEdit: NextPage = () => {
                   helperText={fieldState.error?.message}
                   multiline
                   fullWidth
-                  placeholder="Write in Markdown Text"
+                  placeholder="Write in Text"
                   rows={25}
                   sx={{ backgroundColor: 'white' }}
                 />
