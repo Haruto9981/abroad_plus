@@ -1,9 +1,10 @@
 {
   "/_app": "pages/_app.js",
-  "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/current/diaries/[id]": "pages/current/diaries/[id].js",
   "/": "pages/index.js",
-  "/sign_out": "pages/sign_out.js",
-  "/sign_in": "pages/sign_in.js",
+  "/current/diaries": "pages/current/diaries.js",
+  "/current/diaries/edit/[id]": "pages/current/diaries/edit/[id].js",
   "/diaries/[id]": "pages/diaries/[id].js"
 }

@@ -35,9 +35,8 @@ const Index: NextPage = () => {
 
   const meta = camelcaseKeys(data.meta)
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
     router.push('/?page=' + value)
-  }
 
   return (
     <Box css={styles.pageMinHeight} sx={{ backgroundColor: '#ffe0b6' }}>
