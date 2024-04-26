@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, Typography } from '@mui/material'
 
 type diaryCardProps = {
+  id: number
   title: string
   content: string
   imageUrl: string

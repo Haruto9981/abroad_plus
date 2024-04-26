@@ -1,6 +1,16 @@
-import { Box, Container, Typography, Card } from '@mui/material'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import {
+  Avatar,
+  Box,
+  Container,
+  Typography,
+  Card,
+  Tooltip,
+  IconButton,
+} from '@mui/material'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import Error from '@/components/Error'
@@ -42,6 +52,17 @@ const DiaryDetail: NextPage = () => {
     >
       <Container maxWidth="lg">
         <Box sx={{ maxWidth: 840, m: 'auto', pt: 6, pb: 3 }}>
+          <Box sx={{ width: 40, height: 40 }}>
+            <Link href={'/current/diaries'}>
+              <Avatar>
+                <Tooltip title="日記一覧に戻る">
+                  <IconButton sx={{ backgroundColor: 'white' }}>
+                    <ChevronLeftIcon sx={{ color: '#99AAB6' }} />
+                  </IconButton>
+                </Tooltip>
+              </Avatar>
+            </Link>
+          </Box>
           <Box sx={{ textAlign: 'center' }}>
             <Typography
               component="h2"
