@@ -43,16 +43,11 @@ const Profile: NextPage = () => {
   const [user] = useUserState()
   const [, setSnackbar] = useSnackbarState()
   const [selectedCountry, setSelectedCountry] = useState('')
-  const [selectedUni, setSelectedUni] = useState('')
   const [isFetched, setIsFetched] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleChangeForCountry = (event: SelectChangeEvent) => {
     setSelectedCountry(event.target.value)
-  }
-
-  const handleChangeForUni = (event: SelectChangeEvent) => {
-    setSelectedUni(event.target.value)
   }
 
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
@@ -180,9 +175,6 @@ const Profile: NextPage = () => {
                   {...field}
                   sx={{ backgroundColor: 'white' }}
                   displayEmpty
-                  id="country"
-                  value={selectedCountry}
-                  onChange={handleChangeForCountry}
                 >
                   <MenuItem value="">
                     <em>選択してください</em>
@@ -202,56 +194,40 @@ const Profile: NextPage = () => {
             name="uni"
             control={control}
             render={({ field }) => (
-              <Select
-                {...field}
-                sx={{ backgroundColor: 'white' }}
-                displayEmpty
-                value={selectedUni}
-                onChange={handleChangeForUni}
-              >
+              <Select {...field} sx={{ backgroundColor: 'white' }} displayEmpty>
                 <MenuItem value="">
                   <em>選択してください</em>
                 </MenuItem>
-                {selectedCountry == 'USA' && [
-                  <MenuItem key="csumb" value="CSUMB">
-                    カリフォルニア州立大学モントレーベイ校
-                  </MenuItem>,
-                  <MenuItem key="kansas" value="Kansas">
-                    カンザス大学
-                  </MenuItem>,
-                  <MenuItem key="utah" value="Utah">
-                    ユタ大学
-                  </MenuItem>,
-                ]}
-                {selectedCountry == 'UK' && [
-                  <MenuItem key="aston" value="Aston">
-                    アストン大学
-                  </MenuItem>,
-                  <MenuItem key="cccu" value="CCCU">
-                    カンタベリー・クライスト・チャーチ大学
-                  </MenuItem>,
-                ]}
-                {selectedCountry == 'Australia' && [
-                  <MenuItem key="queensland" value="Queensland">
-                    クイーンズランド大学
-                  </MenuItem>,
-                  <MenuItem key="southerncross" value="SouthernCross">
-                    サザンクロス大学
-                  </MenuItem>,
-                ]}
-                {selectedCountry == 'Canada' && [
-                  <MenuItem key="alberta" value="Alberta">
-                    アルバータ
-                  </MenuItem>,
-                ]}
-                {selectedCountry == 'NewZealand' && [
-                  <MenuItem key="otago" value="Otago">
-                    オタゴ大学
-                  </MenuItem>,
-                  <MenuItem key="auckland" value="Auckland">
-                    オークランド大学
-                  </MenuItem>,
-                ]}
+                <MenuItem key="csumb" value="CSUMB">
+                  カリフォルニア州立大学モントレーベイ校
+                </MenuItem>
+                <MenuItem key="kansas" value="Kansas">
+                  カンザス大学
+                </MenuItem>
+                <MenuItem key="utah" value="Utah">
+                  ユタ大学
+                </MenuItem>
+                <MenuItem key="aston" value="Aston">
+                  アストン大学
+                </MenuItem>
+                <MenuItem key="cccu" value="Canterbury Christ Church">
+                  カンタベリー・クライスト・チャーチ大学
+                </MenuItem>
+                <MenuItem key="queensland" value="Queensland">
+                  クイーンズランド大学
+                </MenuItem>
+                <MenuItem key="southerncross" value="SouthernCross">
+                  サザンクロス大学
+                </MenuItem>
+                <MenuItem key="alberta" value="Alberta">
+                  アルバータ
+                </MenuItem>
+                <MenuItem key="otago" value="Otago">
+                  オタゴ大学
+                </MenuItem>
+                <MenuItem key="auckland" value="Auckland">
+                  オークランド大学
+                </MenuItem>
               </Select>
             )}
           />
@@ -321,29 +297,3 @@ const Profile: NextPage = () => {
 }
 
 export default Profile
-
-{
-  /* <Typography sx={{ mt: 3, mb: 1 }}>留学先の国</Typography>
-        <Controller
-          name="country"
-          control={control}
-          render={({ field, fieldState }) => (
-            <TextField
-              sx={{ backgroundColor: 'white' }}
-              {...field}
-              select
-              variant="standard"
-              helperText={fieldState.error?.message}
-            >
-              <MenuItem value="">
-                <em>選択してください</em>
-              </MenuItem>
-              <MenuItem value="USA">アメリカ合衆国</MenuItem>
-              <MenuItem value="UK">イギリス</MenuItem>
-              <MenuItem value="Australia">オーストラリア</MenuItem>
-              <MenuItem value="Canada">カナダ</MenuItem>
-              <MenuItem value="NewZealand">ニュージーランド</MenuItem>
-            </TextField>
-          )}
-        /> */
-}
