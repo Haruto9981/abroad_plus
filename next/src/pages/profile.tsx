@@ -5,37 +5,47 @@ import {
   TextField,
   Typography,
   Stack,
-  FormControl,
+  FormHelperText,
   MenuItem,
+  FormControl,
 } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import axios, { AxiosResponse, AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
-import { useSnackbarState } from '@/hooks/useGlobalState'
+import useSWR from 'swr'
+import Error from '@/components/Error'
+import Loading from '@/components/Loading'
+import { useUserState, useSnackbarState } from '@/hooks/useGlobalState'
 import { styles } from '@/styles'
+import { fetcher } from '@/utils'
 
-type SignUpFormData = {
-  email: string
-  password: string
+type profileProps = {
   name: string
-  bio: string
+  country: string
+  uni: string
   start_date: Date
   end_date: Date
+  bio: string
 }
 
-const SignUp: NextPage = () => {
-  const router = useRouter()
+type profileFormData = {
+  name: string
+  country: string
+  uni: string
+  start_date: Date
+  end_date: Date
+  bio: string
+}
+
+const Profile: NextPage = () => {
+  const [user] = useUserState()
   const [, setSnackbar] = useSnackbarState()
-  const [isLoading, setIsLoading] = useState(false)
   const [selectedCountry, setSelectedCountry] = useState('')
   const [selectedUni, setSelectedUni] = useState('')
-
-  const { handleSubmit, control } = useForm<SignUpFormData>({
-    defaultValues: { email: '', password: '' },
-  })
+  const [isFetched, setIsFetched] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleChangeForCountry = (event: SelectChangeEvent) => {
     setSelectedCountry(event.target.value)
@@ -45,63 +55,89 @@ const SignUp: NextPage = () => {
     setSelectedUni(event.target.value)
   }
 
-  const validationRules = {
-    email: {
-      required: 'メールアドレスを入力してください。',
-      pattern: {
-        value:
-          /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
-        message: '正しい形式のメールアドレスを入力してください。',
-      },
-    },
-    password: {
-      required: 'パスワードを入力してください。',
-    },
-    name: {
-      required: 'ユーザー名を入力してください。',
-    },
-  }
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
+  const { data, error } = useSWR(user.isSignedIn ? url : null, fetcher)
 
-  const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
-    const SignUp = async (data: SignUpFormData) => {
-      setIsLoading(true)
-      const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/auth'
-      const headers = { 'Content-Type': 'application/json' }
-      const confirmSuccessUrl =
-        process.env.NEXT_PUBLIC_FRONT_BASE_URL + '/sign_in'
-
-      await axios({
-        method: 'POST',
-        url: url,
-        data: { ...data, confirm_success_url: confirmSuccessUrl },
-        headers: headers,
-      })
-        .then((res: AxiosResponse) => {
-          localStorage.setItem(
-            'access-token',
-            res.headers['access-token'] || '',
-          )
-          localStorage.setItem('client', res.headers['client'] || '')
-          localStorage.setItem('uid', res.headers['uid'] || '')
-          setSnackbar({
-            message: '認証メールをご確認ください',
-            severity: 'success',
-            pathname: '/',
-          })
-          router.push('/')
-        })
-        .catch((e: AxiosError<{ error: string }>) => {
-          console.log(e.message)
-          setSnackbar({
-            message: '不正なユーザー情報です',
-            severity: 'error',
-            pathname: '/sign_up',
-          })
-          setIsLoading(false)
-        })
+  const profile: profileProps = useMemo(() => {
+    if (!data) {
+      return {
+        name: '',
+        country: '',
+        uni: '',
+        start_date: null,
+        end_date: null,
+        bio: '',
+      }
     }
-    SignUp(data)
+    return {
+      name: data.name == null ? '' : data.name,
+      country: data.country == null ? '' : data.country,
+      uni: data.uni == null ? '' : data.uni,
+      start_date: data.start_date == null ? '' : data.start_date,
+      end_date: data.end_date == null ? '' : data.end_date,
+      bio: data.bio == null ? '' : data.bio,
+    }
+  }, [data])
+
+  const { handleSubmit, control, reset } = useForm<profileFormData>({
+    defaultValues: { profile },
+  })
+
+  useEffect(() => {
+    if (data) {
+      reset(profile)
+      setIsFetched(true)
+    }
+  }, [data, profile, reset])
+
+  const onSubmit: SubmitHandler<profileFormData> = (data) => {
+    if (data.name == '') {
+      return setSnackbar({
+        message: '名前を入力してください',
+        severity: 'error',
+        pathname: '/profile',
+      })
+    }
+
+    setIsLoading(true)
+
+    const patchUrl = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'access-token': localStorage.getItem('access-token'),
+      client: localStorage.getItem('client'),
+      uid: localStorage.getItem('uid'),
+    }
+
+    const patchData = { ...data }
+
+    axios({
+      method: 'PATCH',
+      url: patchUrl,
+      data: patchData,
+      headers: headers,
+    })
+      .then(() => {
+        setSnackbar({
+          message: 'プロフィールを更新しました',
+          severity: 'success',
+          pathname: '/profile',
+        })
+      })
+      .catch((err: AxiosError<{ error: string }>) => {
+        console.log(err.message)
+        setSnackbar({
+          message: 'プロフィールの更新に失敗しました',
+          severity: 'error',
+          pathname: '/profile',
+        })
+      })
+    setIsLoading(false)
   }
+
+  if (error) return <Error />
+  if (!data || !isFetched) return <Loading />
 
   return (
     <Box
@@ -124,7 +160,6 @@ const SignUp: NextPage = () => {
           <Controller
             name="name"
             control={control}
-            rules={validationRules.name}
             render={({ field, fieldState }) => (
               <TextField
                 {...field}
@@ -136,85 +171,96 @@ const SignUp: NextPage = () => {
             )}
           />
           <Typography sx={{ mt: 3, mb: 1 }}>留学先の国</Typography>
-          <FormControl>
-            <Select
-              name="country"
-              value={selectedCountry}
-              onChange={handleChangeForCountry}
-              sx={{ backgroundColor: 'white' }}
-              displayEmpty
-            >
-              <MenuItem value="">
-                <em>選択してください</em>
-              </MenuItem>
-              <MenuItem value="USA">アメリカ合衆国</MenuItem>
-              <MenuItem value="UK">イギリス</MenuItem>
-              <MenuItem value="Australia">オーストラリア</MenuItem>
-              <MenuItem value="Canada">カナダ</MenuItem>
-              <MenuItem value="NewZealand">ニュージーランド</MenuItem>
-            </Select>
-          </FormControl>
+          <Controller
+            name="country"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormControl error={fieldState.invalid}>
+                <Select
+                  {...field}
+                  sx={{ backgroundColor: 'white' }}
+                  displayEmpty
+                  id="country"
+                  value={selectedCountry}
+                  onChange={handleChangeForCountry}
+                >
+                  <MenuItem value="">
+                    <em>選択してください</em>
+                  </MenuItem>
+                  <MenuItem value="USA">アメリカ合衆国</MenuItem>
+                  <MenuItem value="UK">イギリス</MenuItem>
+                  <MenuItem value="Australia">オーストラリア</MenuItem>
+                  <MenuItem value="Canada">カナダ</MenuItem>
+                  <MenuItem value="NewZealand">ニュージーランド</MenuItem>
+                </Select>
+                <FormHelperText>{fieldState.error?.message}</FormHelperText>
+              </FormControl>
+            )}
+          />
           <Typography sx={{ mt: 3, mb: 1 }}>留学先の大学</Typography>
-          <FormControl>
-            <Select
-              name="uni"
-              value={selectedUni}
-              onChange={handleChangeForUni}
-              sx={{ backgroundColor: 'white' }}
-              displayEmpty
-            >
-              <MenuItem value="">
-                <em>選択してください</em>
-              </MenuItem>
-              {selectedCountry == 'USA' && [
-                <MenuItem key="csumb" value="CSUMB">
-                  カリフォルニア州立大学モントレーベイ校
-                </MenuItem>,
-                <MenuItem key="kansas" value="Kansas">
-                  カンザス大学
-                </MenuItem>,
-                <MenuItem key="utah" value="Utah">
-                  ユタ大学
-                </MenuItem>,
-              ]}
-              {selectedCountry == 'UK' && [
-                <MenuItem key="aston" value="Aston">
-                  アストン大学
-                </MenuItem>,
-                <MenuItem key="cccu" value="CCCU">
-                  カンタベリー・クライスト・チャーチ大学
-                </MenuItem>,
-              ]}
-              {selectedCountry == 'Australia' && [
-                <MenuItem key="queensland" value="Queensland">
-                  クイーンズランド大学
-                </MenuItem>,
-                <MenuItem key="southerncross" value="SouthernCross">
-                  サザンクロス大学
-                </MenuItem>,
-              ]}
-              {selectedCountry == 'Canada' && [
-                <MenuItem key="alberta" value="Alberta">
-                  アルバータ
-                </MenuItem>,
-              ]}
-              {selectedCountry == 'NewZealand' && [
-                <MenuItem key="otago" value="Otago">
-                  オタゴ大学
-                </MenuItem>,
-                <MenuItem key="auckland" value="Auckland">
-                  オークランド大学
-                </MenuItem>,
-              ]}
-            </Select>
-          </FormControl>
+          <Controller
+            name="uni"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                sx={{ backgroundColor: 'white' }}
+                displayEmpty
+                value={selectedUni}
+                onChange={handleChangeForUni}
+              >
+                <MenuItem value="">
+                  <em>選択してください</em>
+                </MenuItem>
+                {selectedCountry == 'USA' && [
+                  <MenuItem key="csumb" value="CSUMB">
+                    カリフォルニア州立大学モントレーベイ校
+                  </MenuItem>,
+                  <MenuItem key="kansas" value="Kansas">
+                    カンザス大学
+                  </MenuItem>,
+                  <MenuItem key="utah" value="Utah">
+                    ユタ大学
+                  </MenuItem>,
+                ]}
+                {selectedCountry == 'UK' && [
+                  <MenuItem key="aston" value="Aston">
+                    アストン大学
+                  </MenuItem>,
+                  <MenuItem key="cccu" value="CCCU">
+                    カンタベリー・クライスト・チャーチ大学
+                  </MenuItem>,
+                ]}
+                {selectedCountry == 'Australia' && [
+                  <MenuItem key="queensland" value="Queensland">
+                    クイーンズランド大学
+                  </MenuItem>,
+                  <MenuItem key="southerncross" value="SouthernCross">
+                    サザンクロス大学
+                  </MenuItem>,
+                ]}
+                {selectedCountry == 'Canada' && [
+                  <MenuItem key="alberta" value="Alberta">
+                    アルバータ
+                  </MenuItem>,
+                ]}
+                {selectedCountry == 'NewZealand' && [
+                  <MenuItem key="otago" value="Otago">
+                    オタゴ大学
+                  </MenuItem>,
+                  <MenuItem key="auckland" value="Auckland">
+                    オークランド大学
+                  </MenuItem>,
+                ]}
+              </Select>
+            )}
+          />
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ mr: 4 }}>
               <Typography sx={{ mt: 3, mb: 1 }}>留学開始日</Typography>
               <Controller
                 name="start_date"
                 control={control}
-                rules={validationRules.name}
                 render={({ field, fieldState }) => (
                   <TextField
                     {...field}
@@ -231,7 +277,6 @@ const SignUp: NextPage = () => {
               <Controller
                 name="end_date"
                 control={control}
-                rules={validationRules.name}
                 render={({ field, fieldState }) => (
                   <TextField
                     {...field}
@@ -248,7 +293,6 @@ const SignUp: NextPage = () => {
           <Controller
             name="bio"
             control={control}
-            rules={validationRules.name}
             render={({ field, fieldState }) => (
               <TextField
                 multiline
@@ -276,4 +320,30 @@ const SignUp: NextPage = () => {
   )
 }
 
-export default SignUp
+export default Profile
+
+{
+  /* <Typography sx={{ mt: 3, mb: 1 }}>留学先の国</Typography>
+        <Controller
+          name="country"
+          control={control}
+          render={({ field, fieldState }) => (
+            <TextField
+              sx={{ backgroundColor: 'white' }}
+              {...field}
+              select
+              variant="standard"
+              helperText={fieldState.error?.message}
+            >
+              <MenuItem value="">
+                <em>選択してください</em>
+              </MenuItem>
+              <MenuItem value="USA">アメリカ合衆国</MenuItem>
+              <MenuItem value="UK">イギリス</MenuItem>
+              <MenuItem value="Australia">オーストラリア</MenuItem>
+              <MenuItem value="Canada">カナダ</MenuItem>
+              <MenuItem value="NewZealand">ニュージーランド</MenuItem>
+            </TextField>
+          )}
+        /> */
+}
