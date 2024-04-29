@@ -153,6 +153,14 @@ const Header = () => {
                       </Typography>
                     </Box>
                     <Divider />
+                    <Link href="/profile">
+                      <MenuItem>
+                        <ListItemIcon>
+                          <PersonIcon fontSize="small" />
+                        </ListItemIcon>
+                        プロフィール
+                      </MenuItem>
+                    </Link>
                     <Link href="/current/diaries">
                       <MenuItem>
                         <ListItemIcon>

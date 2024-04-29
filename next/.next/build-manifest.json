@@ -22,20 +22,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/current/diaries": [
+    "/profile": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/current/diaries.js"
-    ],
-    "/current/diaries/[id]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/current/diaries/[id].js"
-    ],
-    "/current/diaries/edit/[id]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/current/diaries/edit/[id].js"
+      "static/chunks/pages/profile.js"
     ]
   },
   "ampFirstPages": []
