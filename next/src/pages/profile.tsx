@@ -9,7 +9,7 @@ import {
   MenuItem,
   FormControl,
 } from '@mui/material'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Select from '@mui/material/Select'
 import axios, { AxiosError } from 'axios'
 import type { NextPage } from 'next'
 import { useEffect, useState, useMemo } from 'react'
@@ -42,13 +42,8 @@ type profileFormData = {
 const Profile: NextPage = () => {
   const [user] = useUserState()
   const [, setSnackbar] = useSnackbarState()
-  const [selectedCountry, setSelectedCountry] = useState('')
   const [isFetched, setIsFetched] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const handleChangeForCountry = (event: SelectChangeEvent) => {
-    setSelectedCountry(event.target.value)
-  }
 
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
   const { data, error } = useSWR(user.isSignedIn ? url : null, fetcher)
