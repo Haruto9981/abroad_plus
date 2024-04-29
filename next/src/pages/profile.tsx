@@ -37,6 +37,7 @@ type profileFormData = {
   start_date: Date
   end_date: Date
   bio: string
+  profile: profileProps
 }
 
 const Profile: NextPage = () => {
