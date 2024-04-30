@@ -8,11 +8,14 @@ import {
   FormHelperText,
   MenuItem,
   FormControl,
+  Avatar,
+  Button,
+  SelectChangeEvent,
 } from '@mui/material'
 import Select from '@mui/material/Select'
 import axios, { AxiosError } from 'axios'
 import type { NextPage } from 'next'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, ChangeEvent } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import useSWR from 'swr'
 import Error from '@/components/Error'
@@ -25,8 +28,8 @@ type profileProps = {
   name: string
   country: string
   uni: string
-  start_date: Date
-  end_date: Date
+  start_date: string
+  end_date: string
   bio: string
 }
 
@@ -34,9 +37,10 @@ type profileFormData = {
   name: string
   country: string
   uni: string
-  start_date: Date
-  end_date: Date
+  start_date: string
+  end_date: string
   bio: string
+  image: string
   profile: profileProps
 }
 
@@ -45,6 +49,9 @@ const Profile: NextPage = () => {
   const [, setSnackbar] = useSnackbarState()
   const [isFetched, setIsFetched] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [selectedFile, setSelectedFile] = useState<File>()
+  const [previewUrl, setPreviewUrl] = useState('')
+  const [country, setCountry] = useState('')
 
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
   const { data, error } = useSWR(user.isSignedIn ? url : null, fetcher)
@@ -55,9 +62,12 @@ const Profile: NextPage = () => {
         name: '',
         country: '',
         uni: '',
-        start_date: null,
-        end_date: null,
+        start_date: '',
+        end_date: '',
         bio: '',
+        image: {
+          url: '',
+        },
       }
     }
     return {
@@ -74,12 +84,35 @@ const Profile: NextPage = () => {
     defaultValues: { profile },
   })
 
+  const handleCountryChange = (e: SelectChangeEvent<string>) => {
+    setCountry(e.target.value)
+  }
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+
+    if (file) {
+      setSelectedFile(file)
+
+      const reader = new FileReader()
+      reader.onload = () => {
+        const result = reader.result
+        if (typeof result === 'string') {
+          setPreviewUrl(result)
+        }
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   useEffect(() => {
     if (data) {
       reset(profile)
       setIsFetched(true)
     }
   }, [data, profile, reset])
+
+  console.log(selectedFile)
 
   const onSubmit: SubmitHandler<profileFormData> = (data) => {
     if (data.name == '') {
@@ -95,18 +128,28 @@ const Profile: NextPage = () => {
     const patchUrl = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
 
     const headers = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       'access-token': localStorage.getItem('access-token'),
       client: localStorage.getItem('client'),
       uid: localStorage.getItem('uid'),
     }
 
-    const patchData = { ...data }
+    const formData = new FormData()
+
+    formData.append('user[name]', data.name)
+    formData.append('user[country]', data.country)
+    formData.append('user[uni]', data.uni)
+    formData.append('user[start_date]', data.start_date)
+    formData.append('user[end_date]', data.end_date)
+    formData.append('user[bio]', data.bio)
+    if (selectedFile) {
+      formData.append('user[image]', selectedFile)
+    }
 
     axios({
       method: 'PATCH',
       url: patchUrl,
-      data: patchData,
+      data: formData,
       headers: headers,
     })
       .then(() => {
@@ -147,6 +190,55 @@ const Profile: NextPage = () => {
           </Typography>
         </Box>
         <Stack component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            {!selectedFile && (
+              <>
+                {data.image.url ? (
+                  <Avatar
+                    sx={{ width: 175, height: 175, mb: 2 }}
+                    alt="プレビュー"
+                    src={data.image.url}
+                  />
+                ) : (
+                  <Avatar
+                    sx={{ width: 175, height: 175, mb: 2 }}
+                    alt="プレビュー"
+                  />
+                )}
+              </>
+            )}
+            {selectedFile && (
+              <Avatar
+                sx={{ width: 175, height: 175, mb: 2 }}
+                alt="プレビュー"
+                src={previewUrl}
+              />
+            )}
+            <Controller
+              name="image"
+              control={control}
+              render={({ field }) => (
+                <Button variant="contained" component="label" color="warning">
+                  画像を選択
+                  <input
+                    {...field}
+                    type="file"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      field.onChange(e)
+                      handleFileChange(e)
+                    }}
+                  />
+                </Button>
+              )}
+            />
+          </Box>
           <Typography sx={{ mb: 1 }}>名前</Typography>
           <Controller
             name="name"
@@ -157,6 +249,9 @@ const Profile: NextPage = () => {
                 type="text"
                 error={fieldState.invalid}
                 helperText={fieldState.error?.message}
+                onChange={(e) => {
+                  field.onChange(e)
+                }}
                 sx={{ backgroundColor: 'white' }}
               />
             )}
@@ -171,6 +266,10 @@ const Profile: NextPage = () => {
                   {...field}
                   sx={{ backgroundColor: 'white' }}
                   displayEmpty
+                  onChange={(e) => {
+                    field.onChange(e)
+                    handleCountryChange(e)
+                  }}
                 >
                   <MenuItem value="">
                     <em>選択してください</em>
@@ -194,36 +293,78 @@ const Profile: NextPage = () => {
                 <MenuItem value="">
                   <em>選択してください</em>
                 </MenuItem>
-                <MenuItem key="csumb" value="CSUMB">
-                  カリフォルニア州立大学モントレーベイ校
-                </MenuItem>
-                <MenuItem key="kansas" value="Kansas">
-                  カンザス大学
-                </MenuItem>
-                <MenuItem key="utah" value="Utah">
-                  ユタ大学
-                </MenuItem>
-                <MenuItem key="aston" value="Aston">
-                  アストン大学
-                </MenuItem>
-                <MenuItem key="cccu" value="Canterbury Christ Church">
-                  カンタベリー・クライスト・チャーチ大学
-                </MenuItem>
-                <MenuItem key="queensland" value="Queensland">
-                  クイーンズランド大学
-                </MenuItem>
-                <MenuItem key="southerncross" value="SouthernCross">
-                  サザンクロス大学
-                </MenuItem>
-                <MenuItem key="alberta" value="Alberta">
-                  アルバータ
-                </MenuItem>
-                <MenuItem key="otago" value="Otago">
-                  オタゴ大学
-                </MenuItem>
-                <MenuItem key="auckland" value="Auckland">
-                  オークランド大学
-                </MenuItem>
+                {!country && [
+                  <MenuItem key="csumb" value="CSUMB">
+                    カリフォルニア州立大学モントレーベイ校
+                  </MenuItem>,
+                  <MenuItem key="kansas" value="Kansas">
+                    カンザス大学
+                  </MenuItem>,
+                  <MenuItem key="utah" value="Utah">
+                    ユタ大学
+                  </MenuItem>,
+                  <MenuItem key="aston" value="Aston">
+                    アストン大学
+                  </MenuItem>,
+                  <MenuItem key="cccu" value="Canterbury Christ Church">
+                    カンタベリー・クライスト・チャーチ大学
+                  </MenuItem>,
+                  <MenuItem key="queensland" value="Queensland">
+                    クイーンズランド大学
+                  </MenuItem>,
+                  <MenuItem key="southerncross" value="SouthernCross">
+                    サザンクロス大学
+                  </MenuItem>,
+                  <MenuItem key="alberta" value="Alberta">
+                    アルバータ
+                  </MenuItem>,
+                  <MenuItem key="otago" value="Otago">
+                    オタゴ大学
+                  </MenuItem>,
+                  <MenuItem key="auckland" value="Auckland">
+                    オークランド大学
+                  </MenuItem>,
+                ]}
+                {country === 'USA' && [
+                  <MenuItem key="csumb" value="CSUMB">
+                    カリフォルニア州立大学モントレーベイ校
+                  </MenuItem>,
+                  <MenuItem key="kansas" value="Kansas">
+                    カンザス大学
+                  </MenuItem>,
+                  <MenuItem key="utah" value="Utah">
+                    ユタ大学
+                  </MenuItem>,
+                ]}
+                {country === 'UK' && [
+                  <MenuItem key="aston" value="Aston">
+                    アストン大学
+                  </MenuItem>,
+                  <MenuItem key="cccu" value="Canterbury Christ Church">
+                    カンタベリー・クライスト・チャーチ大学
+                  </MenuItem>,
+                ]}
+                {country === 'Australia' && [
+                  <MenuItem key="queensland" value="Queensland">
+                    クイーンズランド大学
+                  </MenuItem>,
+                  <MenuItem key="southerncross" value="SouthernCross">
+                    サザンクロス大学
+                  </MenuItem>,
+                ]}
+                {country === 'Canada' && [
+                  <MenuItem key="alberta" value="Alberta">
+                    アルバータ
+                  </MenuItem>,
+                ]}
+                {country === 'NewZealand' && [
+                  <MenuItem key="otago" value="Otago">
+                    オタゴ大学
+                  </MenuItem>,
+                  <MenuItem key="auckland" value="Auckland">
+                    オークランド大学
+                  </MenuItem>,
+                ]}
               </Select>
             )}
           />
