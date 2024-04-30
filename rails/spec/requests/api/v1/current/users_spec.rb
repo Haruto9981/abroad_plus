@@ -11,7 +11,7 @@ RSpec.describe "Api::V1::Current::Users", type: :request do
       it "正常にレコードを取得できる" do
         subject
         res = JSON.parse(response.body)
-        expect(res.keys).to eq ["id", "name", "email", "country", "uni", "start_date", "end_date", "bio"]
+        expect(res.keys).to eq ["id", "name", "email", "country", "uni", "start_date", "end_date", "bio", "image"]
         expect(response).to have_http_status(:ok)
       end
     end
