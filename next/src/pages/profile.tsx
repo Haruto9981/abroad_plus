@@ -178,6 +178,7 @@ const Profile: NextPage = () => {
       css={styles.pageMinHeight}
       sx={{
         backgroundColor: '#ffe0b6',
+        pb: 10,
       }}
     >
       <Container maxWidth="md">

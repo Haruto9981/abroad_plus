@@ -1,5 +1,5 @@
 class DiarySerializer < ActiveModel::Serializer
-  attributes :id, :title, :content, :image_url, :word_count, :status, :created_at, :from_today
+  attributes :id, :title, :content, :image_url, :word_count, :status, :created_at, :date, :w_day
   belongs_to :user, serializer: UserSerializer
 
   def status
@@ -10,27 +10,19 @@ class DiarySerializer < ActiveModel::Serializer
     object.created_at.strftime("%Y/%m/%d")
   end
 
-  def from_today # rubocop:disable Metrics/AbcSize
-    now = Time.zone.now
-    created_at = object.created_at
+  def date
+    day = object.created_at.strftime('%d')
 
-    months = (now.year - created_at.year) * 12 + now.month - created_at.month - ((now.day >= created_at.day) ? 0 : 1)
-    years = months.div(12)
+    month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    month = month_list[object.created_at.strftime('%m').to_i - 1]
 
-    return "#{years}年前" if years > 0
-    return "#{months}ヶ月前" if months > 0
+    year = object.created_at.strftime('%Y')
 
-    seconds = (Time.zone.now - object.created_at).round
+    return "#{day} #{month} #{year}"
+  end
 
-    days = seconds / (60 * 60 * 24)
-    return "#{days}日前" if days.positive?
-
-    hours = seconds / (60 * 60)
-    return "#{hours}時間前" if hours.positive?
-
-    minutes = seconds / 60
-    return "#{minutes}分前" if minutes.positive?
-
-    "#{seconds}秒前"
+  def w_day
+    day_of_week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+    day_of_week[object.created_at.wday]
   end
 end

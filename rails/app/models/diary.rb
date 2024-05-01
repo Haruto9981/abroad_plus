@@ -2,6 +2,7 @@ class Diary < ApplicationRecord
   belongs_to :user
   enum :status, { unsaved: 10, personal: 20, shared: 30 }, _prefix: true
   validates :title, :content, :word_count, presence: true, if: -> { personal? || shared? }
+  validates :title, length: { maximum: 75 }
   validate :verify_only_one_unsaved_status_is_allowed
 
   private

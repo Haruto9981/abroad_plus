@@ -5,6 +5,7 @@ ja:
         title: タイトル
         content: 本文
         word_count: 単語数
+        image: 画像
   enums:
     diary:
       status:
