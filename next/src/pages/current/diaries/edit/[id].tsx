@@ -81,6 +81,7 @@ const CurrentDiariesEdit: NextPage = () => {
     }
   }, [data, diary, reset])
 
+  // useSWRでfetchしてきたdataとこのdataは別物。
   const onSubmit: SubmitHandler<DiaryFormData> = (data) => {
     if (data.title == '') {
       return setSnackbar({

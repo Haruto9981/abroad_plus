@@ -45,7 +45,7 @@ type profileFormData = {
 }
 
 const Profile: NextPage = () => {
-  const [user] = useUserState()
+  const [user, setUser] = useUserState()
   const [, setSnackbar] = useSnackbarState()
   const [isFetched, setIsFetched] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -65,9 +65,6 @@ const Profile: NextPage = () => {
         start_date: '',
         end_date: '',
         bio: '',
-        image: {
-          url: '',
-        },
       }
     }
     return {
@@ -112,8 +109,6 @@ const Profile: NextPage = () => {
     }
   }, [data, profile, reset])
 
-  console.log(selectedFile)
-
   const onSubmit: SubmitHandler<profileFormData> = (data) => {
     if (data.name == '') {
       return setSnackbar({
@@ -153,6 +148,7 @@ const Profile: NextPage = () => {
       headers: headers,
     })
       .then(() => {
+        setUser({ ...user, isFetched: false })
         setSnackbar({
           message: 'プロフィールを更新しました',
           severity: 'success',
@@ -307,7 +303,7 @@ const Profile: NextPage = () => {
                   <MenuItem key="aston" value="Aston">
                     アストン大学
                   </MenuItem>,
-                  <MenuItem key="cccu" value="Canterbury Christ Church">
+                  <MenuItem key="cccu" value="Canterbury">
                     カンタベリー・クライスト・チャーチ大学
                   </MenuItem>,
                   <MenuItem key="queensland" value="Queensland">
@@ -341,7 +337,7 @@ const Profile: NextPage = () => {
                   <MenuItem key="aston" value="Aston">
                     アストン大学
                   </MenuItem>,
-                  <MenuItem key="cccu" value="Canterbury Christ Church">
+                  <MenuItem key="cccu" value="Canterbury">
                     カンタベリー・クライスト・チャーチ大学
                   </MenuItem>,
                 ]}

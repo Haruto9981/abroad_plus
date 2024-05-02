@@ -29,7 +29,7 @@ class Api::V1::Current::DiariesController < Api::V1::BaseController
   private
 
     def diary_params
-      params.require(:diary).permit(:title, :content, :image_url, :word_count, :status)
+      params.require(:diary).permit(:title, :content, :image, :word_count, :status)
     end
 
     def set_diary

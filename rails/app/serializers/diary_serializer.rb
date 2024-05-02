@@ -1,13 +1,9 @@
 class DiarySerializer < ActiveModel::Serializer
-  attributes :id, :title, :content, :image_url, :word_count, :status, :created_at, :date, :w_day
+  attributes :id, :title, :content, :image, :word_count, :status, :date, :w_day
   belongs_to :user, serializer: UserSerializer
 
   def status
     object.status_i18n
-  end
-
-  def created_at
-    object.created_at.strftime("%Y/%m/%d")
   end
 
   def date
@@ -22,7 +18,7 @@ class DiarySerializer < ActiveModel::Serializer
   end
 
   def w_day
-    day_of_week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+    day_of_week = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     day_of_week[object.created_at.wday]
   end
 end
