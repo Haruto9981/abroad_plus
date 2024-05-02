@@ -17,8 +17,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
         subject
         res = JSON.parse(response.body)
         expect(res.length).to eq 3
-        expect(res[0].keys).to eq ["id", "title", "content", "image_url", "word_count", "status", "created_at", "from_today", "user"]
-        expect(res[0]["user"].keys).to eq ["name"]
+        expect(res[0].keys).to eq ["id", "title", "content", "image", "word_count", "status", "date", "w_day", "user"]
+        expect(res[0]["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
         expect(response).to have_http_status(:ok)
       end
     end
@@ -46,8 +46,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
       it "正常にレコードを取得できる" do
         subject
         res = JSON.parse(response.body)
-        expect(res.keys).to eq ["id", "title", "content", "image_url", "word_count", "status", "created_at", "from_today", "user"]
-        expect(res["user"].keys).to eq ["name"]
+        expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "date", "w_day", "user"]
+        expect(res["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
         expect(response).to have_http_status(:ok)
       end
     end
@@ -73,8 +73,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
         expect { subject }.to change { current_user.diaries.count }.by(1)
         expect(current_user.diaries.last).to be_unsaved
         res = JSON.parse(response.body)
-        expect(res.keys).to eq ["id", "title", "content", "image_url", "word_count", "status", "created_at", "from_today", "user"]
-        expect(res["user"].keys).to eq ["name"]
+        expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "date", "w_day", "user"]
+        expect(res["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
         expect(response).to have_http_status(:ok)
       end
     end
@@ -85,8 +85,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
       it "未保存ステータスの日記は新規作成されない" do
         expect { subject }.not_to change { current_user.diaries.count }
         res = JSON.parse(response.body)
-        expect(res.keys).to eq ["id", "title", "content", "image_url", "word_count", "status", "created_at", "from_today", "user"]
-        expect(res["user"].keys).to eq ["name"]
+        expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "date", "w_day", "user"]
+        expect(res["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
         expect(response).to have_http_status(:ok)
       end
     end
@@ -109,8 +109,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
           change { current_user_diary.reload.content }.from("テスト本文1").to("テスト本文2") and
           change { current_user_diary.reload.status }.from("personal").to("shared")
         res = JSON.parse(response.body)
-        expect(res.keys).to eq ["id", "title", "content", "image_url", "word_count", "status", "created_at", "from_today", "user"]
-        expect(res["user"].keys).to eq ["name"]
+        expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "date", "w_day", "user"]
+        expect(res["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
         expect(response).to have_http_status(:ok)
       end
     end
@@ -139,8 +139,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
         subject
         expect { subject }.to change { current_user.diaries.count }.by(0)
         res = JSON.parse(response.body)
-        expect(res.keys).to eq ["id", "title", "content", "image_url", "word_count", "status", "created_at", "from_today", "user"]
-        expect(res["user"].keys).to eq ["name"]
+        expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "date", "w_day", "user"]
+        expect(res["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
         expect(response).to have_http_status(:ok)
       end
     end
