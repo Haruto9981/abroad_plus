@@ -118,9 +118,16 @@ const Header = () => {
               {user.isSignedIn && (
                 <Box sx={{ display: 'flex' }}>
                   <IconButton onClick={handleClick} sx={{ p: 0 }}>
-                    <Avatar>
-                      <PersonIcon />
-                    </Avatar>
+                    {user.image.url ? (
+                      <Avatar
+                        src={user.image.url}
+                        sx={{ width: 50, height: 50 }}
+                      ></Avatar>
+                    ) : (
+                      <Avatar sx={{ width: 50, height: 50 }}>
+                        <PersonIcon />
+                      </Avatar>
+                    )}
                   </IconButton>
                   <Box sx={{ ml: 2 }}>
                     <Button
@@ -129,9 +136,9 @@ const Header = () => {
                       sx={{
                         color: 'white',
                         textTransform: 'none',
-                        fontSize: 16,
+                        fontSize: 14,
                         borderRadius: 2,
-                        width: 120,
+                        width: 100,
                         height: 50,
                         boxShadow: 'none',
                       }}

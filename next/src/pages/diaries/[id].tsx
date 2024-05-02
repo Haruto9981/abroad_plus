@@ -22,12 +22,20 @@ type DiaryProps = {
   id: number
   title: string
   content: string
-  imageUrl: string
+  image: string
   wordCount: number
-  createdAt: string
-  fromToday: string
+  date: string
+  wDay: string
   user: {
     name: string
+    country: string
+    uni: string
+    startDate: string
+    endDate: string
+    bio: string
+    image: {
+      url: string
+    }
   }
 }
 
@@ -53,7 +61,7 @@ const DiaryDetail: NextPage = () => {
       <Container maxWidth="lg">
         <Box sx={{ maxWidth: 840, m: 'auto', pt: 6, pb: 3 }}>
           <Box sx={{ width: 40, height: 40 }}>
-            <Link href={'/current/diaries'}>
+            <Link href={'/'}>
               <Avatar>
                 <Tooltip title="日記一覧に戻る">
                   <IconButton sx={{ backgroundColor: 'white' }}>

@@ -8,4 +8,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable
   include DeviseTokenAuth::Concerns::User
   has_many :diaries, dependent: :destroy
+  validates :name, presence: true
 end

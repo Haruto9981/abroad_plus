@@ -14,12 +14,20 @@ type DiaryProps = {
   id: number
   title: string
   content: string
-  imageUrl: string
+  image: string
   wordCount: number
-  createdAt: string
-  fromToday: string
+  date: string
+  wDay: string
   user: {
     name: string
+    country: string
+    uni: string
+    startDate: string
+    endDate: string
+    bio: string
+    image: {
+      url: string
+    }
   }
 }
 
@@ -46,12 +54,20 @@ const Index: NextPage = () => {
             <Grid key={i} item xs={12} md={12}>
               <Link href={'/diaries/' + diary.id}>
                 <DiaryCard
+                  id={diary.id}
                   title={diary.title}
                   content={diary.content}
-                  imageUrl={diary.imageUrl}
+                  image={diary.image}
                   wordCount={diary.wordCount}
-                  fromToday={diary.fromToday}
+                  date={diary.date}
+                  wDay={diary.wDay}
                   userName={diary.user.name}
+                  userCountry={diary.user.country}
+                  userUni={diary.user.uni}
+                  userStartDate={diary.user.startDate}
+                  userEndDate={diary.user.endDate}
+                  userBio={diary.user.bio}
+                  userImage={diary.user.image.url}
                 />
               </Link>
             </Grid>
