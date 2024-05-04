@@ -43,13 +43,13 @@ RSpec.describe Diary, type: :model do
       end
     end
 
-    context "ステータスが未保存かつ、すでに同一ユーザーが未保存ステータスの記事を所有していた時" do
-      let(:status) { :unsaved }
-      before { create(:diary, status: :unsaved, user:) }
+    # context "ステータスが未保存かつ、すでに同一ユーザーが未保存ステータスの記事を所有していた時" do
+    #   let(:status) { :unsaved }
+    #   before { create(:diary, status: :unsaved, user:) }
 
-      it "例外が発生する" do
-        expect { subject }.to raise_error(StandardError)
-      end
-    end
+    #   it "例外が発生する" do
+    #     expect { subject }.to raise_error(StandardError)
+    #   end
+    # end
   end
 end

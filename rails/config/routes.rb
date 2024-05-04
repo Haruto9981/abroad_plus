@@ -12,6 +12,9 @@ Rails.application.routes.draw do
         resources :diaries, only: [:index, :show, :create, :update, :destroy]
       end
       resources :diaries, only: [:index, :show]
+      resources :diaries do
+        resource :favorites, only: [:show, :create, :destroy]
+      end
     end
   end
 end

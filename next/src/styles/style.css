@@ -1,0 +1,11 @@
+.image {
+    width: 520px; /* デフォルトの幅 */
+    height: 350px; /* デフォルトの高さ */
+  }
+  
+  @media (max-width: 500px) {
+    .image {
+      width: 350px;
+      height: 250px; /* 500px以下の場合の幅 */
+    }
+  }

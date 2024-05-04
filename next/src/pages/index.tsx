@@ -14,7 +14,9 @@ type DiaryProps = {
   id: number
   title: string
   content: string
-  image: string
+  image: {
+    url: string
+  }
   wordCount: number
   date: string
   wDay: string
@@ -48,8 +50,8 @@ const Index: NextPage = () => {
 
   return (
     <Box css={styles.pageMinHeight} sx={{ backgroundColor: '#ffe0b6' }}>
-      <Container maxWidth="md" sx={{ pt: 6 }}>
-        <Grid container spacing={4}>
+      <Container maxWidth="sm" sx={{ pt: 6 }}>
+        <Grid container spacing={2}>
           {diaries.map((diary: DiaryProps, i: number) => (
             <Grid key={i} item xs={12} md={12}>
               <Link href={'/diaries/' + diary.id}>
@@ -57,7 +59,7 @@ const Index: NextPage = () => {
                   id={diary.id}
                   title={diary.title}
                   content={diary.content}
-                  image={diary.image}
+                  image={diary.image.url}
                   wordCount={diary.wordCount}
                   date={diary.date}
                   wDay={diary.wDay}
