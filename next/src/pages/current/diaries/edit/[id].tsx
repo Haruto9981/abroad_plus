@@ -1,4 +1,5 @@
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
+import CloseIcon from '@mui/icons-material/Close'
 import { LoadingButton } from '@mui/lab'
 import {
   AppBar,
@@ -52,6 +53,7 @@ const CurrentDiariesEdit: NextPage = () => {
   const [inputLength, setInputLength] = useState<number>(0)
   const [selectedFile, setSelectedFile] = useState<File>()
   const [previewUrl, setPreviewUrl] = useState('')
+  const [isExistImageDeleted, setIsExistImageDeleted] = useState<boolean>(false)
 
   const handleChangeStatusChecked = () => {
     setStatusChecked(!statusChecked)
@@ -81,6 +83,8 @@ const CurrentDiariesEdit: NextPage = () => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
 
+    console.log(file)
+
     if (file) {
       setSelectedFile(file)
 
@@ -93,6 +97,14 @@ const CurrentDiariesEdit: NextPage = () => {
       }
       reader.readAsDataURL(file)
     }
+  }
+
+  const handleDeleteChange = () => {
+    setSelectedFile(undefined)
+  }
+
+  const handleExistImageDeleteChange = () => {
+    setIsExistImageDeleted(true)
   }
 
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/diaries/'
@@ -175,8 +187,8 @@ const CurrentDiariesEdit: NextPage = () => {
     formData.append('diary[content]', data.content)
     formData.append('diary[status', status)
     formData.append('diary[word_count]', wordCount.toString())
-    if (selectedFile) {
-      formData.append('diary[image]', selectedFile)
+    if (selectedFile || isExistImageDeleted) {
+      formData.append('diary[image]', selectedFile || '')
     }
 
     axios({
@@ -322,7 +334,7 @@ const CurrentDiariesEdit: NextPage = () => {
                 </Tooltip>
               )}
             />
-            {!selectedFile && data.image.url && (
+            {!selectedFile && data.image.url && !isExistImageDeleted && (
               <Box
                 sx={{
                   mb: 4,
@@ -332,12 +344,32 @@ const CurrentDiariesEdit: NextPage = () => {
                 }}
               >
                 {/* なぜかImageだとうまく画像を読み込めない。nextのpublicから探してるっぽい。 */}
-                <img // eslint-disable-line
-                  alt="プレビュー"
-                  src={data.image.url}
-                  width={360}
-                  height={260}
-                />
+                <Box css={{ position: 'relative' }}>
+                  <img // eslint-disable-line
+                    alt="プレビュー"
+                    src={data.image.url}
+                    width={360}
+                    height={260}
+                  />
+                  <Tooltip title="サムネイルを削除する">
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: -8,
+                        right: -8,
+                      }}
+                    >
+                      <Avatar>
+                        <IconButton
+                          sx={{ backgroundColor: '#F1F5FA' }}
+                          onClick={handleExistImageDeleteChange}
+                        >
+                          <CloseIcon sx={{ color: '#99AAB6' }} />
+                        </IconButton>
+                      </Avatar>
+                    </Box>
+                  </Tooltip>
+                </Box>
               </Box>
             )}
             {selectedFile && (
@@ -349,12 +381,32 @@ const CurrentDiariesEdit: NextPage = () => {
                   justifyContent: 'center',
                 }}
               >
-                <Image
-                  alt="プレビュー"
-                  src={previewUrl}
-                  width={360}
-                  height={260}
-                />
+                <Box css={{ position: 'relative' }}>
+                  <Image
+                    alt="プレビュー"
+                    src={previewUrl}
+                    width={360}
+                    height={260}
+                  />
+                  <Tooltip title="サムネイルを削除する">
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: -8,
+                        right: -8,
+                      }}
+                    >
+                      <Avatar>
+                        <IconButton
+                          sx={{ backgroundColor: '#F1F5FA' }}
+                          onClick={handleDeleteChange}
+                        >
+                          <CloseIcon sx={{ color: '#99AAB6' }} />
+                        </IconButton>
+                      </Avatar>
+                    </Box>
+                  </Tooltip>
+                </Box>
               </Box>
             )}
 
