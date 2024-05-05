@@ -3,7 +3,5 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/current/diaries/edit/[id]": "pages/current/diaries/edit/[id].js",
-  "/current/diaries": "pages/current/diaries.js",
-  "/": "pages/index.js",
-  "/diaries/[id]": "pages/diaries/[id].js"
+  "/": "pages/index.js"
 }

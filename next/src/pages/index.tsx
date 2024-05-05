@@ -7,6 +7,7 @@ import useSWR from 'swr'
 import DiaryCard from '@/components/DiaryCard'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
+import { Calendar } from '@/components/MuiCalendar'
 import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
@@ -49,7 +50,10 @@ const Index: NextPage = () => {
     router.push('/?page=' + value)
 
   return (
-    <Box css={styles.pageMinHeight} sx={{ backgroundColor: '#ffe0b6' }}>
+    <Box
+      css={styles.pageMinHeight}
+      sx={{ backgroundColor: '#ffe0b6', display: 'flex' }}
+    >
       <Container maxWidth="sm" sx={{ pt: 6 }}>
         <Grid container spacing={2}>
           {diaries.map((diary: DiaryProps, i: number) => (
@@ -82,6 +86,9 @@ const Index: NextPage = () => {
             onChange={handleChange}
           />
         </Box>
+      </Container>
+      <Container maxWidth="sm" sx={{ pt: 6 }}>
+        <Calendar />
       </Container>
     </Box>
   )
