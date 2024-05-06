@@ -13,6 +13,9 @@ class Api::V1::Current::DiariesController < Api::V1::BaseController
 
   def create
     unsaved_diary = current_user.diaries.unsaved.first || current_user.diaries.create!(status: :unsaved)
+    if unsaved_diary.created_at.strftime("%Y-%m-%d") != Time.zone.now.strftime("%Y-%m-%d")
+      unsaved_diary.update!(created_at: Time.zone.now, updated_at: Time.zone.now)
+    end
     render json: unsaved_diary
   end
 

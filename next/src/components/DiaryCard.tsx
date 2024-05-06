@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import CommentIcon from '@mui/icons-material/Comment'
+import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import PersonIcon from '@mui/icons-material/Person'
 import {
@@ -10,7 +11,13 @@ import {
   Avatar,
   Typography,
 } from '@mui/material'
+import axios, { AxiosError } from 'axios'
+import camelcaseKeys from 'camelcase-keys'
 import Image from 'next/image'
+import { useState, useEffect, MouseEventHandler } from 'react'
+import useSWR from 'swr'
+import { useUserState } from '@/hooks/useGlobalState'
+import { fetcher } from '@/utils'
 
 type diaryCardProps = {
   id: number
@@ -29,12 +36,88 @@ type diaryCardProps = {
   userImage: string
 }
 
+type favoriteType = {
+  userId: number
+  diaryId: number
+}
+
 const imageCss = css({ marginTop: '4px' })
 
 const omit = (text: string) => (len: number) => (ellipsis: string) =>
   text.length >= len ? text.slice(0, len - ellipsis.length) + ellipsis : text
 
 const DiaryCard = (props: diaryCardProps) => {
+  const [user] = useUserState()
+  const [isLiked, setIsLiked] = useState<boolean>(false)
+  const [LikedCount, setLikedCount] = useState<number>(0)
+
+  const url =
+    process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/' + props.id + '/favorites'
+  const { data } = useSWR(url, fetcher)
+
+  useEffect(() => {
+    if (data) {
+      const favorites: favoriteType[] = camelcaseKeys(data)
+      const liked: boolean = favorites.some(
+        (favorite) => favorite.userId === user.id,
+      )
+      setIsLiked(liked)
+      setLikedCount(favorites.length)
+    }
+  }, [data, user.id])
+
+  const handleLikedChange: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    setLikedCount(LikedCount + 1)
+    const url =
+      process.env.NEXT_PUBLIC_API_BASE_URL +
+      '/diaries/' +
+      props.id +
+      '/favorites'
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'access-token': localStorage.getItem('access-token'),
+      client: localStorage.getItem('client'),
+      uid: localStorage.getItem('uid'),
+    }
+
+    axios({ method: 'POST', url: url, headers: headers })
+      .then(() => {
+        setIsLiked(!isLiked)
+        console.log('sent Liked!')
+      })
+      .catch((e: AxiosError<{ error: string }>) => {
+        console.log(e.message)
+      })
+  }
+
+  const handleDislikedChange: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    setLikedCount(LikedCount - 1)
+    const url =
+      process.env.NEXT_PUBLIC_API_BASE_URL +
+      '/diaries/' +
+      props.id +
+      '/favorites'
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'access-token': localStorage.getItem('access-token'),
+      client: localStorage.getItem('client'),
+      uid: localStorage.getItem('uid'),
+    }
+
+    axios({ method: 'DELETE', url: url, headers: headers })
+      .then(() => {
+        setIsLiked(!isLiked)
+        console.log('sent DisLiked!')
+      })
+      .catch((e: AxiosError<{ error: string }>) => {
+        console.log(e.message)
+      })
+  }
+
   return (
     <Card sx={{ borderRadius: 2 }}>
       <CardContent>
@@ -123,6 +206,23 @@ const DiaryCard = (props: diaryCardProps) => {
             </Box>
           </Box>
         </Box>
+        {props.image && (
+          <Box
+            sx={{
+              my: 2,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {/* なぜかImageだとうまく画像を読み込めない。nextのpublicから探してるっぽい。style.cssからレスポンシブデザイン適応 */}
+            <img // eslint-disable-line
+              alt="日記画像"
+              src={props.image}
+              className="image"
+            />
+          </Box>
+        )}
         <Typography
           component="h3"
           sx={{
@@ -135,14 +235,26 @@ const DiaryCard = (props: diaryCardProps) => {
           {omit(props.title)(40)('...')}
         </Typography>
         <Typography>
-          {omit(props.content)(200)('...')} ({props.wordCount} words)
+          {omit(props.content)(305)('...')} ({props.wordCount} words)
         </Typography>
-        <IconButton>
-          <FavoriteBorderIcon />
-        </IconButton>
-        <IconButton>
-          <CommentIcon />
-        </IconButton>
+        <Box sx={{ display: 'flex' }}>
+          <Box>
+            {!isLiked && (
+              <IconButton onClick={handleLikedChange}>
+                <FavoriteBorderIcon />
+              </IconButton>
+            )}
+            {isLiked && (
+              <IconButton onClick={handleDislikedChange}>
+                <FavoriteIcon color="secondary" />
+              </IconButton>
+            )}
+          </Box>
+          <Typography sx={{ mt: 1 }}>{LikedCount}</Typography>
+          <IconButton>
+            <CommentIcon />
+          </IconButton>
+        </Box>
       </CardContent>
     </Card>
   )

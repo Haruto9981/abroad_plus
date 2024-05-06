@@ -1,0 +1,3 @@
+import { UseSingleInputDateTimeRangeFieldDefaultizedProps, UseSingleInputDateTimeRangeFieldParams, UseSingleInputDateTimeRangeFieldProps } from './SingleInputDateTimeRangeField.types';
+export declare const useDefaultizedTimeRangeFieldProps: <TDate, AdditionalProps extends {}>(props: UseSingleInputDateTimeRangeFieldProps<TDate>) => UseSingleInputDateTimeRangeFieldDefaultizedProps<TDate, AdditionalProps>;
+export declare const useSingleInputDateTimeRangeField: <TDate, TChildProps extends {}>({ props, inputRef, }: UseSingleInputDateTimeRangeFieldParams<TDate, TChildProps>) => import("@mui/x-date-pickers/internals").UseFieldResponse<Omit<TChildProps, keyof UseSingleInputDateTimeRangeFieldProps<TDate>>>;

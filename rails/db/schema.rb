@@ -10,17 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_01_131501) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_03_083656) do
   create_table "diaries", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", comment: "タイトル"
     t.text "content", comment: "本文"
     t.string "image", comment: "画像"
-    t.integer "word_count", comment: "単語数"
+    t.integer "word_count", default: 0, comment: "単語数"
     t.integer "status", comment: "ステータス(10:未保存, 20:非公開, 30:公開)"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_diaries_on_user_id"
+  end
+
+  create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "diary_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["diary_id"], name: "index_favorites_on_diary_id"
+    t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -54,4 +63,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_01_131501) do
   end
 
   add_foreign_key "diaries", "users"
+  add_foreign_key "favorites", "diaries"
+  add_foreign_key "favorites", "users"
 end

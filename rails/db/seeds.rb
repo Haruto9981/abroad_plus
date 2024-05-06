@@ -1,6 +1,6 @@
 ActiveRecord::Base.transaction do
   user1 = User.create!(name: "Megumi Jr.", email: "test1@example.com", password: "password", confirmed_at: Time.current,
-                       image: File.open("./public/images/1850951C-86C6-424C-B319-D650246376C2_4_5005_c.jpeg"),
+                       image: File.open("./public/images/F4F46FAC-089C-40B0-BE5A-005E3C8440AA_4_5005_c.jpeg"),
                        country: "NewZealand", uni: "Auckland", bio: "Hello!")
 
   user2 = User.create!(name: "Aya", email: "test2@example.com", password: "password", confirmed_at: Time.current,
@@ -8,7 +8,7 @@ ActiveRecord::Base.transaction do
                        country: "USA", uni: "Kansas", bio: "Hello!")
 
   user3 = User.create!(name: "Ryo", email: "test3@example.com", password: "password", confirmed_at: Time.current,
-                       image: File.open("./public/images/D7C1316F-92C9-4509-9DBE-8C2BA932CF59_1_105_c.jpeg"),
+                       image: File.open("./public/images/0477E005-3F30-4EE5-A073-6582185CE9E7_4_5005_c.jpeg"),
                        country: "Australia", uni: "Queensland", bio: "Hello!")
 
   user4 = User.create!(name: "Tanabe Ken", email: "test4@example.com", password: "password", confirmed_at: Time.current,
@@ -24,24 +24,24 @@ ActiveRecord::Base.transaction do
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 100, status: :shared, user: user1)
+                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user1)
     Diary.create!(title: "Party Night",
-                  content: "text text text text text text text text text text text text text text text text text text", word_count: 20,
+                  content: "text text text text text text text text text text text text text text text text text text", word_count: 18,
                   status: :shared, user: user2)
     Diary.create!(title: "Meet new friends!",
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 140, status: :shared, user: user3)
+                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user3)
     Diary.create!(title: "Went to New York",
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 160, status: :shared, user: user4)
+                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user4)
     Diary.create!(title: "Great day",
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 180, status: :shared, user: user5)
+                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user5)
   end
 end
