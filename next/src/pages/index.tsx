@@ -61,8 +61,6 @@ const Index: NextPage = () => {
     return diffDays
   }
 
-  console.log(user)
-
   const currentDate = new Date()
   const startDate = new Date(user.start_date)
   const endDate = new Date(user.end_date)

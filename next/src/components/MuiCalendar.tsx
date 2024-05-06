@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
@@ -18,6 +19,8 @@ export const Calendar: React.FC = () => {
   useRequireSignedIn()
   const [user] = useUserState()
   const [diaryWrittenDates, setDiaryWrittenDates] = useState<Dayjs[]>([])
+  const [diaryCounter, setDiaryCounter] = useState<number>()
+  const [daysInSelectedMonth, setDaysInSelectedMonth] = useState<number>()
 
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/diaries'
   const { data } = useSWR(user.isSignedIn ? url : null, fetcher)
@@ -25,11 +28,39 @@ export const Calendar: React.FC = () => {
   useEffect(() => {
     if (data) {
       const diaryWrittenDates = extractUpdatedAt(data)
+      const currentYear = new Date().getFullYear()
+      const currentMonth = new Date().getMonth() + 1
+      const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth)
+      const diaryCount = writtenDiaryInMonth(
+        currentYear,
+        currentMonth,
+        diaryWrittenDates,
+      )
+      setDiaryCounter(diaryCount)
+      setDaysInSelectedMonth(daysInCurrentMonth)
       setDiaryWrittenDates(diaryWrittenDates)
     }
   }, [data])
 
-  function extractUpdatedAt(array: Item[]) {
+  const writtenDiaryInMonth = (
+    year: number,
+    month: number,
+    diaryWrittenDates: dayjs.Dayjs[],
+  ) => {
+    let diaryCount = 0
+
+    for (let i = 0; i < diaryWrittenDates.length; i++) {
+      if (
+        diaryWrittenDates[i].year() === year &&
+        diaryWrittenDates[i].month() + 1 === month
+      ) {
+        diaryCount += 1
+      }
+    }
+    return diaryCount
+  }
+
+  const extractUpdatedAt = (array: Item[]) => {
     const updatedAtSet = new Set(array.map((item: Item) => item.updated_at))
     const uniqueUpdatedAtArrayWithDayjs = Array.from(updatedAtSet).map(
       (dateString) => dayjs(dateString),
@@ -37,8 +68,8 @@ export const Calendar: React.FC = () => {
     return uniqueUpdatedAtArrayWithDayjs
   }
 
-  function diaryWrittenDay(props: PickersDayProps<Dayjs>) {
-    const { day } = props
+  const diaryWrittenDay = (props: PickersDayProps<Date>) => {
+    const { day } = props // eslint-disable-line
 
     if (!diaryWrittenDates) {
       return <PickersDay {...props} style={{ backgroundColor: 'white' }} />
@@ -55,9 +86,37 @@ export const Calendar: React.FC = () => {
     return <PickersDay {...props} style={cellStyle} />
   }
 
+  const getDaysInMonth = (year: number, month: number) => {
+    return new Date(year, month, 0).getDate()
+  }
+
+  const handleMonthChange = (e: Date) => {
+    const selectedYear = e.getFullYear()
+    const selectedMonth = e.getMonth() + 1
+    const daysInSelectedMonth = getDaysInMonth(selectedYear, selectedMonth)
+
+    setDaysInSelectedMonth(daysInSelectedMonth)
+
+    const diaryCount = writtenDiaryInMonth(
+      selectedYear,
+      selectedMonth,
+      diaryWrittenDates,
+    )
+    setDiaryCounter(diaryCount)
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Typography sx={{ fontSize: 20, textAlign: 'right', mr: 4, my: 1 }}>
+        Diary Records:{' '}
+        <span style={{ fontWeight: 'bold', color: '#ed1c24', fontSize: 30 }}>
+          {diaryCounter}
+        </span>{' '}
+        / {daysInSelectedMonth} days
+      </Typography>
+
       <DateCalendar
+        onMonthChange={handleMonthChange}
         views={['day']}
         slots={{
           day: diaryWrittenDay,
