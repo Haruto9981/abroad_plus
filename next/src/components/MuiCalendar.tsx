@@ -4,13 +4,47 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay'
 import dayjs, { Dayjs } from 'dayjs'
 import * as React from 'react'
+import { useState, useEffect } from 'react'
+import useSWR from 'swr'
+import { useUserState } from '@/hooks/useGlobalState'
+import { useRequireSignedIn } from '@/hooks/useRequireSignedIn'
+import { fetcher } from '@/utils'
+
+interface Item {
+  updated_at: string
+}
 
 export const Calendar: React.FC = () => {
-  const specificDates = [dayjs('2024-05-02'), dayjs('2024-05-03')]
+  useRequireSignedIn()
+  const [user] = useUserState()
+  const [diaryWrittenDates, setDiaryWrittenDates] = useState<Dayjs[]>([])
 
-  function SpecificDay(props: PickersDayProps<Dayjs>) {
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/diaries'
+  const { data } = useSWR(user.isSignedIn ? url : null, fetcher)
+
+  useEffect(() => {
+    if (data) {
+      const diaryWrittenDates = extractUpdatedAt(data)
+      setDiaryWrittenDates(diaryWrittenDates)
+    }
+  }, [data])
+
+  function extractUpdatedAt(array: Item[]) {
+    const updatedAtSet = new Set(array.map((item: Item) => item.updated_at))
+    const uniqueUpdatedAtArrayWithDayjs = Array.from(updatedAtSet).map(
+      (dateString) => dayjs(dateString),
+    )
+    return uniqueUpdatedAtArrayWithDayjs
+  }
+
+  function diaryWrittenDay(props: PickersDayProps<Dayjs>) {
     const { day } = props
-    const isSpecificDay = specificDates.some((date) =>
+
+    if (!diaryWrittenDates) {
+      return <PickersDay {...props} style={{ backgroundColor: 'white' }} />
+    }
+
+    const isSpecificDay = diaryWrittenDates.some((date) =>
       dayjs(day).isSame(date, 'day'),
     )
 
@@ -26,18 +60,9 @@ export const Calendar: React.FC = () => {
       <DateCalendar
         views={['day']}
         slots={{
-          day: SpecificDay,
+          day: diaryWrittenDay,
         }}
         sx={{
-          '& .MuiBadge-badge': {
-            // Adjustment for recordMade badge
-            fontSize: '0.7em',
-            paddingTop: '4px',
-          },
-          // '& .MuiPickersBasePicker-pickerView': {
-          //     maxHeight: '800px',
-          //   },
-
           '& .MuiDayCalendar-header': {
             // Needed for weekday (ie S M T W T F S )adjustments (and padding if wanted)
             // Adjusts spacing between
@@ -80,6 +105,9 @@ export const Calendar: React.FC = () => {
             width: 'calc(10% - 4px)', // deals with margin
             fontSize: '1.2em',
           },
+          '& .MuiPickersCalendarHeader-root': {
+            paddingLeft: 0,
+          },
           '& .MuiPickersCalendarHeader-label': {
             // Manages month/year size
             fontSize: '1.3em',
@@ -96,7 +124,8 @@ export const Calendar: React.FC = () => {
             },
           '& .MuiDayCalendar-slideTransition': {
             // Handles size of week row parent, 1.6 aspect is good for now
-            aspectRatio: 1.4,
+            // 1.2がベスト。1.6だとカレンダー下部が切れる。
+            aspectRatio: 1.2,
             width: '100%',
             overflow: 'hidden',
           },

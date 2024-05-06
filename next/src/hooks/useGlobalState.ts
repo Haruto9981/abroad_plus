@@ -5,6 +5,8 @@ export const useUserState = () => {
     id: number
     name: string
     email: string
+    start_date: Date
+    end_date: Date
     image: {
       url: string
     }
@@ -16,6 +18,8 @@ export const useUserState = () => {
     id: 0,
     name: '',
     email: '',
+    start_date: new Date(),
+    end_date: new Date(),
     image: {
       url: '',
     },

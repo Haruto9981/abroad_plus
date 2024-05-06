@@ -1,4 +1,4 @@
-import { Box, Grid, Container, Pagination } from '@mui/material'
+import { Box, Grid, Container, Pagination, Typography } from '@mui/material'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Link from 'next/link'
@@ -8,6 +8,7 @@ import DiaryCard from '@/components/DiaryCard'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { Calendar } from '@/components/MuiCalendar'
+import { useUserState } from '@/hooks/useGlobalState'
 import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
@@ -36,6 +37,7 @@ type DiaryProps = {
 
 const Index: NextPage = () => {
   const router = useRouter()
+  const [user] = useUserState()
   const page = 'page' in router.query ? Number(router.query.page) : 1
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/?page=' + page
   const { data, error } = useSWR(url, fetcher)
@@ -48,6 +50,24 @@ const Index: NextPage = () => {
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
     router.push('/?page=' + value)
+
+  const getDateDifference = (date1: Date, date2: Date) => {
+    const d1 = new Date(date1)
+    const d2 = new Date(date2)
+
+    const diffTime = d2.getTime() - d1.getTime()
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+    return diffDays
+  }
+
+  console.log(user)
+
+  const currentDate = new Date()
+  const startDate = new Date(user.start_date)
+  const endDate = new Date(user.end_date)
+  const startDateDifference = getDateDifference(currentDate, startDate)
+  const endDateDifference = getDateDifference(currentDate, endDate)
 
   return (
     <Box
@@ -87,7 +107,35 @@ const Index: NextPage = () => {
           />
         </Box>
       </Container>
-      <Container maxWidth="sm" sx={{ pt: 6 }}>
+      <Container
+        maxWidth="sm"
+        sx={{ pt: 6, display: { xs: 'none', lg: 'block' } }}
+      >
+        {startDateDifference <= 0 && endDateDifference > 0 && (
+          <Typography component="h2" sx={{ fontSize: 28, textAlign: 'left' }}>
+            <span
+              style={{ fontWeight: 'bold', color: '#ed1c24', fontSize: 36 }}
+            >
+              {endDateDifference}
+            </span>{' '}
+            days left to the end of your SA
+          </Typography>
+        )}
+        {endDateDifference <= 0 && (
+          <Typography component="h2" sx={{ fontSize: 28, textAlign: 'left' }}>
+            Your SA is already over
+          </Typography>
+        )}
+        {startDateDifference > 0 && (
+          <Typography component="h2" sx={{ fontSize: 28, textAlign: 'left' }}>
+            <span
+              style={{ fontWeight: 'bold', color: '#ed1c24', fontSize: 36 }}
+            >
+              {startDateDifference}
+            </span>{' '}
+            days to the start of your SA
+          </Typography>
+        )}
         <Calendar />
       </Container>
     </Box>
