@@ -32,7 +32,9 @@ type DiaryProps = {
   content: string
   status: string
   wordCount: number
-  date: string
+  day: string
+  month: string
+  year: string
   wDay: string
 }
 
@@ -121,7 +123,9 @@ const CurrentDiariesEdit: NextPage = () => {
         content: '',
         status: false,
         wordCount: 0,
-        date: '',
+        day: '',
+        month: '',
+        year: '',
         wDay: '',
       }
     }
@@ -130,7 +134,9 @@ const CurrentDiariesEdit: NextPage = () => {
       content: data.content == null ? '' : data.content,
       status: data.status,
       wordCount: data.word_count,
-      date: data.date,
+      day: data.day,
+      month: data.month,
+      year: data.year,
       wDay: data.w_day,
     }
   }, [data])
@@ -142,7 +148,7 @@ const CurrentDiariesEdit: NextPage = () => {
   useEffect(() => {
     if (data) {
       reset(diary)
-      setStatusChecked(diary.status == '公開')
+      setStatusChecked(diary.status == 'shared')
       setIsFetched(true)
     }
   }, [data, diary, reset])
@@ -238,11 +244,17 @@ const CurrentDiariesEdit: NextPage = () => {
           }}
         >
           <Box sx={{ width: 50 }}>
-            <Link href="/current/diaries">
+            <Link
+              href={
+                diary.status === 'unsaved'
+                  ? '/current/diaries'
+                  : '/current/diaries/' + id
+              }
+            >
               <Typography
                 sx={{ fontSize: { xs: 12, sm: 15 }, color: '#2f4f4f' }}
               >
-                閉じる
+                Back
               </Typography>
             </Link>
           </Box>
@@ -277,7 +289,7 @@ const CurrentDiariesEdit: NextPage = () => {
                 color="warning"
               />
               <Typography sx={{ fontSize: { xs: 12, sm: 15 } }}>
-                非公開／公開
+                Personal / Shared
               </Typography>
             </Box>
             <LoadingButton
@@ -304,7 +316,7 @@ const CurrentDiariesEdit: NextPage = () => {
         <Box sx={{ width: 840 }}>
           <Box sx={{ mb: 2 }}>
             <Typography sx={{ fontSize: { xs: 20, sm: 30 }, my: 2 }}>
-              {diary.date} {diary.wDay}
+              {diary.day} {diary.month} {diary.year} {diary.wDay}
             </Typography>
             <Controller
               name="image"

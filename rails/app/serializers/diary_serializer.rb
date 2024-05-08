@@ -1,20 +1,19 @@
 class DiarySerializer < ActiveModel::Serializer
-  attributes :id, :title, :content, :image, :word_count, :status, :date, :w_day, :updated_at
+  attributes :id, :title, :content, :image, :word_count, :status, :day, :month, :year, :w_day, :updated_at
   belongs_to :user, serializer: UserSerializer
+  has_many :favorites, serializer: FavoriteSerializer
 
-  def status
-    object.status_i18n
+  def day
+    object.created_at.strftime("%d")
   end
 
-  def date
-    day = object.created_at.strftime("%d")
-
+  def month
     month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    month = month_list[object.created_at.strftime("%m").to_i - 1]
+    month_list[object.created_at.strftime("%m").to_i - 1]
+  end
 
-    year = object.created_at.strftime("%Y")
-
-    "#{day} #{month} #{year}"
+  def year
+    object.created_at.strftime("%Y")
   end
 
   def w_day

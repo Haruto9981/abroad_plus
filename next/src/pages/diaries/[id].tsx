@@ -1,18 +1,11 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import {
-  Avatar,
-  Box,
-  Container,
-  Typography,
-  Card,
-  Tooltip,
-  IconButton,
-} from '@mui/material'
+import { Avatar, Box, Container, Tooltip, IconButton } from '@mui/material'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
+import DiaryCard from '@/components/DiaryCard'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { styles } from '@/styles'
@@ -22,9 +15,13 @@ type DiaryProps = {
   id: number
   title: string
   content: string
-  image: string
+  image: {
+    url: string
+  }
   wordCount: number
-  date: string
+  day: string
+  month: string
+  year: string
   wDay: string
   user: {
     name: string
@@ -37,6 +34,7 @@ type DiaryProps = {
       url: string
     }
   }
+  favorites: { user_id: number }[]
 }
 
 const DiaryDetail: NextPage = () => {
@@ -58,60 +56,37 @@ const DiaryDetail: NextPage = () => {
         pb: 6,
       }}
     >
-      <Container maxWidth="lg">
-        <Box sx={{ maxWidth: 840, m: 'auto', pt: 6, pb: 3 }}>
-          <Box sx={{ width: 40, height: 40 }}>
-            <Link href={'/'}>
-              <Avatar>
-                <Tooltip title="日記一覧に戻る">
-                  <IconButton sx={{ backgroundColor: 'white' }}>
-                    <ChevronLeftIcon sx={{ color: '#99AAB6' }} />
-                  </IconButton>
-                </Tooltip>
-              </Avatar>
-            </Link>
-          </Box>
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography
-              component="h2"
-              sx={{
-                fontSize: { xs: 21, sm: 25 },
-                fontWeight: 'bold',
-              }}
-            >
-              {diary.title}
-            </Typography>
-          </Box>
-          <Box sx={{ textAlign: 'right' }}>
-            <Typography
-              component="h3"
-              sx={{
-                fontSize: { xs: 15, sm: 18 },
-              }}
-            >
-              {diary.wordCount} words
-            </Typography>
-          </Box>
+      <Container maxWidth="sm" sx={{ pt: 1 }}>
+        <Box sx={{ width: 40, height: 40, my: 2 }}>
+          <Link href={'/'}>
+            <Avatar>
+              <Tooltip title="Back">
+                <IconButton sx={{ backgroundColor: 'white' }}>
+                  <ChevronLeftIcon sx={{ color: '#99AAB6' }} />
+                </IconButton>
+              </Tooltip>
+            </Avatar>
+          </Link>
         </Box>
-        <Box sx={{ width: '100%' }}>
-          <Card
-            sx={{
-              boxShadow: 'none',
-              borderRadius: '12px',
-              maxWidth: 840,
-              m: 'auto',
-            }}
-          >
-            <Box
-              sx={{
-                padding: { xs: '0 24px 24px 24px', sm: '0 40px 40px 40px' },
-                marginTop: { xs: '24px', sm: '40px' },
-              }}
-            >
-              <Typography>{diary.content}</Typography>
-            </Box>
-          </Card>
-        </Box>
+        <DiaryCard
+          id={diary.id}
+          title={diary.title}
+          content={diary.content}
+          image={diary.image.url}
+          wordCount={diary.wordCount}
+          day={diary.day}
+          month={diary.month}
+          year={diary.year}
+          wDay={diary.wDay}
+          userName={diary.user.name}
+          userCountry={diary.user.country}
+          userUni={diary.user.uni}
+          userStartDate={diary.user.startDate}
+          userEndDate={diary.user.endDate}
+          userBio={diary.user.bio}
+          userImage={diary.user.image.url}
+          favorites={diary.favorites}
+        />
       </Container>
     </Box>
   )

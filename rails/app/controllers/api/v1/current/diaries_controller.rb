@@ -3,7 +3,7 @@ class Api::V1::Current::DiariesController < Api::V1::BaseController
   before_action :set_diary, only: [:show, :update, :destroy]
 
   def index
-    diaries = current_user.diaries.not_unsaved.order(created_at: :desc)
+    diaries = current_user.diaries.not_unsaved.order(created_at: :desc).includes([:favorites])
     render json: diaries
   end
 

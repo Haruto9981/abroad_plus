@@ -12,12 +12,10 @@ import {
   Typography,
 } from '@mui/material'
 import axios, { AxiosError } from 'axios'
-import camelcaseKeys from 'camelcase-keys'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { useState, useEffect, MouseEventHandler } from 'react'
-import useSWR from 'swr'
 import { useUserState } from '@/hooks/useGlobalState'
-import { fetcher } from '@/utils'
 
 type diaryCardProps = {
   id: number
@@ -25,7 +23,9 @@ type diaryCardProps = {
   content: string
   image: string
   wordCount: number
-  date: string
+  day: string
+  month: string
+  year: string
   wDay: string
   userName: string
   userCountry: string
@@ -34,11 +34,7 @@ type diaryCardProps = {
   userEndDate: string
   userBio: string
   userImage: string
-}
-
-type favoriteType = {
-  userId: number
-  diaryId: number
+  favorites: { user_id: number }[]
 }
 
 const imageCss = css({ marginTop: '4px' })
@@ -47,45 +43,37 @@ const omit = (text: string) => (len: number) => (ellipsis: string) =>
   text.length >= len ? text.slice(0, len - ellipsis.length) + ellipsis : text
 
 const DiaryCard = (props: diaryCardProps) => {
+  const router = useRouter()
   const [user] = useUserState()
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [LikedCount, setLikedCount] = useState<number>(0)
 
+  useEffect(() => {
+    const favorites = props.favorites
+    const liked: boolean = favorites.some(
+      (favorite) => favorite.user_id === user.id,
+    )
+    setIsLiked(liked)
+    setLikedCount(favorites.length)
+  }, [user.id, props.favorites])
+
   const url =
     process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/' + props.id + '/favorites'
-  const { data } = useSWR(url, fetcher)
 
-  useEffect(() => {
-    if (data) {
-      const favorites: favoriteType[] = camelcaseKeys(data)
-      const liked: boolean = favorites.some(
-        (favorite) => favorite.userId === user.id,
-      )
-      setIsLiked(liked)
-      setLikedCount(favorites.length)
-    }
-  }, [data, user.id])
+  const headers = {
+    'Content-Type': 'application/json',
+    'access-token': localStorage.getItem('access-token'),
+    client: localStorage.getItem('client'),
+    uid: localStorage.getItem('uid'),
+  }
 
   const handleLikedChange: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
-    setLikedCount(LikedCount + 1)
-    const url =
-      process.env.NEXT_PUBLIC_API_BASE_URL +
-      '/diaries/' +
-      props.id +
-      '/favorites'
-
-    const headers = {
-      'Content-Type': 'application/json',
-      'access-token': localStorage.getItem('access-token'),
-      client: localStorage.getItem('client'),
-      uid: localStorage.getItem('uid'),
-    }
 
     axios({ method: 'POST', url: url, headers: headers })
       .then(() => {
         setIsLiked(!isLiked)
-        console.log('sent Liked!')
+        setLikedCount(LikedCount + 1)
       })
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
@@ -94,24 +82,11 @@ const DiaryCard = (props: diaryCardProps) => {
 
   const handleDislikedChange: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
-    setLikedCount(LikedCount - 1)
-    const url =
-      process.env.NEXT_PUBLIC_API_BASE_URL +
-      '/diaries/' +
-      props.id +
-      '/favorites'
-
-    const headers = {
-      'Content-Type': 'application/json',
-      'access-token': localStorage.getItem('access-token'),
-      client: localStorage.getItem('client'),
-      uid: localStorage.getItem('uid'),
-    }
 
     axios({ method: 'DELETE', url: url, headers: headers })
       .then(() => {
         setIsLiked(!isLiked)
-        console.log('sent DisLiked!')
+        setLikedCount(LikedCount - 1)
       })
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
@@ -139,46 +114,10 @@ const DiaryCard = (props: diaryCardProps) => {
               <Typography sx={{ fontSize: 15, mx: 1, fontWeight: 'bold' }}>
                 {props.userName}
               </Typography>
-              {props.userCountry === 'USA' && (
+              {props.userCountry && (
                 <Image
                   css={imageCss}
-                  src="/usa.png"
-                  height={15}
-                  width={30}
-                  alt="国旗"
-                />
-              )}
-              {props.userCountry === 'UK' && (
-                <Image
-                  css={imageCss}
-                  src="/uk.png"
-                  height={15}
-                  width={30}
-                  alt="国旗"
-                />
-              )}
-              {props.userCountry === 'Australia' && (
-                <Image
-                  css={imageCss}
-                  src="/australia.png"
-                  height={15}
-                  width={30}
-                  alt="国旗"
-                />
-              )}
-              {props.userCountry === 'Canada' && (
-                <Image
-                  css={imageCss}
-                  src="/canada.png"
-                  height={15}
-                  width={30}
-                  alt="国旗"
-                />
-              )}
-              {props.userCountry === 'NewZealand' && (
-                <Image
-                  css={imageCss}
-                  src="/newzealand.png"
+                  src={`/${props.userCountry.toLowerCase()}.png`}
                   height={15}
                   width={30}
                   alt="国旗"
@@ -201,7 +140,11 @@ const DiaryCard = (props: diaryCardProps) => {
               )}
             </Box>
             <Box sx={{ display: 'flex', mx: 1, color: 'gray' }}>
-              <Typography sx={{ fontSize: 15, mr: 1 }}>{props.date}</Typography>
+              <Typography sx={{ fontSize: 15, mr: 1 }}>{props.day}</Typography>
+              <Typography sx={{ fontSize: 15, mr: 1 }}>
+                {props.month}
+              </Typography>
+              <Typography sx={{ fontSize: 15, mr: 1 }}>{props.year}</Typography>
               <Typography sx={{ fontSize: 15, mr: 1 }}>{props.wDay}</Typography>
             </Box>
           </Box>
@@ -232,10 +175,12 @@ const DiaryCard = (props: diaryCardProps) => {
             lineHeight: 1.5,
           }}
         >
-          {omit(props.title)(40)('...')}
+          {router.pathname === '/' && omit(props.title)(40)('...')}{' '}
+          {router.pathname !== '/' && props.title}
         </Typography>
         <Typography>
-          {omit(props.content)(305)('...')} ({props.wordCount} words)
+          {router.pathname === '/' && omit(props.content)(305)('...')}{' '}
+          {router.pathname !== '/' && props.content} ({props.wordCount} words)
         </Typography>
         <Box sx={{ display: 'flex' }}>
           <Box>

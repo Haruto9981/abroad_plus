@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_03_083656) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_08_054622) do
   create_table "diaries", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", comment: "タイトル"
     t.text "content", comment: "本文"
@@ -29,6 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_03_083656) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["diary_id"], name: "index_favorites_on_diary_id"
+    t.index ["user_id", "diary_id"], name: "index_favorites_on_user_id_and_diary_id", unique: true
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 

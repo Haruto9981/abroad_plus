@@ -165,7 +165,7 @@ const Header = () => {
                         <ListItemIcon>
                           <PersonIcon fontSize="small" />
                         </ListItemIcon>
-                        プロフィール
+                        Profile
                       </MenuItem>
                     </Link>
                     <Link href="/current/diaries">
@@ -173,7 +173,7 @@ const Header = () => {
                         <ListItemIcon>
                           <ArticleIcon fontSize="small" />
                         </ListItemIcon>
-                        日記の管理
+                        Diary
                       </MenuItem>
                     </Link>
                     <Link href="/sign_out">
@@ -181,7 +181,7 @@ const Header = () => {
                         <ListItemIcon>
                           <Logout fontSize="small" />
                         </ListItemIcon>
-                        サインアウト
+                        Sigh out
                       </MenuItem>
                     </Link>
                   </Menu>
