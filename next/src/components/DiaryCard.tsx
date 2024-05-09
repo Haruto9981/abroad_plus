@@ -140,12 +140,16 @@ const DiaryCard = (props: diaryCardProps) => {
               )}
             </Box>
             <Box sx={{ display: 'flex', mx: 1, color: 'gray' }}>
-              <Typography sx={{ fontSize: 15, mr: 1 }}>{props.day}</Typography>
-              <Typography sx={{ fontSize: 15, mr: 1 }}>
+              <Typography sx={{ fontSize: 15, mr: 0.5 }}>
+                {props.day}
+              </Typography>
+              <Typography sx={{ fontSize: 15, mr: 0.5 }}>
                 {props.month}
               </Typography>
-              <Typography sx={{ fontSize: 15, mr: 1 }}>{props.year}</Typography>
-              <Typography sx={{ fontSize: 15, mr: 1 }}>{props.wDay}</Typography>
+              <Typography sx={{ fontSize: 15, mr: 0.5 }}>
+                {props.year}
+              </Typography>
+              <Typography sx={{ fontSize: 15 }}>{props.wDay}</Typography>
             </Box>
           </Box>
         </Box>

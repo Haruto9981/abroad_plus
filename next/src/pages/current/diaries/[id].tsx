@@ -36,7 +36,7 @@ type CurrentDiaryProps = {
   }
   wordCount: number
   day: string
-  month: string
+  monthName: string
   year: string
   date: string
   wDay: string
@@ -148,7 +148,7 @@ const CurrentDiaryDetail: NextPage = () => {
             image={diary.image.url}
             wordCount={diary.wordCount}
             day={diary.day}
-            month={diary.month}
+            month={diary.monthName}
             year={diary.year}
             wDay={diary.wDay}
             favorites={diary.favorites}

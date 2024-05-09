@@ -135,7 +135,7 @@ const CurrentDiariesEdit: NextPage = () => {
       status: data.status,
       wordCount: data.word_count,
       day: data.day,
-      month: data.month,
+      month: data.month_name,
       year: data.year,
       wDay: data.w_day,
     }

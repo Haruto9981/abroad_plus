@@ -14,14 +14,19 @@ import {
   ListItemIcon,
   Typography,
 } from '@mui/material'
+import Tabs from '@mui/material/Tabs'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import LinkTab from './LinkTab'
 import { useUserState } from '@/hooks/useGlobalState'
 
-const Header = () => {
+type Props = {
+  pageUrl?: string
+}
+const Header: React.FC<Props> = ({ pageUrl }: Props) => {
   const [user] = useUserState()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -73,10 +78,19 @@ const Header = () => {
             alignItems: 'center',
           }}
         >
-          <Box>
+          <Box sx={{ display: 'flex', textAlign: 'center' }}>
             <Link href="/">
               <Image src="/logo.png" width={85} height={85} alt="logo" />
             </Link>
+
+            <Tabs sx={{ mt: 5, ml: 4 }} value={pageUrl || false}>
+              <LinkTab label="Home" href="/" value="/" />
+              <LinkTab
+                label="Diary"
+                href="/current/diaries"
+                value="/current/diaries"
+              />
+            </Tabs>
           </Box>
           {user.isFetched && (
             <>

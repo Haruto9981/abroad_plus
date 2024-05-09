@@ -42,10 +42,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/current/diaries/edit/[id].js"
     ],
-    "/profile": [
+    "/diaries/[id]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/profile.js"
+      "static/chunks/pages/diaries/[id].js"
     ]
   },
   "ampFirstPages": []
