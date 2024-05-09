@@ -1,4 +1,4 @@
-import { Box, Grid, Container, Pagination, Typography } from '@mui/material'
+import { Box, Grid, Container, Pagination } from '@mui/material'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Link from 'next/link'
@@ -7,8 +7,6 @@ import useSWR from 'swr'
 import DiaryCard from '@/components/DiaryCard'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
-import { Calendar } from '@/components/MuiCalendar'
-import { useUserState } from '@/hooks/useGlobalState'
 import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
@@ -20,7 +18,10 @@ type DiaryProps = {
     url: string
   }
   wordCount: number
-  date: string
+  day: string
+  monthName: string
+  month: string
+  year: string
   wDay: string
   user: {
     name: string
@@ -33,11 +34,11 @@ type DiaryProps = {
       url: string
     }
   }
+  favorites: { user_id: number }[]
 }
 
 const Index: NextPage = () => {
   const router = useRouter()
-  const [user] = useUserState()
   const page = 'page' in router.query ? Number(router.query.page) : 1
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/?page=' + page
   const { data, error } = useSWR(url, fetcher)
@@ -51,21 +52,21 @@ const Index: NextPage = () => {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
     router.push('/?page=' + value)
 
-  const getDateDifference = (date1: Date, date2: Date) => {
-    const d1 = new Date(date1)
-    const d2 = new Date(date2)
+  // const getDateDifference = (date1: Date, date2: Date) => {
+  //   const d1 = new Date(date1)
+  //   const d2 = new Date(date2)
 
-    const diffTime = d2.getTime() - d1.getTime()
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  //   const diffTime = d2.getTime() - d1.getTime()
+  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-    return diffDays
-  }
+  //   return diffDays
+  // }
 
-  const currentDate = new Date()
-  const startDate = new Date(user.start_date)
-  const endDate = new Date(user.end_date)
-  const startDateDifference = getDateDifference(currentDate, startDate)
-  const endDateDifference = getDateDifference(currentDate, endDate)
+  // const currentDate = new Date()
+  // const startDate = new Date(user.start_date)
+  // const endDate = new Date(user.end_date)
+  // const startDateDifference = getDateDifference(currentDate, startDate)
+  // const endDateDifference = getDateDifference(currentDate, endDate)
 
   return (
     <Box
@@ -83,7 +84,9 @@ const Index: NextPage = () => {
                   content={diary.content}
                   image={diary.image.url}
                   wordCount={diary.wordCount}
-                  date={diary.date}
+                  day={diary.day}
+                  month={diary.monthName}
+                  year={diary.year}
                   wDay={diary.wDay}
                   userName={diary.user.name}
                   userCountry={diary.user.country}
@@ -92,6 +95,7 @@ const Index: NextPage = () => {
                   userEndDate={diary.user.endDate}
                   userBio={diary.user.bio}
                   userImage={diary.user.image.url}
+                  favorites={diary.favorites}
                 />
               </Link>
             </Grid>
@@ -105,7 +109,7 @@ const Index: NextPage = () => {
           />
         </Box>
       </Container>
-      <Container
+      {/* <Container
         maxWidth="sm"
         sx={{ pt: 6, display: { xs: 'none', lg: 'block' } }}
       >
@@ -134,8 +138,7 @@ const Index: NextPage = () => {
             days to the start of your SA
           </Typography>
         )}
-        <Calendar />
-      </Container>
+      </Container> */}
     </Box>
   )
 }

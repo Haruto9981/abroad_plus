@@ -3,6 +3,8 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/": "pages/index.js",
+  "/diaries/[id]": "pages/diaries/[id].js",
+  "/current/diaries/edit/[id]": "pages/current/diaries/edit/[id].js",
   "/current/diaries": "pages/current/diaries.js",
   "/current/diaries/[id]": "pages/current/diaries/[id].js"
 }

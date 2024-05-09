@@ -1,11 +1,11 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import EditIcon from '@mui/icons-material/Edit'
 import { LoadingButton } from '@mui/lab'
 import {
   Avatar,
   Box,
   Container,
   Typography,
-  Card,
   Button,
   Modal,
   Tooltip,
@@ -18,6 +18,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
+import CurrentUserDiaryCard from '@/components/CurrentDiaryCard'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { useUserState, useSnackbarState } from '@/hooks/useGlobalState'
@@ -29,13 +30,17 @@ type CurrentDiaryProps = {
   id: number
   title: string
   content: string
-  imageUrl: string
-  wordCount: number
-  createdAt: string
-  fromToday: string
-  user: {
-    name: string
+  status: string
+  image: {
+    url: string
   }
+  wordCount: number
+  day: string
+  monthName: string
+  year: string
+  date: string
+  wDay: string
+  favorites: { user_id: number }[]
 }
 
 const CurrentDiaryDetail: NextPage = () => {
@@ -109,60 +114,45 @@ const CurrentDiaryDetail: NextPage = () => {
         pb: 6,
       }}
     >
-      <Container maxWidth="lg">
-        <Box sx={{ maxWidth: 840, m: 'auto', pt: 6, pb: 3 }}>
-          <Box sx={{ width: 40, height: 40 }}>
-            <Link href={'/current/diaries'}>
-              <Avatar>
-                <Tooltip title="日記一覧に戻る">
-                  <IconButton sx={{ backgroundColor: 'white' }}>
-                    <ChevronLeftIcon sx={{ color: '#99AAB6' }} />
-                  </IconButton>
-                </Tooltip>
-              </Avatar>
-            </Link>
+      <Container maxWidth="sm">
+        <Box sx={{ maxWidth: 840, m: 'auto', pt: 1 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 2 }}>
+            <Box sx={{ width: 40, height: 40 }}>
+              <Link href={'/current/diaries'}>
+                <Avatar>
+                  <Tooltip title="Back">
+                    <IconButton sx={{ backgroundColor: 'white' }}>
+                      <ChevronLeftIcon sx={{ color: '#99AAB6' }} />
+                    </IconButton>
+                  </Tooltip>
+                </Avatar>
+              </Link>
+            </Box>
+            <Box>
+              <Link href={'/current/diaries/edit/' + diary.id}>
+                <Avatar>
+                  <Tooltip title="Edit">
+                    <IconButton sx={{ backgroundColor: 'white' }}>
+                      <EditIcon sx={{ color: '#99AAB6' }} />
+                    </IconButton>
+                  </Tooltip>
+                </Avatar>
+              </Link>
+            </Box>
           </Box>
-          <Box sx={{ textAlign: 'center', width: '100%' }}>
-            <Typography
-              component="h2"
-              sx={{
-                fontSize: { xs: 21, sm: 25 },
-                fontWeight: 'bold',
-                lineHeight: '40px',
-              }}
-            >
-              {diary.title}
-            </Typography>
-          </Box>
-          <Box sx={{ textAlign: 'right' }}>
-            <Typography
-              component="h3"
-              sx={{
-                fontSize: { xs: 15, sm: 18 },
-              }}
-            >
-              {diary.wordCount} words
-            </Typography>
-          </Box>
-          <Box sx={{ width: '100%' }}>
-            <Card
-              sx={{
-                boxShadow: 'none',
-                borderRadius: '12px',
-                maxWidth: 840,
-                m: '0 auto',
-              }}
-            >
-              <Box
-                sx={{
-                  padding: { xs: '0 24px 24px 24px', sm: '0 40px 40px 40px' },
-                  marginTop: { xs: '24px', sm: '40px' },
-                }}
-              >
-                <Typography>{diary.content}</Typography>
-              </Box>
-            </Card>
-          </Box>
+          <CurrentUserDiaryCard
+            id={diary.id}
+            title={diary.title}
+            content={diary.content}
+            status={diary.status}
+            image={diary.image.url}
+            wordCount={diary.wordCount}
+            day={diary.day}
+            month={diary.monthName}
+            year={diary.year}
+            wDay={diary.wDay}
+            favorites={diary.favorites}
+          />
           <Box sx={{ mt: 4, textAlign: 'right' }}>
             <LoadingButton
               color="warning"
@@ -197,20 +187,17 @@ const CurrentDiaryDetail: NextPage = () => {
                 }}
               >
                 <Typography sx={{ mb: 4 }}>
-                  本当に削除してもよろしいですか?
+                  Do you really want to delete it?
                 </Typography>
                 <Button
                   onClick={handleClose}
                   variant="contained"
+                  color="warning"
                   sx={{ marginRight: 2 }}
                 >
-                  キャンセル
+                  Cancel
                 </Button>
-                <Button
-                  variant="contained"
-                  color="warning"
-                  onClick={deleteDiary}
-                >
+                <Button variant="contained" onClick={deleteDiary}>
                   OK
                 </Button>
               </Box>

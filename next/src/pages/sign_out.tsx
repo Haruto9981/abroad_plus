@@ -14,6 +14,8 @@ const SignOut: NextPage = () => {
       id: 0,
       name: '',
       email: '',
+      start_date: new Date(),
+      end_date: new Date(),
       image: {
         url: '',
       },

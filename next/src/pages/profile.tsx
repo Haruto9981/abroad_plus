@@ -183,7 +183,7 @@ const Profile: NextPage = () => {
             component="h2"
             sx={{ fontSize: 28, color: 'black', fontWeight: 'bold' }}
           >
-            プロフィール
+            Profile
           </Typography>
         </Box>
         <Stack component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -221,8 +221,13 @@ const Profile: NextPage = () => {
               name="image"
               control={control}
               render={({ field }) => (
-                <Button variant="contained" component="label" color="warning">
-                  画像を選択
+                <Button
+                  variant="contained"
+                  component="label"
+                  color="warning"
+                  sx={{ textTransform: 'none' }}
+                >
+                  Choose your avator
                   <input
                     {...field}
                     type="file"
@@ -236,7 +241,7 @@ const Profile: NextPage = () => {
               )}
             />
           </Box>
-          <Typography sx={{ mb: 1 }}>名前</Typography>
+          <Typography sx={{ mb: 1 }}>Name</Typography>
           <Controller
             name="name"
             control={control}
@@ -253,7 +258,7 @@ const Profile: NextPage = () => {
               />
             )}
           />
-          <Typography sx={{ mt: 3, mb: 1 }}>留学先の国</Typography>
+          <Typography sx={{ mt: 3, mb: 1 }}>The Country of your SA</Typography>
           <Controller
             name="country"
             control={control}
@@ -269,97 +274,97 @@ const Profile: NextPage = () => {
                   }}
                 >
                   <MenuItem value="">
-                    <em>選択してください</em>
+                    <em>Select</em>
                   </MenuItem>
-                  <MenuItem value="USA">アメリカ合衆国</MenuItem>
-                  <MenuItem value="UK">イギリス</MenuItem>
-                  <MenuItem value="Australia">オーストラリア</MenuItem>
-                  <MenuItem value="Canada">カナダ</MenuItem>
-                  <MenuItem value="NewZealand">ニュージーランド</MenuItem>
+                  <MenuItem value="USA">USA</MenuItem>
+                  <MenuItem value="UK">UK</MenuItem>
+                  <MenuItem value="Australia">Australia</MenuItem>
+                  <MenuItem value="Canada">Canada</MenuItem>
+                  <MenuItem value="NewZealand">NewZealand</MenuItem>
                 </Select>
                 <FormHelperText>{fieldState.error?.message}</FormHelperText>
               </FormControl>
             )}
           />
-          <Typography sx={{ mt: 3, mb: 1 }}>留学先の大学</Typography>
+          <Typography sx={{ mt: 3, mb: 1 }}>The Uni of your SA</Typography>
           <Controller
             name="uni"
             control={control}
             render={({ field }) => (
               <Select {...field} sx={{ backgroundColor: 'white' }} displayEmpty>
                 <MenuItem value="">
-                  <em>選択してください</em>
+                  <em>Select</em>
                 </MenuItem>
                 {!country && [
                   <MenuItem key="csumb" value="CSUMB">
-                    カリフォルニア州立大学モントレーベイ校
+                    California State University Monterey Bay
                   </MenuItem>,
                   <MenuItem key="kansas" value="Kansas">
-                    カンザス大学
+                    The University of Kansas
                   </MenuItem>,
                   <MenuItem key="utah" value="Utah">
-                    ユタ大学
+                    The University of Utah
                   </MenuItem>,
                   <MenuItem key="aston" value="Aston">
-                    アストン大学
+                    Aston University
                   </MenuItem>,
                   <MenuItem key="cccu" value="Canterbury">
-                    カンタベリー・クライスト・チャーチ大学
+                    Canterbury Christ Church University
                   </MenuItem>,
                   <MenuItem key="queensland" value="Queensland">
-                    クイーンズランド大学
+                    The University of Queensland
                   </MenuItem>,
                   <MenuItem key="southerncross" value="SouthernCross">
-                    サザンクロス大学
+                    Southern Cross University
                   </MenuItem>,
                   <MenuItem key="alberta" value="Alberta">
-                    アルバータ
+                    The University of Alberta
                   </MenuItem>,
                   <MenuItem key="otago" value="Otago">
-                    オタゴ大学
+                    The University of Otago
                   </MenuItem>,
                   <MenuItem key="auckland" value="Auckland">
-                    オークランド大学
+                    The University of Auckland
                   </MenuItem>,
                 ]}
                 {country === 'USA' && [
                   <MenuItem key="csumb" value="CSUMB">
-                    カリフォルニア州立大学モントレーベイ校
+                    California State University Monterey Bay
                   </MenuItem>,
                   <MenuItem key="kansas" value="Kansas">
-                    カンザス大学
+                    The University of Kansas
                   </MenuItem>,
                   <MenuItem key="utah" value="Utah">
-                    ユタ大学
+                    The University of Utah
                   </MenuItem>,
                 ]}
                 {country === 'UK' && [
                   <MenuItem key="aston" value="Aston">
-                    アストン大学
+                    Aston University
                   </MenuItem>,
                   <MenuItem key="cccu" value="Canterbury">
-                    カンタベリー・クライスト・チャーチ大学
+                    Canterbury Christ Church University
                   </MenuItem>,
                 ]}
                 {country === 'Australia' && [
                   <MenuItem key="queensland" value="Queensland">
-                    クイーンズランド大学
+                    The University of Queensland
                   </MenuItem>,
                   <MenuItem key="southerncross" value="SouthernCross">
-                    サザンクロス大学
+                    Southern Cross University
                   </MenuItem>,
                 ]}
                 {country === 'Canada' && [
                   <MenuItem key="alberta" value="Alberta">
-                    アルバータ
+                    The University of Alberta
                   </MenuItem>,
                 ]}
                 {country === 'NewZealand' && [
                   <MenuItem key="otago" value="Otago">
-                    オタゴ大学
+                    The University of Otago
                   </MenuItem>,
                   <MenuItem key="auckland" value="Auckland">
-                    オークランド大学
+                    The University of Auckland
                   </MenuItem>,
                 ]}
               </Select>
@@ -367,7 +372,9 @@ const Profile: NextPage = () => {
           />
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ mr: 4 }}>
-              <Typography sx={{ mt: 3, mb: 1 }}>留学開始日</Typography>
+              <Typography sx={{ mt: 3, mb: 1 }}>
+                Start date of your SA
+              </Typography>
               <Controller
                 name="start_date"
                 control={control}
@@ -383,7 +390,7 @@ const Profile: NextPage = () => {
               />
             </Box>
             <Box>
-              <Typography sx={{ mt: 3, mb: 1 }}>留学終了日</Typography>
+              <Typography sx={{ mt: 3, mb: 1 }}>End date of your SA</Typography>
               <Controller
                 name="end_date"
                 control={control}
@@ -399,7 +406,7 @@ const Profile: NextPage = () => {
               />
             </Box>
           </Box>
-          <Typography sx={{ mt: 3, mb: 1 }}>自己紹介</Typography>
+          <Typography sx={{ mt: 3, mb: 1 }}>Bio</Typography>
           <Controller
             name="bio"
             control={control}
@@ -420,9 +427,14 @@ const Profile: NextPage = () => {
             type="submit"
             color="warning"
             loading={isLoading}
-            sx={{ mt: 3, fontWeight: 'bold', color: 'white' }}
+            sx={{
+              mt: 3,
+              fontWeight: 'bold',
+              color: 'white',
+              textTransform: 'none',
+            }}
           >
-            更新する
+            Save
           </LoadingButton>
         </Stack>
       </Container>

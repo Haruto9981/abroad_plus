@@ -19,29 +19,51 @@ ActiveRecord::Base.transaction do
                        image: File.open("./public/images/6917C2F9-F127-411E-B180-5128956C03C2_1_105_c.jpeg"),
                        country: "UK", uni: "Canterbury", bio: "Hello!")
 
-  15.times do |_i|
+  require "date"
+
+  start_date = Date.new(2024, 4, 15)
+  end_date = Date.new(2024, 5, 9)
+
+  10.times do |_i|
     Diary.create!(title: "Had ramen",
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user1)
+                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user1,
+                  image: open("./public/images/sample#{_i}.jpeg"),
+                  created_at: rand(start_date..end_date),
+                  updated_at: rand(start_date..end_date))
     Diary.create!(title: "Party Night",
-                  content: "text text text text text text text text text text text text text text text text text text", word_count: 18,
-                  status: :shared, user: user2)
+                  content: "text text text text text text text text text text text text
+                  text text text text text text text text text text text text text text
+                  text text text text text text text text text text text text text text
+                  text text text text text text text text text text text text text text", word_count: 18, status: :shared, user: user2,
+                  image: open("./public/images/sample#{_i}.jpeg"),
+                  created_at: rand(start_date..end_date),
+                  updated_at: rand(start_date..end_date))
     Diary.create!(title: "Meet new friends!",
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user3)
+                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user3,
+                  image: open("./public/images/sample#{_i}.jpeg"),
+                  created_at: rand(start_date..end_date),
+                  updated_at: rand(start_date..end_date))
     Diary.create!(title: "Went to New York",
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user4)
-    Diary.create!(title: "Great day",
+                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user4,
+                  image: open("./public/images/sample#{_i}.jpeg"),
+                  created_at: rand(start_date..end_date),
+                  updated_at: rand(start_date..end_date))
+    Diary.create!(title: "Exciting Day",
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user5)
+                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user5,
+                  image: open("./public/images/sample#{_i}.jpeg"),
+                  created_at: rand(start_date..end_date),
+                  updated_at: rand(start_date..end_date))
   end
 end

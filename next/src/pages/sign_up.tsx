@@ -111,7 +111,7 @@ const SignUp: NextPage = () => {
               <TextField
                 {...field}
                 type="text"
-                label="メールアドレス"
+                label="E-mail"
                 error={fieldState.invalid}
                 helperText={fieldState.error?.message}
                 sx={{ backgroundColor: 'white' }}
@@ -126,7 +126,7 @@ const SignUp: NextPage = () => {
               <TextField
                 {...field}
                 type="password"
-                label="パスワード"
+                label="Password"
                 error={fieldState.invalid}
                 helperText={fieldState.error?.message}
                 sx={{ backgroundColor: 'white' }}
@@ -141,7 +141,7 @@ const SignUp: NextPage = () => {
               <TextField
                 {...field}
                 type="text"
-                label="ユーザー名"
+                label="User Name"
                 error={fieldState.invalid}
                 helperText={fieldState.error?.message}
                 sx={{ backgroundColor: 'white' }}
@@ -153,9 +153,9 @@ const SignUp: NextPage = () => {
             type="submit"
             color="warning"
             loading={isLoading}
-            sx={{ fontWeight: 'bold', color: 'white' }}
+            sx={{ fontWeight: 'bold', color: 'white', textTransform: 'none' }}
           >
-            送信する
+            Send
           </LoadingButton>
         </Stack>
       </Container>
