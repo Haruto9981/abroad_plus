@@ -185,27 +185,28 @@ const CurrentDiaries: NextPage = () => {
     return months[month - 1]
   }
 
-  const handleMonthChange = (e: Date) => {
-    const selectedYear = e.getFullYear()
-    const selectedMonth = e.getMonth() + 1
-    const daysInSelectedMonth = getDaysInMonth(selectedYear, selectedMonth)
+  const handleMonthChange = (e: Date | null) => {
+    if (e !== null) {
+      const selectedYear = e.getFullYear()
+      const selectedMonth = e.getMonth() + 1
+      const daysInSelectedMonth = getDaysInMonth(selectedYear, selectedMonth)
+      setDaysInSelectedMonth(daysInSelectedMonth)
 
-    setDaysInSelectedMonth(daysInSelectedMonth)
+      const diaryCount = writtenDiaryInMonth(
+        selectedYear,
+        selectedMonth,
+        diaryWrittenDates,
+      )
+      setDiaryCounter(diaryCount)
 
-    const diaryCount = writtenDiaryInMonth(
-      selectedYear,
-      selectedMonth,
-      diaryWrittenDates,
-    )
-    setDiaryCounter(diaryCount)
-
-    const diariesInSpecificMonth = getDiariesInSpecificMonth(
-      selectedYear,
-      selectedMonth,
-    )
-    setDiariesInSpecificDay(undefined)
-    setDiariesInSpecificMonth(diariesInSpecificMonth)
-    setYearMonth(`${getMonthName(selectedMonth)} ${selectedYear}`)
+      const diariesInSpecificMonth = getDiariesInSpecificMonth(
+        selectedYear,
+        selectedMonth,
+      )
+      setDiariesInSpecificDay(undefined)
+      setDiariesInSpecificMonth(diariesInSpecificMonth)
+      setYearMonth(`${getMonthName(selectedMonth)} ${selectedYear}`)
+    }
   }
 
   const handleDayChange = (e: Date | null) => {
@@ -239,12 +240,107 @@ const CurrentDiaries: NextPage = () => {
       sx={{ backgroundColor: '#ffe0b6', display: 'flex' }}
     >
       <Container maxWidth="sm" sx={{ py: 6 }}>
+        <Container maxWidth="sm" sx={{ display: { lg: 'none' } }}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Typography sx={{ fontSize: 20, textAlign: 'right', mr: 4, my: 1 }}>
+              Diary Records:{' '}
+              <span
+                style={{ fontWeight: 'bold', color: '#ed1c24', fontSize: 30 }}
+              >
+                {diaryCounter}
+              </span>{' '}
+              / {daysInSelectedMonth} days
+            </Typography>
+
+            <DateCalendar
+              onChange={handleDayChange}
+              onMonthChange={handleMonthChange}
+              views={['day']}
+              slots={{
+                day: diaryWrittenDay,
+              }}
+              sx={{
+                '& .MuiDayCalendar-header': {
+                  // Needed for weekday (ie S M T W T F S )adjustments (and padding if wanted)
+                  // Adjusts spacing between
+
+                  width: '100%',
+                  overflow: 'hidden',
+                  justifyContent: 'space-between',
+                  paddingLeft: '1em',
+                  paddingRight: '1em',
+                  // paddingTop: '1em',
+                  // paddingBottom: "1em",
+                },
+                '& .MuiDayCalendar-weekContainer': {
+                  // Adjusts spacing between days (ie 1, 2, 3.. 27, 28)
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  width: '100%',
+                  margin: 0,
+                },
+                '& .MuiPickersDay-dayWithMargin': {
+                  // Grows width/height of day buttons
+                  width: 'calc(100% - 4px)',
+                  height: 'calc(100% - 4px)',
+                  aspectRatio: '1',
+                  // height: 'auto',
+
+                  fontSize: '1.0em',
+                },
+                '& .MuiBadge-root': {
+                  // Parent of button management
+                  aspectRatio: 1,
+                  width: '10%',
+                  display: 'flex',
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                },
+                '& .MuiDayCalendar-weekDayLabel': {
+                  // Manages size of weekday labels
+                  aspectRatio: 1,
+                  width: 'calc(10% - 4px)', // deals with margin
+                  fontSize: '1.2em',
+                },
+                '& .MuiPickersCalendarHeader-root': {
+                  paddingLeft: 0,
+                },
+                '& .MuiPickersCalendarHeader-label': {
+                  // Manages month/year size
+                  fontSize: '1.3em',
+                },
+                '& .MuiDayCalendar-monthContainer': {
+                  // Not sure if needed, currently works tho
+                  width: '100%',
+                },
+                '& .MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer':
+                  {
+                    // Handles size of week row parent, 1.6 aspect is good for now
+                    aspectRatio: '1.6',
+                    overflow: 'hidden',
+                  },
+                '& .MuiDayCalendar-slideTransition': {
+                  // Handles size of week row parent, 1.6 aspect is good for now
+                  // 1.2がベスト。1.6だとカレンダー下部が切れる。
+                  aspectRatio: 1.2,
+                  width: '100%',
+                  overflow: 'hidden',
+                },
+
+                width: '100%',
+                maxHeight: '500%',
+              }}
+            />
+          </LocalizationProvider>
+        </Container>
         <Grid container spacing={2}>
           {!diariesInSpecificMonth && !diariesInSpecificDay && (
             <>
-              <Typography sx={{ fontSize: 30, ml: 2 }}>
-                Recent Diaries
-              </Typography>
+              <Box>
+                <Typography sx={{ fontSize: 30, ml: 2 }}>
+                  Recent Diaries
+                </Typography>
+              </Box>
               {firstThirty.length === 0 ? (
                 <Typography sx={{ fontSize: 20, ml: 2, mt: 1, color: 'red' }}>
                   Not Found
@@ -276,9 +372,17 @@ const CurrentDiaries: NextPage = () => {
           )}
           {diariesInSpecificMonth && (
             <>
-              <Typography sx={{ fontSize: 30, ml: 2 }}>
-                Diaries in {yearMonth}
-              </Typography>
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: 30,
+                    ml: 2,
+                    display: { xs: 'none', lg: 'block' },
+                  }}
+                >
+                  {yearMonth}
+                </Typography>
+              </Box>
               {diariesInSpecificMonth.length === 0 ? (
                 <Typography sx={{ fontSize: 20, ml: 2, mt: 1, color: 'red' }}>
                   Not Found
@@ -312,9 +416,18 @@ const CurrentDiaries: NextPage = () => {
           )}
           {diariesInSpecificDay && (
             <>
-              <Typography sx={{ fontSize: 30, ml: 2 }}>
-                Diaries in {yearMonthDay}
-              </Typography>
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: 30,
+                    ml: 2,
+                    display: { xs: 'none', lg: 'block' },
+                  }}
+                >
+                  {yearMonthDay}
+                </Typography>
+              </Box>
+
               {diariesInSpecificDay.length === 0 ? (
                 <Typography sx={{ fontSize: 20, ml: 2, mt: 1, color: 'red' }}>
                   Not Found

@@ -68,6 +68,7 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
         backgroundColor: 'white',
         color: 'black',
         boxShadow: 'none',
+        height: 88,
       }}
     >
       <Container maxWidth="lg" sx={{ px: 2 }}>
@@ -83,7 +84,10 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
               <Image src="/logo.png" width={85} height={85} alt="logo" />
             </Link>
 
-            <Tabs sx={{ mt: 5, ml: 4 }} value={pageUrl || false}>
+            <Tabs
+              sx={{ mt: 5, ml: 4, display: { xs: 'none', sm: 'block' } }}
+              value={pageUrl || false}
+            >
               <LinkTab label="Home" href="/" value="/" />
               <LinkTab
                 label="Diary"
@@ -174,20 +178,28 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
                       </Typography>
                     </Box>
                     <Divider />
+                    <Link href="/">
+                      <MenuItem sx={{ display: { sm: 'none' } }}>
+                        <ListItemIcon>
+                          <ArticleIcon fontSize="small" />
+                        </ListItemIcon>
+                        Home
+                      </MenuItem>
+                    </Link>
+                    <Link href="/current/diaries">
+                      <MenuItem sx={{ display: { sm: 'none' } }}>
+                        <ListItemIcon>
+                          <ArticleIcon fontSize="small" />
+                        </ListItemIcon>
+                        Diary
+                      </MenuItem>
+                    </Link>
                     <Link href="/profile">
                       <MenuItem>
                         <ListItemIcon>
                           <PersonIcon fontSize="small" />
                         </ListItemIcon>
                         Profile
-                      </MenuItem>
-                    </Link>
-                    <Link href="/current/diaries">
-                      <MenuItem>
-                        <ListItemIcon>
-                          <ArticleIcon fontSize="small" />
-                        </ListItemIcon>
-                        Diary
                       </MenuItem>
                     </Link>
                     <Link href="/sign_out">
