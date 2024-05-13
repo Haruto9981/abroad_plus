@@ -2,6 +2,7 @@ class DiarySerializer < ActiveModel::Serializer
   attributes :id, :title, :content, :image, :word_count, :status, :day, :month_name, :month, :year, :w_day, :created_at
   belongs_to :user, serializer: UserSerializer
   has_many :favorites, serializer: FavoriteSerializer
+  has_many :diary_comments, serializer: DiaryCommentSerializer
 
   def day
     object.created_at.strftime("%d")

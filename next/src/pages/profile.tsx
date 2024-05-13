@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close'
 import { LoadingButton } from '@mui/lab'
 import {
   Box,
@@ -10,6 +11,7 @@ import {
   FormControl,
   Avatar,
   Button,
+  IconButton,
   SelectChangeEvent,
 } from '@mui/material'
 import Select from '@mui/material/Select'
@@ -21,6 +23,7 @@ import useSWR from 'swr'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { useUserState, useSnackbarState } from '@/hooks/useGlobalState'
+import { useRequireSignedIn } from '@/hooks/useRequireSignedIn'
 import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
@@ -45,6 +48,7 @@ type profileFormData = {
 }
 
 const Profile: NextPage = () => {
+  useRequireSignedIn()
   const [user, setUser] = useUserState()
   const [, setSnackbar] = useSnackbarState()
   const [isFetched, setIsFetched] = useState<boolean>(false)
@@ -52,6 +56,7 @@ const Profile: NextPage = () => {
   const [selectedFile, setSelectedFile] = useState<File>()
   const [previewUrl, setPreviewUrl] = useState('')
   const [country, setCountry] = useState('')
+  const [isExistImageDeleted, setIsExistImageDeleted] = useState<boolean>(false)
 
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
   const { data, error } = useSWR(user.isSignedIn ? url : null, fetcher)
@@ -81,6 +86,13 @@ const Profile: NextPage = () => {
     defaultValues: { profile },
   })
 
+  useEffect(() => {
+    if (data) {
+      reset(profile)
+      setIsFetched(true)
+    }
+  }, [data, profile, reset])
+
   const handleCountryChange = (e: SelectChangeEvent<string>) => {
     setCountry(e.target.value)
   }
@@ -102,12 +114,13 @@ const Profile: NextPage = () => {
     }
   }
 
-  useEffect(() => {
-    if (data) {
-      reset(profile)
-      setIsFetched(true)
-    }
-  }, [data, profile, reset])
+  const handleDeleteChange = () => {
+    setSelectedFile(undefined)
+  }
+
+  const handleExistImageDeleteChange = () => {
+    setIsExistImageDeleted(true)
+  }
 
   const onSubmit: SubmitHandler<profileFormData> = (data) => {
     if (data.name == '') {
@@ -137,8 +150,8 @@ const Profile: NextPage = () => {
     formData.append('user[start_date]', data.start_date)
     formData.append('user[end_date]', data.end_date)
     formData.append('user[bio]', data.bio)
-    if (selectedFile) {
-      formData.append('user[image]', selectedFile)
+    if (selectedFile || isExistImageDeleted) {
+      formData.append('user[image]', selectedFile || '')
     }
 
     axios({
@@ -196,12 +209,30 @@ const Profile: NextPage = () => {
           >
             {!selectedFile && (
               <>
-                {data.image.url ? (
-                  <Avatar
-                    sx={{ width: 175, height: 175, mb: 2 }}
-                    alt="プレビュー"
-                    src={data.image.url}
-                  />
+                {data.image.url && !isExistImageDeleted ? (
+                  <Box css={{ position: 'relative' }}>
+                    <Avatar
+                      sx={{ width: 175, height: 175, mb: 2 }}
+                      alt="プレビュー"
+                      src={data.image.url}
+                    />
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: -12,
+                        right: -12,
+                      }}
+                    >
+                      <Avatar>
+                        <IconButton
+                          sx={{ backgroundColor: '#F1F5FA' }}
+                          onClick={handleExistImageDeleteChange}
+                        >
+                          <CloseIcon sx={{ color: '#99AAB6' }} />
+                        </IconButton>
+                      </Avatar>
+                    </Box>
+                  </Box>
                 ) : (
                   <Avatar
                     sx={{ width: 175, height: 175, mb: 2 }}
@@ -211,11 +242,30 @@ const Profile: NextPage = () => {
               </>
             )}
             {selectedFile && (
-              <Avatar
-                sx={{ width: 175, height: 175, mb: 2 }}
-                alt="プレビュー"
-                src={previewUrl}
-              />
+              <Box css={{ position: 'relative' }}>
+                <Avatar
+                  sx={{ width: 175, height: 175, mb: 2 }}
+                  alt="プレビュー"
+                  src={previewUrl}
+                />
+
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: -12,
+                    right: -12,
+                  }}
+                >
+                  <Avatar>
+                    <IconButton
+                      sx={{ backgroundColor: '#F1F5FA' }}
+                      onClick={handleDeleteChange}
+                    >
+                      <CloseIcon sx={{ color: '#99AAB6' }} />
+                    </IconButton>
+                  </Avatar>
+                </Box>
+              </Box>
             )}
             <Controller
               name="image"

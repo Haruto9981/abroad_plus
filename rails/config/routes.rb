@@ -11,8 +11,8 @@ Rails.application.routes.draw do
         resource :user, only: [:show, :update]
         resources :diaries, only: [:index, :show, :create, :update, :destroy]
       end
-      resources :diaries, only: [:index, :show]
-      resources :diaries do
+      resources :diaries, only: [:index, :show] do
+        resources :diary_comments, only: [:index, :create, :destroy]
         resource :favorites, only: [:show, :create, :destroy]
       end
     end

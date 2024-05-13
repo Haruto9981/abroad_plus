@@ -1,6 +1,7 @@
 class Diary < ApplicationRecord
   belongs_to :user
   has_many :favorites, dependent: :destroy
+  has_many :diary_comments, dependent: :destroy
   mount_uploader :image, ImageUploader
   enum :status, { unsaved: 10, personal: 20, shared: 30 }, _prefix: true
   validates :title, :content, :word_count, presence: true, if: -> { personal? || shared? }

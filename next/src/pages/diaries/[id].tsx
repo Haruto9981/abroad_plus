@@ -5,6 +5,7 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
+import Comment from '@/components/Comment'
 import DiaryCard from '@/components/DiaryCard'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
@@ -35,6 +36,7 @@ type DiaryProps = {
     }
   }
   favorites: { user_id: number }[]
+  diaryComments: Array<object>
 }
 
 const DiaryDetail: NextPage = () => {
@@ -81,12 +83,14 @@ const DiaryDetail: NextPage = () => {
           userName={diary.user.name}
           userCountry={diary.user.country}
           userUni={diary.user.uni}
-          userStartDate={diary.user.startDate}
-          userEndDate={diary.user.endDate}
           userBio={diary.user.bio}
           userImage={diary.user.image.url}
           favorites={diary.favorites}
+          diaryComments={diary.diaryComments}
         />
+        <Box sx={{ my: 4 }}>
+          <Comment id={diary.id} />
+        </Box>
       </Container>
     </Box>
   )

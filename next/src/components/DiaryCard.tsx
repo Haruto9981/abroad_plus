@@ -30,11 +30,10 @@ type diaryCardProps = {
   userName: string
   userCountry: string
   userUni: string
-  userStartDate: string
-  userEndDate: string
   userBio: string
   userImage: string
   favorites: { user_id: number }[]
+  diaryComments: Array<object>
 }
 
 const imageCss = css({ marginTop: '4px' })
@@ -203,6 +202,7 @@ const DiaryCard = (props: diaryCardProps) => {
           <IconButton>
             <CommentIcon />
           </IconButton>
+          <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
         </Box>
       </CardContent>
     </Card>

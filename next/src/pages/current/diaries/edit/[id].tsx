@@ -322,7 +322,7 @@ const CurrentDiariesEdit: NextPage = () => {
               name="image"
               control={control}
               render={({ field }) => (
-                <Tooltip title="サムネイルを追加する">
+                <Tooltip title="Add Image">
                   <Avatar sx={{ my: 2, mr: 4 }}>
                     <label htmlFor="image-upload">
                       <IconButton
@@ -363,24 +363,23 @@ const CurrentDiariesEdit: NextPage = () => {
                     width={360}
                     height={260}
                   />
-                  <Tooltip title="サムネイルを削除する">
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: -8,
-                        right: -8,
-                      }}
-                    >
-                      <Avatar>
-                        <IconButton
-                          sx={{ backgroundColor: '#F1F5FA' }}
-                          onClick={handleExistImageDeleteChange}
-                        >
-                          <CloseIcon sx={{ color: '#99AAB6' }} />
-                        </IconButton>
-                      </Avatar>
-                    </Box>
-                  </Tooltip>
+
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: -8,
+                      right: -8,
+                    }}
+                  >
+                    <Avatar>
+                      <IconButton
+                        sx={{ backgroundColor: '#F1F5FA' }}
+                        onClick={handleExistImageDeleteChange}
+                      >
+                        <CloseIcon sx={{ color: '#99AAB6' }} />
+                      </IconButton>
+                    </Avatar>
+                  </Box>
                 </Box>
               </Box>
             )}
@@ -400,24 +399,22 @@ const CurrentDiariesEdit: NextPage = () => {
                     width={360}
                     height={260}
                   />
-                  <Tooltip title="サムネイルを削除する">
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: -8,
-                        right: -8,
-                      }}
-                    >
-                      <Avatar>
-                        <IconButton
-                          sx={{ backgroundColor: '#F1F5FA' }}
-                          onClick={handleDeleteChange}
-                        >
-                          <CloseIcon sx={{ color: '#99AAB6' }} />
-                        </IconButton>
-                      </Avatar>
-                    </Box>
-                  </Tooltip>
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: -8,
+                      right: -8,
+                    }}
+                  >
+                    <Avatar>
+                      <IconButton
+                        sx={{ backgroundColor: '#F1F5FA' }}
+                        onClick={handleDeleteChange}
+                      >
+                        <CloseIcon sx={{ color: '#99AAB6' }} />
+                      </IconButton>
+                    </Avatar>
+                  </Box>
                 </Box>
               </Box>
             )}

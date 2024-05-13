@@ -9,5 +9,6 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
   has_many :diaries, dependent: :destroy
   has_many :favorites, dependent: :destroy
+  has_many :diary_comments, dependent: :destroy
   validates :name, presence: true
 end

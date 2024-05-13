@@ -1,4 +1,5 @@
 import ArticleIcon from '@mui/icons-material/Article'
+import HomeIcon from '@mui/icons-material/Home'
 import Logout from '@mui/icons-material/Logout'
 import PersonIcon from '@mui/icons-material/Person'
 import {
@@ -181,7 +182,7 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
                     <Link href="/">
                       <MenuItem sx={{ display: { sm: 'none' } }}>
                         <ListItemIcon>
-                          <ArticleIcon fontSize="small" />
+                          <HomeIcon fontSize="small" />
                         </ListItemIcon>
                         Home
                       </MenuItem>

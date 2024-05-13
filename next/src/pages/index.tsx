@@ -27,14 +27,13 @@ type DiaryProps = {
     name: string
     country: string
     uni: string
-    startDate: string
-    endDate: string
     bio: string
     image: {
       url: string
     }
   }
   favorites: { user_id: number }[]
+  diaryComments: Array<object>
 }
 
 const Index: NextPage = () => {
@@ -46,6 +45,8 @@ const Index: NextPage = () => {
   if (!data) return <Loading />
 
   const diaries = camelcaseKeys(data.diaries)
+
+  console.log(diaries)
 
   const meta = camelcaseKeys(data.meta)
 
@@ -91,11 +92,10 @@ const Index: NextPage = () => {
                   userName={diary.user.name}
                   userCountry={diary.user.country}
                   userUni={diary.user.uni}
-                  userStartDate={diary.user.startDate}
-                  userEndDate={diary.user.endDate}
                   userBio={diary.user.bio}
                   userImage={diary.user.image.url}
                   favorites={diary.favorites}
+                  diaryComments={diary.diaryComments}
                 />
               </Link>
             </Grid>
