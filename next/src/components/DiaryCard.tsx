@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import axios, { AxiosError } from 'axios'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState, useEffect, MouseEventHandler } from 'react'
 import { useUserState } from '@/hooks/useGlobalState'
@@ -27,6 +28,7 @@ type diaryCardProps = {
   month: string
   year: string
   wDay: string
+  userId: number
   userName: string
   userCountry: string
   userUni: string
@@ -96,18 +98,23 @@ const DiaryCard = (props: diaryCardProps) => {
     <Card sx={{ borderRadius: 2 }}>
       <CardContent>
         <Box sx={{ display: 'flex' }}>
-          <IconButton sx={{ p: 0 }}>
-            {props.userImage ? (
-              <Avatar
-                src={props.userImage}
-                sx={{ width: 50, height: 50 }}
-              ></Avatar>
-            ) : (
-              <Avatar sx={{ width: 50, height: 50 }}>
-                <PersonIcon />
-              </Avatar>
-            )}
-          </IconButton>
+          <Link
+            href={{ pathname: `/${props.userName}` }}
+            as={`/${props.userName}`}
+          >
+            <IconButton sx={{ p: 0 }}>
+              {props.userImage ? (
+                <Avatar
+                  src={props.userImage}
+                  sx={{ width: 50, height: 50 }}
+                ></Avatar>
+              ) : (
+                <Avatar sx={{ width: 50, height: 50 }}>
+                  <PersonIcon />
+                </Avatar>
+              )}
+            </IconButton>
+          </Link>
           <Box>
             <Box sx={{ display: 'flex' }}>
               <Typography sx={{ fontSize: 15, mx: 1, fontWeight: 'bold' }}>

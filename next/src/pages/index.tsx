@@ -24,6 +24,7 @@ type DiaryProps = {
   year: string
   wDay: string
   user: {
+    id: number
     name: string
     country: string
     uni: string
@@ -45,8 +46,6 @@ const Index: NextPage = () => {
   if (!data) return <Loading />
 
   const diaries = camelcaseKeys(data.diaries)
-
-  console.log(diaries)
 
   const meta = camelcaseKeys(data.meta)
 
@@ -89,6 +88,7 @@ const Index: NextPage = () => {
                   month={diary.monthName}
                   year={diary.year}
                   wDay={diary.wDay}
+                  userId={diary.user.id}
                   userName={diary.user.name}
                   userCountry={diary.user.country}
                   userUni={diary.user.uni}

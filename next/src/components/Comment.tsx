@@ -55,6 +55,7 @@ const Comment = (props: diaryIdProps) => {
   const [user] = useUserState()
   const [, setSnackbar] = useSnackbarState()
   const [open, setOpen] = useState<boolean>(false)
+  const [commentId, setCommentId] = useState<number>(0)
   const url =
     process.env.NEXT_PUBLIC_API_BASE_URL +
     '/diaries/' +
@@ -109,12 +110,14 @@ const Comment = (props: diaryIdProps) => {
       })
   }
 
-  const handleOpen = () => {
+  const handleOpen = (id: number) => {
     setOpen(true)
+    setCommentId(id)
   }
 
   const handleClose = () => {
     setOpen(false)
+    setCommentId(0)
   }
 
   const handleDeleteChange = (commentId: number) => {
@@ -144,6 +147,7 @@ const Comment = (props: diaryIdProps) => {
           pathname: '/diaries/[id]',
         })
         mutateComments()
+        setCommentId(0)
       })
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
@@ -259,48 +263,48 @@ const Comment = (props: diaryIdProps) => {
               </Box>
               {comment.userId === user.id && (
                 <>
-                  <IconButton onClick={handleOpen}>
+                  <IconButton onClick={() => handleOpen(comment.id)}>
                     <DeleteIcon />
                   </IconButton>
-                  <Modal open={open} onClose={handleClose}>
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 400,
-                        bgcolor: 'background.paper',
-                        border: '0.5px solid #000',
-                        boxShadow: 24,
-                        p: 4,
-                        borderRadius: 2,
-                      }}
-                    >
-                      <Typography sx={{ mb: 4 }}>
-                        Do you really want to delete it?
-                      </Typography>
-                      <Button
-                        onClick={handleClose}
-                        variant="contained"
-                        color="warning"
-                        sx={{ marginRight: 2 }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="contained"
-                        onClick={() => handleDeleteChange(comment.id)}
-                      >
-                        OK
-                      </Button>
-                    </Box>
-                  </Modal>
                 </>
               )}
             </Box>
           </>
         ))}
+        <Modal open={open} onClose={handleClose}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              bgcolor: 'background.paper',
+              border: '0.5px solid #000',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}
+          >
+            <Typography sx={{ mb: 4 }}>
+              Do you really want to delete it?
+            </Typography>
+            <Button
+              onClick={handleClose}
+              variant="contained"
+              color="warning"
+              sx={{ marginRight: 2 }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => handleDeleteChange(commentId)}
+            >
+              OK
+            </Button>
+          </Box>
+        </Modal>
       </CardContent>
     </Card>
   )
