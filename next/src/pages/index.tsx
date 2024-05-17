@@ -7,6 +7,8 @@ import useSWR from 'swr'
 import DiaryCard from '@/components/DiaryCard'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
+import ProfileCard from '@/components/ProfileCard'
+import { useUserState } from '@/hooks/useGlobalState'
 import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
@@ -39,6 +41,7 @@ type DiaryProps = {
 
 const Index: NextPage = () => {
   const router = useRouter()
+  const [user] = useUserState()
   const page = 'page' in router.query ? Number(router.query.page) : 1
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/?page=' + page
   const { data, error } = useSWR(url, fetcher)
@@ -52,27 +55,26 @@ const Index: NextPage = () => {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
     router.push('/?page=' + value)
 
-  // const getDateDifference = (date1: Date, date2: Date) => {
-  //   const d1 = new Date(date1)
-  //   const d2 = new Date(date2)
-
-  //   const diffTime = d2.getTime() - d1.getTime()
-  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
-  //   return diffDays
-  // }
-
-  // const currentDate = new Date()
-  // const startDate = new Date(user.start_date)
-  // const endDate = new Date(user.end_date)
-  // const startDateDifference = getDateDifference(currentDate, startDate)
-  // const endDateDifference = getDateDifference(currentDate, endDate)
-
   return (
     <Box
       css={styles.pageMinHeight}
       sx={{ backgroundColor: '#ffe0b6', display: 'flex' }}
     >
+      <Container
+        maxWidth="xs"
+        sx={{ pt: 6, display: { xs: 'none', lg: 'block' } }}
+      >
+        <ProfileCard
+          id={user.id}
+          name={user.name}
+          country={user.country}
+          uni={user.uni}
+          bio={user.bio}
+          startDate={user.start_date}
+          endDate={user.end_date}
+          image={user.image.url}
+        />
+      </Container>
       <Container maxWidth="sm" sx={{ pt: 6 }}>
         <Grid container spacing={2}>
           {diaries.map((diary: DiaryProps, i: number) => (
@@ -109,36 +111,6 @@ const Index: NextPage = () => {
           />
         </Box>
       </Container>
-      {/* <Container
-        maxWidth="sm"
-        sx={{ pt: 6, display: { xs: 'none', lg: 'block' } }}
-      >
-        {startDateDifference <= 0 && endDateDifference > 0 && (
-          <Typography component="h2" sx={{ fontSize: 28, textAlign: 'left' }}>
-            <span
-              style={{ fontWeight: 'bold', color: '#ed1c24', fontSize: 36 }}
-            >
-              {endDateDifference}
-            </span>{' '}
-            days left to the end of your SA
-          </Typography>
-        )}
-        {endDateDifference <= 0 && (
-          <Typography component="h2" sx={{ fontSize: 28, textAlign: 'left' }}>
-            Your SA is already over
-          </Typography>
-        )}
-        {startDateDifference > 0 && (
-          <Typography component="h2" sx={{ fontSize: 28, textAlign: 'left' }}>
-            <span
-              style={{ fontWeight: 'bold', color: '#ed1c24', fontSize: 36 }}
-            >
-              {startDateDifference}
-            </span>{' '}
-            days to the start of your SA
-          </Typography>
-        )}
-      </Container> */}
     </Box>
   )
 }

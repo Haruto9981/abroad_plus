@@ -10,5 +10,6 @@ class User < ApplicationRecord
   has_many :diaries, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :diary_comments, dependent: :destroy
-  validates :name, presence: true
+  VALID_ACCOUNT_NAME_REGEX = /\A[a-zA-Z0-9]+\z/ # 半角英数字のみ受け付ける正規表現
+  validates :name, presence: true, uniqueness: true, length: { minimum: 3, maximum: 25 }, format: { with: VALID_ACCOUNT_NAME_REGEX }
 end

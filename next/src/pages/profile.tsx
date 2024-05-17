@@ -192,10 +192,7 @@ const Profile: NextPage = () => {
     >
       <Container maxWidth="md">
         <Box sx={{ mb: 4, pt: 4 }}>
-          <Typography
-            component="h2"
-            sx={{ fontSize: 28, color: 'black', fontWeight: 'bold' }}
-          >
+          <Typography component="h2" sx={{ fontSize: 28, color: 'black' }}>
             Profile
           </Typography>
         </Box>

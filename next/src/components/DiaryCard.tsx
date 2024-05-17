@@ -98,10 +98,7 @@ const DiaryCard = (props: diaryCardProps) => {
     <Card sx={{ borderRadius: 2 }}>
       <CardContent>
         <Box sx={{ display: 'flex' }}>
-          <Link
-            href={{ pathname: `/${props.userName}` }}
-            as={`/${props.userName}`}
-          >
+          <Link href={`/${props.userName}`}>
             <IconButton sx={{ p: 0 }}>
               {props.userImage ? (
                 <Avatar
