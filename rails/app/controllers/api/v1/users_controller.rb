@@ -13,6 +13,20 @@ class Api::V1::UsersController < Api::V1::BaseController
     end
   end
 
+  def following
+    @title = "Following"
+    @user  = User.find_by(name: params[:id])
+    @users = @user.following
+    render json: @users
+  end
+
+  def followers
+    @title = "Followers"
+    @user  = User.find_by(name: params[:id])
+    @users = @user.followers
+    render json: @users
+  end
+
   private
 
     def user_with_diaries_json(user, diaries)
