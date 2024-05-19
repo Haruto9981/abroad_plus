@@ -58,6 +58,8 @@ const UserProfile: NextPage = () => {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
     router.push('/' + router.query.name + '/?page=' + value)
 
+  console.log(profile)
+
   return (
     <Box
       css={styles.pageMinHeight}

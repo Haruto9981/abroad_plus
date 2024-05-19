@@ -13,9 +13,18 @@ export const useUserState = () => {
     image: {
       url: string
     }
-    following: []
+    following: following[]
+    followers: followers[]
     isSignedIn: boolean
     isFetched: boolean
+  }
+
+  type following = {
+    id: number
+  }
+
+  type followers = {
+    id: number
   }
 
   const fallbackData: userStateType = {
@@ -31,6 +40,7 @@ export const useUserState = () => {
       url: '',
     },
     following: [],
+    followers: [],
     isSignedIn: false,
     isFetched: false,
   }

@@ -25,12 +25,8 @@ type profileCardProps = {
   image: string | null
 }
 
-type following = {
-  id: number
-}
-
 const ProfileCard = (props: profileCardProps) => {
-  const [user] = useUserState()
+  const [user, setUser] = useUserState()
   const [isFollowed, setIsFollowed] = useState<boolean>(false)
 
   const getDateDifference = (date1: Date, date2: Date) => {
@@ -52,10 +48,10 @@ const ProfileCard = (props: profileCardProps) => {
   useEffect(() => {
     const followingArray = user.following
     const followed: boolean = followingArray.some(
-      (following: following) => following.id === props.id,
+      (following) => following.id === props.id,
     )
     setIsFollowed(followed)
-  }, [])// eslint-disable-line
+  }, [user.following, props.id])
 
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/relationships'
 
@@ -72,8 +68,10 @@ const ProfileCard = (props: profileCardProps) => {
     axios({ method: 'POST', url: url, data: data, headers: headers })
       .then(() => {
         setIsFollowed(!isFollowed)
-        console.log(user.following)
-        console.log(isFollowed)
+        setUser({
+          ...user,
+          following: [...user.following, { id: props.id }],
+        })
       })
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
@@ -84,8 +82,12 @@ const ProfileCard = (props: profileCardProps) => {
     axios({ method: 'DELETE', url: url, data: data, headers: headers })
       .then(() => {
         setIsFollowed(!isFollowed)
-        console.log(user.following)
-        console.log(isFollowed)
+        setUser({
+          ...user,
+          following: user.following.filter(
+            (following) => following.id !== props.id,
+          ),
+        })
       })
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
