@@ -7,7 +7,7 @@ class Api::V1::Current::RelationshipsController < Api::V1::BaseController
     end
     
     def destroy
-        user = Relationship.find(params[:id]).followed
+        user = User.find(params[:followed_id])
         current_user.unfollow(user)
         render json: user
     end

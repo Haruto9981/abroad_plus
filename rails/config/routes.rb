@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       namespace :current do
         resource :user, only: [:show, :update]
         resources :diaries, only: [:index, :show, :create, :update, :destroy]
-        resources :relationships, only: [:create, :destroy]
+        resource :relationships, only: [:create, :destroy]
       end
       resources :diaries, only: [:index, :show] do
         resources :diary_comments, only: [:index, :create, :destroy]

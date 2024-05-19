@@ -13,6 +13,7 @@ export const useUserState = () => {
     image: {
       url: string
     }
+    following: []
     isSignedIn: boolean
     isFetched: boolean
   }
@@ -29,6 +30,7 @@ export const useUserState = () => {
     image: {
       url: '',
     },
+    following: [],
     isSignedIn: false,
     isFetched: false,
   }

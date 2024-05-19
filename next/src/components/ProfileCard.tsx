@@ -8,8 +8,10 @@ import {
   Button,
   Typography,
 } from '@mui/material'
+import axios, { AxiosError } from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import { useUserState } from '@/hooks/useGlobalState'
 
 type profileCardProps = {
@@ -23,8 +25,13 @@ type profileCardProps = {
   image: string | null
 }
 
+type following = {
+  id: number
+}
+
 const ProfileCard = (props: profileCardProps) => {
   const [user] = useUserState()
+  const [isFollowed, setIsFollowed] = useState<boolean>(false)
 
   const getDateDifference = (date1: Date, date2: Date) => {
     const d1 = new Date(date1)
@@ -41,6 +48,49 @@ const ProfileCard = (props: profileCardProps) => {
   const endDate = new Date(user.end_date)
   const startDateDifference = getDateDifference(currentDate, startDate)
   const endDateDifference = getDateDifference(currentDate, endDate)
+
+  useEffect(() => {
+    const followingArray = user.following
+    const followed: boolean = followingArray.some(
+      (following: following) => following.id === props.id,
+    )
+    setIsFollowed(followed)
+  }, [])// eslint-disable-line
+
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/relationships'
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'access-token': localStorage.getItem('access-token'),
+    client: localStorage.getItem('client'),
+    uid: localStorage.getItem('uid'),
+  }
+
+  const data = { followed_id: props.id }
+
+  const handleFollowChange = () => {
+    axios({ method: 'POST', url: url, data: data, headers: headers })
+      .then(() => {
+        setIsFollowed(!isFollowed)
+        console.log(user.following)
+        console.log(isFollowed)
+      })
+      .catch((e: AxiosError<{ error: string }>) => {
+        console.log(e.message)
+      })
+  }
+
+  const handleUnfollowChange = () => {
+    axios({ method: 'DELETE', url: url, data: data, headers: headers })
+      .then(() => {
+        setIsFollowed(!isFollowed)
+        console.log(user.following)
+        console.log(isFollowed)
+      })
+      .catch((e: AxiosError<{ error: string }>) => {
+        console.log(e.message)
+      })
+  }
 
   return (
     <Card sx={{ borderRadius: 2 }}>
@@ -194,8 +244,9 @@ const ProfileCard = (props: profileCardProps) => {
             </Button>
           </Link>
         )}
-        {props.id !== user.id && (
+        {props.id !== user.id && !isFollowed && (
           <Button
+            onClick={handleFollowChange}
             variant="contained"
             color="warning"
             type="submit"
@@ -208,6 +259,24 @@ const ProfileCard = (props: profileCardProps) => {
             }}
           >
             follow
+          </Button>
+        )}
+        {props.id !== user.id && isFollowed && (
+          <Button
+            onClick={handleUnfollowChange}
+            variant="outlined"
+            color="warning"
+            type="submit"
+            sx={{
+              fontWeight: 'bold',
+              textTransform: 'none',
+              boxShadow: 'none',
+              border: '1.5px solid #f5a500',
+              width: '100%',
+              my: 2,
+            }}
+          >
+            unfollow
           </Button>
         )}
       </CardContent>
