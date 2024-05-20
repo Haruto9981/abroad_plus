@@ -2,8 +2,9 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
+  "/[name]/following_users": "pages/[name]/following_users.js",
   "/[name]": "pages/[name].js",
-  "/profile": "pages/profile.js",
-  "/current/diaries": "pages/current/diaries.js"
+  "/": "pages/index.js",
+  "/current/diaries": "pages/current/diaries.js",
+  "/[name]/followers": "pages/[name]/followers.js"
 }

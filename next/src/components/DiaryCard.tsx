@@ -114,9 +114,20 @@ const DiaryCard = (props: diaryCardProps) => {
           </Link>
           <Box>
             <Box sx={{ display: 'flex' }}>
-              <Typography sx={{ fontSize: 15, mx: 1, fontWeight: 'bold' }}>
-                {props.userName}
-              </Typography>
+              <Link href={`/${props.userName}`}>
+                <Typography
+                  sx={{
+                    fontSize: 15,
+                    mx: 1,
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  {props.userName}
+                </Typography>
+              </Link>
               {props.userCountry && (
                 <Image
                   css={imageCss}

@@ -13,10 +13,35 @@ export const useUserState = () => {
     image: {
       url: string
     }
+    total_likes_count: number
+    diaries: Diary[]
     following: following[]
     followers: followers[]
     isSignedIn: boolean
     isFetched: boolean
+  }
+
+  type Diary = {
+    id: string
+    title: string
+    content: string
+    image: { url: string }
+    wordCount: number
+    day: number
+    monthName: string
+    year: number
+    wDay: string
+    user: {
+      id: string
+      name: string
+      country: string
+      uni: string
+      bio: string
+      image: { url: string }
+    }
+    status: string
+    favorites: number
+    diaryComments: number
   }
 
   type following = {
@@ -39,6 +64,8 @@ export const useUserState = () => {
     image: {
       url: '',
     },
+    total_likes_count: 0,
+    diaries: [],
     following: [],
     followers: [],
     isSignedIn: false,

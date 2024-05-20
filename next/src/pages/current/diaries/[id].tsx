@@ -45,7 +45,7 @@ type CurrentDiaryProps = {
 
 const CurrentDiaryDetail: NextPage = () => {
   useRequireSignedIn()
-  const [user] = useUserState()
+  const [user, setUser] = useUserState()
   const router = useRouter()
   const [, setSnackbar] = useSnackbarState()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -88,6 +88,10 @@ const CurrentDiaryDetail: NextPage = () => {
       headers: headers,
     })
       .then(() => {
+        setUser({
+          ...user,
+          isFetched: false,
+        })
         setSnackbar({
           message: '日記を削除しました',
           severity: 'success',

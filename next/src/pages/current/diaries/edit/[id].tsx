@@ -47,7 +47,7 @@ type DiaryFormData = {
 const CurrentDiariesEdit: NextPage = () => {
   useRequireSignedIn()
   const router = useRouter()
-  const [user] = useUserState()
+  const [user, setUser] = useUserState()
   const [, setSnackbar] = useSnackbarState()
   const [statusChecked, setStatusChecked] = useState<boolean>(false)
   const [isFetched, setIsFetched] = useState<boolean>(false)
@@ -204,6 +204,10 @@ const CurrentDiariesEdit: NextPage = () => {
       headers: headers,
     })
       .then(() => {
+        setUser({
+          ...user,
+          isFetched: false,
+        })
         setSnackbar({
           message: '日記を保存しました',
           severity: 'success',

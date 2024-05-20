@@ -23,11 +23,18 @@ type profileCardProps = {
   startDate: string | null
   endDate: string | null
   image: string | null
+  diaries: object[]
+  totalDiariesCount: number
+  totalLikesCount: number
+  following: object[]
+  followers: object[]
 }
 
 const ProfileCard = (props: profileCardProps) => {
   const [user, setUser] = useUserState()
   const [isFollowed, setIsFollowed] = useState<boolean>(false)
+  const [followersCount, setFollowersCount] = useState<number>(0)
+  const [isChanged, setIsChanged] = useState<boolean>(false)
 
   const getDateDifference = (date1: Date, date2: Date) => {
     const d1 = new Date(date1)
@@ -46,12 +53,14 @@ const ProfileCard = (props: profileCardProps) => {
   const endDateDifference = getDateDifference(currentDate, endDate)
 
   useEffect(() => {
-    const followingArray = user.following
-    const followed: boolean = followingArray.some(
-      (following) => following.id === props.id,
+    const currentUserfollowingArray = user.following
+    const followersArray = props.followers
+    const followed: boolean = currentUserfollowingArray.some(
+      (currentUserFollowing) => currentUserFollowing.id === props.id,
     )
     setIsFollowed(followed)
-  }, [user.following, props.id])
+    if (!isChanged) setFollowersCount(followersArray.length)
+  }, [user.following, props.id, props.followers, isChanged])
 
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/relationships'
 
@@ -65,9 +74,11 @@ const ProfileCard = (props: profileCardProps) => {
   const data = { followed_id: props.id }
 
   const handleFollowChange = () => {
+    setIsChanged(true)
     axios({ method: 'POST', url: url, data: data, headers: headers })
       .then(() => {
         setIsFollowed(!isFollowed)
+        setFollowersCount(followersCount + 1)
         setUser({
           ...user,
           following: [...user.following, { id: props.id }],
@@ -79,9 +90,11 @@ const ProfileCard = (props: profileCardProps) => {
   }
 
   const handleUnfollowChange = () => {
+    setIsChanged(true)
     axios({ method: 'DELETE', url: url, data: data, headers: headers })
       .then(() => {
         setIsFollowed(!isFollowed)
+        setFollowersCount(followersCount - 1)
         setUser({
           ...user,
           following: user.following.filter(
@@ -203,27 +216,67 @@ const ProfileCard = (props: profileCardProps) => {
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
               <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                122
+                {props.totalDiariesCount}
               </Typography>
-              <Typography>Diary</Typography>
+              <Link href={`/${props.name}`}>
+                <Typography
+                  sx={{
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  Diary
+                </Typography>
+              </Link>
+            </Box>
+            <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
+              <Typography
+                sx={{
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                }}
+              >
+                {props.following.length}
+              </Typography>
+              <Link href={`/${props.name}/following_users`}>
+                <Typography
+                  sx={{
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  Follow
+                </Typography>
+              </Link>
+            </Box>
+            <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
+              <Typography
+                sx={{
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                }}
+              >
+                {followersCount}
+              </Typography>
+              <Link href={`/${props.name}/followers`}>
+                <Typography
+                  sx={{
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  Follower
+                </Typography>
+              </Link>
             </Box>
             <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
               <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                33
+                {props.totalLikesCount}
               </Typography>
-              <Typography>Follow</Typography>
-            </Box>
-            <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
-              <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                24
-              </Typography>
-              <Typography>Follower</Typography>
-            </Box>
-            <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
-              <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                112
-              </Typography>
-              <Typography>Likes</Typography>
+              <Typography>Like</Typography>
             </Box>
           </Box>
         </Box>

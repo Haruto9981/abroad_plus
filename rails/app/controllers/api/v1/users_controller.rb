@@ -5,9 +5,10 @@ class Api::V1::UsersController < Api::V1::BaseController
 
     if @user
       diaries = @user.diaries.where(status: "shared").page(params[:page] || 1).per(5).includes([:favorites]).includes([:diary_comments])
+      total_diaries = @user.diaries.not_unsaved
 
       # serializerファイルを利用したincludeオプションを使うアプローチはページネーションが上手く働かないため、独自の関数を定義。
-      render json: { profile: user_with_diaries_json(@user, diaries), meta: pagination(diaries) }, adapter: :json
+      render json: { profile: user_with_diaries_json(@user, diaries), meta: pagination(diaries), total_diaries_count: total_diaries.count, total_likes_count: total_likes_count(total_diaries)}, adapter: :json
     else
       render json: { error: "User not found" }, status: :not_found
     end
@@ -41,6 +42,8 @@ class Api::V1::UsersController < Api::V1::BaseController
         uni: user.uni,
         bio: user.bio,
         diaries: diaries.map {|diary| diary_json(diary) },
+        following: user.following,
+        followers: user.followers
       }
     end
 
@@ -88,5 +91,13 @@ class Api::V1::UsersController < Api::V1::BaseController
         diary_id: comment.diary_id,
         comment: comment.comment,
       }
+    end
+
+    def total_likes_count(diaries)
+      count = 0
+      diaries.each do |diary|
+        count += diary.favorites.length
+      end
+      count
     end
 end

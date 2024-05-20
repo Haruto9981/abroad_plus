@@ -35,8 +35,32 @@ type DiaryProps = {
       url: string
     }
   }
+  diaries: Diary[]
   favorites: { user_id: number }[]
-  diaryComments: Array<object>
+  diaryComments: object[]
+}
+
+type Diary = {
+  id: string
+  title: string
+  content: string
+  image: { url: string }
+  wordCount: number
+  day: number
+  monthName: string
+  year: number
+  wDay: string
+  user: {
+    id: string
+    name: string
+    country: string
+    uni: string
+    bio: string
+    image: { url: string }
+  }
+  status: string
+  favorites: number
+  diaryComments: number
 }
 
 const Index: NextPage = () => {
@@ -51,6 +75,14 @@ const Index: NextPage = () => {
   const diaries = camelcaseKeys(data.diaries)
 
   const meta = camelcaseKeys(data.meta)
+
+  const totalDiariesCount = (diaries: Diary[]) => {
+    let count = 0
+    for (let i = 0; i < diaries.length; i++) {
+      if (diaries[i] && diaries[i].status !== 'unsaved') count += 1
+    }
+    return count
+  }
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
     router.push('/?page=' + value)
@@ -73,6 +105,11 @@ const Index: NextPage = () => {
           startDate={user.start_date}
           endDate={user.end_date}
           image={user.image.url}
+          diaries={user.diaries}
+          totalDiariesCount={totalDiariesCount(user.diaries)}
+          totalLikesCount={user.total_likes_count}
+          following={user.following}
+          followers={user.followers}
         />
       </Container>
       <Container maxWidth="sm" sx={{ pt: 6 }}>

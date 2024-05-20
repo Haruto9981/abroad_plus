@@ -18,6 +18,7 @@ import {
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useState } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import useSWR from 'swr'
@@ -201,26 +202,37 @@ const Comment = (props: diaryIdProps) => {
           <>
             <Divider sx={{ mt: 2 }} />
             <Box key={i} sx={{ display: 'flex', mt: 1 }}>
-              <IconButton>
-                {comment.user.image.url ? (
-                  <Avatar
-                    src={comment.user.image.url}
-                    sx={{ width: 40, height: 40 }}
-                  ></Avatar>
-                ) : (
-                  <Avatar sx={{ width: 40, height: 40 }}>
-                    <PersonIcon />
-                  </Avatar>
-                )}
-              </IconButton>
+              <Link href={`/${comment.user.name}`}>
+                <IconButton>
+                  {comment.user.image.url ? (
+                    <Avatar
+                      src={comment.user.image.url}
+                      sx={{ width: 40, height: 40 }}
+                    ></Avatar>
+                  ) : (
+                    <Avatar sx={{ width: 40, height: 40 }}>
+                      <PersonIcon />
+                    </Avatar>
+                  )}
+                </IconButton>
+              </Link>
               <Box sx={{ width: '100%', mt: 1 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Box sx={{ display: 'flex' }}>
-                    <Typography
-                      sx={{ mr: 1, fontSize: 15, fontWeight: 'bold' }}
-                    >
-                      {comment.user.name}
-                    </Typography>
+                    <Link href={`/${comment.user.name}`}>
+                      <Typography
+                        sx={{
+                          mr: 1,
+                          fontSize: 15,
+                          fontWeight: 'bold',
+                          '&:hover': {
+                            textDecoration: 'underline',
+                          },
+                        }}
+                      >
+                        {comment.user.name}
+                      </Typography>
+                    </Link>
                     {comment.user.country && (
                       <Image
                         css={imageCss}
