@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       end
       namespace :current do
         resource :user, only: [:show, :update]
+        resources :following_diaries, only: [:index]
         resources :diaries, only: [:index, :show, :create, :update, :destroy]
         resource :relationships, only: [:create, :destroy]
       end

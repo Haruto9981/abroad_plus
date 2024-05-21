@@ -64,17 +64,30 @@ type Diary = {
 const Index: NextPage = () => {
   const router = useRouter()
   const page = 'page' in router.query ? Number(router.query.page) : 1
-  const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/?page=' + page
+  const url =
+    process.env.NEXT_PUBLIC_API_BASE_URL +
+    '/current/following_diaries?page=' +
+    page
   const { data, error } = useSWR(url, fetcher)
-  if (error) return <Error />
-  if (!data) return <Loading />
+  if (error)
+    return (
+      <Layout pageUrl={'/following_diaries'}>
+        <Error />
+      </Layout>
+    )
+  if (!data)
+    return (
+      <Layout pageUrl={'/following_diaries'}>
+        <Loading />
+      </Layout>
+    )
 
   const diaries = camelcaseKeys(data.diaries)
 
   const meta = camelcaseKeys(data.meta)
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
-    router.push('/?page=' + value)
+    router.push('/following_diaries?page=' + value)
 
   return (
     <Layout pageUrl={'/following_diaries'}>
