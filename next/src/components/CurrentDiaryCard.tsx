@@ -19,6 +19,7 @@ type CurrentDiaryProps = {
   year: string
   wDay: string
   favorites: { user_id: number }[]
+  diaryComments: Array<object>
 }
 
 const omit = (text: string) => (len: number) => (ellipsis: string) =>
@@ -193,6 +194,7 @@ const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
             <IconButton>
               <CommentIcon />
             </IconButton>
+            <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
           </Box>
         )}
       </CardContent>

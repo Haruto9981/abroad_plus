@@ -1,4 +1,12 @@
-import { Box, Grid, Typography, Pagination } from '@mui/material'
+import {
+  Box,
+  Grid,
+  Typography,
+  Pagination,
+  Card,
+  Divider,
+  CardContent,
+} from '@mui/material'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Link from 'next/link'
@@ -59,41 +67,46 @@ const UserProfile: NextPage = () => {
 
   return (
     <Layout>
-      <Typography sx={{ fontSize: 28, mb: 2 }}>Shared Diaries</Typography>
-      <Grid container spacing={2}>
-        {profile.diaries.map((diary: DiaryProps, i: number) => (
-          <Grid key={i} item xs={12} md={12}>
-            <Link href={'/diaries/' + diary.id}>
-              <DiaryCard
-                id={diary.id}
-                title={diary.title}
-                content={diary.content}
-                image={diary.image.url}
-                wordCount={diary.word_count}
-                day={diary.day}
-                month={diary.month_name}
-                year={diary.year}
-                wDay={diary.w_day}
-                userId={profile.id}
-                userName={profile.name}
-                userCountry={profile.country}
-                userUni={profile.uni}
-                userBio={profile.bio}
-                userImage={profile.image.url}
-                favorites={diary.favorites}
-                diaryComments={diary.diary_comments}
-              />
-            </Link>
+      <Card sx={{ borderRadius: 2 }}>
+        <CardContent>
+          <Typography sx={{ fontSize: 20, mb: 2 }}>Diaries</Typography>
+          <Divider sx={{ my: 2 }} />
+          <Grid container>
+            {profile.diaries.map((diary: DiaryProps, i: number) => (
+              <Grid key={i} item xs={12} md={12}>
+                <Link href={'/diaries/' + diary.id}>
+                  <DiaryCard
+                    id={diary.id}
+                    title={diary.title}
+                    content={diary.content}
+                    image={diary.image.url}
+                    wordCount={diary.word_count}
+                    day={diary.day}
+                    month={diary.month_name}
+                    year={diary.year}
+                    wDay={diary.w_day}
+                    userName={profile.name}
+                    userCountry={profile.country}
+                    userUni={profile.uni}
+                    userBio={profile.bio}
+                    userImage={profile.image.url}
+                    favorites={diary.favorites}
+                    diaryComments={diary.diary_comments}
+                  />
+                </Link>
+                <Divider sx={{ my: 2 }} />
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-      <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
-        <Pagination
-          count={meta.totalPages}
-          page={meta.currentPage}
-          onChange={handleChange}
-        />
-      </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+            <Pagination
+              count={meta.totalPages}
+              page={meta.currentPage}
+              onChange={handleChange}
+            />
+          </Box>
+        </CardContent>
+      </Card>
     </Layout>
   )
 }

@@ -31,6 +31,17 @@ interface User {
   following: Following[]
 }
 
+type Followers = {
+  id: number
+  name: string
+  image: {
+    url: string
+  }
+  country: string
+  uni: string
+  bio: string
+}
+
 const Followers: NextPage = () => {
   const router = useRouter()
   const [user, setUser] = useUserState()
@@ -98,7 +109,7 @@ const Followers: NextPage = () => {
               No followers
             </Typography>
           )}
-          {data.profile.followers.map((followers, i: number) => (
+          {data.profile.followers.map((followers: Followers, i: number) => (
             <>
               <Divider sx={{ mt: 2 }} />
               <Box key={i} sx={{ display: 'flex', mt: 1 }}>
@@ -194,6 +205,7 @@ const Followers: NextPage = () => {
                         boxShadow: 'none',
                         border: '1.5px solid #f5a500',
                         width: '25%',
+                        height: '25%',
                         my: 2,
                       }}
                     >

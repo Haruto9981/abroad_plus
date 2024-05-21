@@ -3,14 +3,7 @@ import CommentIcon from '@mui/icons-material/Comment'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import PersonIcon from '@mui/icons-material/Person'
-import {
-  Box,
-  Card,
-  CardContent,
-  IconButton,
-  Avatar,
-  Typography,
-} from '@mui/material'
+import { Box, IconButton, Avatar, Typography } from '@mui/material'
 import axios, { AxiosError } from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -28,7 +21,6 @@ type diaryCardProps = {
   month: string
   year: string
   wDay: string
-  userId: number
   userName: string
   userCountry: string
   userUni: string
@@ -95,132 +87,135 @@ const DiaryCard = (props: diaryCardProps) => {
   }
 
   return (
-    <Card sx={{ borderRadius: 2 }}>
-      <CardContent>
-        <Box sx={{ display: 'flex' }}>
-          <Link href={`/${props.userName}`}>
-            <IconButton sx={{ p: 0 }}>
-              {props.userImage ? (
-                <Avatar
-                  src={props.userImage}
-                  sx={{ width: 50, height: 50 }}
-                ></Avatar>
-              ) : (
-                <Avatar sx={{ width: 50, height: 50 }}>
-                  <PersonIcon />
-                </Avatar>
-              )}
-            </IconButton>
-          </Link>
-          <Box>
-            <Box sx={{ display: 'flex' }}>
-              <Link href={`/${props.userName}`}>
-                <Typography
-                  sx={{
-                    fontSize: 15,
-                    mx: 1,
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
-                  }}
-                >
-                  {props.userName}
-                </Typography>
-              </Link>
-              {props.userCountry && (
-                <Image
-                  css={imageCss}
-                  src={`/${props.userCountry.toLowerCase()}.png`}
-                  height={15}
-                  width={30}
-                  alt="国旗"
-                />
-              )}
-              {props.userUni && (
-                <Typography
-                  sx={{
-                    color: 'white',
-                    mx: 1,
-                    backgroundColor: 'orange',
-                    p: 0.3,
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    borderRadius: 0.5,
-                  }}
-                >
-                  {props.userUni}
-                </Typography>
-              )}
-            </Box>
-            <Box sx={{ display: 'flex', mx: 1, color: 'gray' }}>
-              <Typography sx={{ fontSize: 15, mr: 0.5 }}>
-                {props.day}
+    <>
+      <Box sx={{ display: 'flex' }}>
+        <Link href={`/${props.userName}`}>
+          <IconButton sx={{ p: 0 }}>
+            {props.userImage ? (
+              <Avatar
+                src={props.userImage}
+                sx={{ width: 50, height: 50 }}
+              ></Avatar>
+            ) : (
+              <Avatar sx={{ width: 50, height: 50 }}>
+                <PersonIcon />
+              </Avatar>
+            )}
+          </IconButton>
+        </Link>
+        <Box>
+          <Box sx={{ display: 'flex' }}>
+            <Link href={`/${props.userName}`}>
+              <Typography
+                sx={{
+                  fontSize: 15,
+                  mx: 1,
+                  fontWeight: 'bold',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
+                {props.userName}
               </Typography>
-              <Typography sx={{ fontSize: 15, mr: 0.5 }}>
-                {props.month}
+            </Link>
+            {props.userCountry && (
+              <Image
+                css={imageCss}
+                src={`/${props.userCountry.toLowerCase()}.png`}
+                height={15}
+                width={30}
+                alt="国旗"
+              />
+            )}
+            {props.userUni && (
+              <Typography
+                sx={{
+                  color: 'white',
+                  mx: 1,
+                  backgroundColor: 'orange',
+                  p: 0.3,
+                  fontSize: 11,
+                  fontWeight: 'bold',
+                  borderRadius: 0.5,
+                }}
+              >
+                {props.userUni}
               </Typography>
-              <Typography sx={{ fontSize: 15, mr: 0.5 }}>
-                {props.year}
-              </Typography>
-              <Typography sx={{ fontSize: 15 }}>{props.wDay}</Typography>
-            </Box>
+            )}
+          </Box>
+          <Box sx={{ display: 'flex', mx: 1, color: 'gray' }}>
+            <Typography sx={{ fontSize: 15, mr: 0.5 }}>{props.day}</Typography>
+            <Typography sx={{ fontSize: 15, mr: 0.5 }}>
+              {props.month}
+            </Typography>
+            <Typography sx={{ fontSize: 15, mr: 0.5 }}>{props.year}</Typography>
+            <Typography sx={{ fontSize: 15 }}>{props.wDay}</Typography>
           </Box>
         </Box>
-        {props.image && (
-          <Box
-            sx={{
-              my: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {/* なぜかImageだとうまく画像を読み込めない。nextのpublicから探してるっぽい。style.cssからレスポンシブデザイン適応 */}
-            <img // eslint-disable-line
-              alt="日記画像"
-              src={props.image}
-              className="image"
-            />
-          </Box>
-        )}
-        <Typography
-          component="h3"
+      </Box>
+      {props.image && (
+        <Box
           sx={{
-            my: 1,
-            fontSize: 20,
-            fontWeight: 'bold',
-            lineHeight: 1.5,
+            my: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          {router.pathname === '/' && omit(props.title)(40)('...')}{' '}
-          {router.pathname !== '/' && props.title}
-        </Typography>
-        <Typography>
-          {router.pathname === '/' && omit(props.content)(305)('...')}{' '}
-          {router.pathname !== '/' && props.content} ({props.wordCount} words)
-        </Typography>
-        <Box sx={{ display: 'flex' }}>
-          <Box>
-            {!isLiked && (
-              <IconButton onClick={handleLikedChange}>
-                <FavoriteBorderIcon />
-              </IconButton>
-            )}
-            {isLiked && (
-              <IconButton onClick={handleDislikedChange}>
-                <FavoriteIcon color="secondary" />
-              </IconButton>
-            )}
-          </Box>
-          <Typography sx={{ mt: 1 }}>{LikedCount}</Typography>
-          <IconButton>
-            <CommentIcon />
-          </IconButton>
-          <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
+          {/* なぜかImageだとうまく画像を読み込めない。nextのpublicから探してるっぽい。style.cssからレスポンシブデザイン適応 */}
+            <img // eslint-disable-line
+            alt="日記画像"
+            src={props.image}
+            className="image"
+          />
         </Box>
-      </CardContent>
-    </Card>
+      )}
+      <Typography
+        component="h3"
+        sx={{
+          my: 1,
+          fontSize: 20,
+          fontWeight: 'bold',
+          lineHeight: 1.5,
+        }}
+      >
+        {(router.pathname === '/' ||
+          router.pathname === '/following_diaries') &&
+          omit(props.title)(40)('...')}{' '}
+        {router.pathname !== '/' &&
+          router.pathname !== '/following_diaries' &&
+          props.title}
+      </Typography>
+      <Typography>
+        {(router.pathname === '/' ||
+          router.pathname === '/following_diaries') &&
+          omit(props.content)(305)('...')}{' '}
+        {router.pathname !== '/' &&
+          router.pathname !== '/following_diaries' &&
+          props.content}{' '}
+        ({props.wordCount} words)
+      </Typography>
+      <Box sx={{ display: 'flex' }}>
+        <Box>
+          {!isLiked && (
+            <IconButton onClick={handleLikedChange}>
+              <FavoriteBorderIcon />
+            </IconButton>
+          )}
+          {isLiked && (
+            <IconButton onClick={handleDislikedChange}>
+              <FavoriteIcon color="secondary" />
+            </IconButton>
+          )}
+        </Box>
+        <Typography sx={{ mt: 1 }}>{LikedCount}</Typography>
+        <IconButton>
+          <CommentIcon />
+        </IconButton>
+        <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
+      </Box>
+    </>
   )
 }
 

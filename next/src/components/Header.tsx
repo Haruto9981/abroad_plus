@@ -21,7 +21,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import LinkTab from './LinkTab'
+import LinkTab from './HeaderLinkTab'
 import { useUserState } from '@/hooks/useGlobalState'
 
 type Props = {
@@ -32,6 +32,8 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const router = useRouter()
+  const url = router.pathname
+  const value = url === '/following_diaries' ? '/following_diaries' : '/'
 
   const hideHeaderPathnames = ['/current/diaries/edit/[id]']
   if (hideHeaderPathnames.includes(router.pathname)) return <></>
@@ -89,7 +91,7 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
               sx={{ mt: 5, ml: 4, display: { xs: 'none', sm: 'block' } }}
               value={pageUrl || false}
             >
-              <LinkTab label="Home" href="/" value="/" />
+              <LinkTab label="Home" href="/" value={value} />
               <LinkTab
                 label="Diary"
                 href="/current/diaries"

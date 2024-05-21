@@ -26,10 +26,13 @@ const imageCss = css({ marginTop: '4px' })
 
 interface Following {
   id: number
-}
-
-interface User {
-  following: Following[]
+  name: string
+  image: {
+    url: string
+  }
+  country: string
+  uni: string
+  bio: string
 }
 
 const Following: NextPage = () => {
@@ -42,9 +45,9 @@ const Following: NextPage = () => {
   if (error) return <Error />
   if (!data) return <Loading />
 
-  const getUserFollowingIdArray = (user: User): number[] => {
+  const getUserFollowingIdArray = (userFollowing: object[]): number[] => {
     const array = []
-    for (let i = 0; i < user.following.length; i++) {
+    for (let i = 0; i < userFollowing.length; i++) {
       array.push(user.following[i].id)
     }
 
@@ -99,7 +102,7 @@ const Following: NextPage = () => {
               No following users
             </Typography>
           )}
-          {data.profile.following.map((following, i: number) => (
+          {data.profile.following.map((following: Following, i: number) => (
             <>
               <Divider sx={{ mt: 2 }} />
               <Box key={i} sx={{ display: 'flex', mt: 1 }}>
@@ -166,41 +169,44 @@ const Following: NextPage = () => {
                     <Typography>{following.bio}</Typography>
                   </Box>
                 </Box>
-                {!getUserFollowingIdArray(user).includes(following.id) && (
-                  <Button
-                    onClick={() => handleFollowChange(following.id)}
-                    variant="contained"
-                    color="warning"
-                    type="submit"
-                    sx={{
-                      fontWeight: 'bold',
-                      color: 'white',
-                      textTransform: 'none',
-                      width: '25%',
-                      my: 2,
-                    }}
-                  >
-                    follow
-                  </Button>
-                )}
-                {getUserFollowingIdArray(user).includes(following.id) && (
-                  <Button
-                    onClick={() => handleUnfollowChange(following.id)}
-                    variant="outlined"
-                    color="warning"
-                    type="submit"
-                    sx={{
-                      fontWeight: 'bold',
-                      textTransform: 'none',
-                      boxShadow: 'none',
-                      border: '1.5px solid #f5a500',
-                      width: '25%',
-                      my: 2,
-                    }}
-                  >
-                    unfollow
-                  </Button>
-                )}
+                {user.id !== following.id &&
+                  (!getUserFollowingIdArray(user.following).includes(
+                    following.id,
+                  ) ? (
+                    <Button
+                      onClick={() => handleFollowChange(following.id)}
+                      variant="contained"
+                      color="warning"
+                      type="submit"
+                      sx={{
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textTransform: 'none',
+                        width: '25%',
+                        my: 2,
+                      }}
+                    >
+                      follow
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => handleUnfollowChange(following.id)}
+                      variant="outlined"
+                      color="warning"
+                      type="submit"
+                      sx={{
+                        fontWeight: 'bold',
+                        textTransform: 'none',
+                        boxShadow: 'none',
+                        border: '1.5px solid #f5a500',
+                        width: '25%',
+                        height: '25%',
+                        my: 2,
+                      }}
+                    >
+                      unfollow
+                    </Button>
+                  ))}
               </Box>
             </>
           ))}

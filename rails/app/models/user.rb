@@ -10,12 +10,14 @@ class User < ApplicationRecord
   has_many :diaries, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :diary_comments, dependent: :destroy
-  has_many :active_relationships, class_name:  "Relationship",
+  has_many :active_relationships, class_name: "Relationship",
                                   foreign_key: "follower_id",
-                                  dependent:   :destroy
-  has_many :passive_relationships, class_name:  "Relationship",
-                                  foreign_key: "followed_id",
-                                  dependent:   :destroy
+                                  dependent: :destroy,
+                                  inverse_of: :follower
+  has_many :passive_relationships, class_name: "Relationship",
+                                   foreign_key: "followed_id",
+                                   dependent: :destroy,
+                                   inverse_of: :followed
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
   VALID_ACCOUNT_NAME_REGEX = /\A[a-zA-Z0-9]+\z/ # 半角英数字のみ受け付ける正規表現

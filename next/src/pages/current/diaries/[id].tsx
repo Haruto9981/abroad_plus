@@ -41,6 +41,7 @@ type CurrentDiaryProps = {
   date: string
   wDay: string
   favorites: { user_id: number }[]
+  diaryComments: Array<object>
 }
 
 const CurrentDiaryDetail: NextPage = () => {
@@ -156,6 +157,7 @@ const CurrentDiaryDetail: NextPage = () => {
             year={diary.year}
             wDay={diary.wDay}
             favorites={diary.favorites}
+            diaryComments={diary.diaryComments}
           />
           <Box sx={{ mt: 4, textAlign: 'right' }}>
             <LoadingButton

@@ -33,6 +33,7 @@ type CurrentDiaryProps = {
   created_at: string
   wDay: string
   favorites: { user_id: number }[]
+  diaryComments: object[]
 }
 
 interface Item {
@@ -362,6 +363,7 @@ const CurrentDiaries: NextPage = () => {
                           year={diary.year}
                           wDay={diary.wDay}
                           favorites={diary.favorites}
+                          diaryComments={diary.diaryComments}
                         />
                       </Link>
                     </Grid>
@@ -405,6 +407,7 @@ const CurrentDiaries: NextPage = () => {
                             year={diary.year}
                             wDay={diary.wDay}
                             favorites={diary.favorites}
+                            diaryComments={diary.diaryComments}
                           />
                         </Link>
                       </Grid>
@@ -450,6 +453,7 @@ const CurrentDiaries: NextPage = () => {
                             year={diary.year}
                             wDay={diary.wDay}
                             favorites={diary.favorites}
+                            diaryComments={diary.diaryComments}
                           />
                         </Link>
                       </Grid>
