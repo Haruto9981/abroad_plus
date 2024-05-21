@@ -4,7 +4,7 @@ class Api::V1::UsersController < Api::V1::BaseController
     @user = User.find_by(name: params[:id])
 
     if @user
-      diaries = @user.diaries.where(status: "shared").page(params[:page] || 1).per(5).includes([:favorites]).includes([:diary_comments])
+      diaries = @user.diaries.where(status: "shared").page(params[:page] || 1).per(10).includes([:favorites]).includes([:diary_comments])
       total_diaries = @user.diaries.not_unsaved.includes([:favorites])
 
       # serializerファイルを利用したincludeオプションを使うアプローチはページネーションが上手く働かないため、独自の関数を定義。

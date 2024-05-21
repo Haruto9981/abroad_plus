@@ -157,24 +157,25 @@ const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
             />
           </Box>
         )}
-        <Typography
-          component="h3"
-          sx={{
-            my: 1,
-            fontSize: 20,
-            fontWeight: 'bold',
-            lineHeight: 1.5,
-          }}
-        >
-          {router.pathname === '/current/diaries' &&
-            omit(props.title)(40)('...')}{' '}
-          {router.pathname !== '/current/diaries' && props.title}
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 1 }}>
+          <Typography
+            component="h3"
+            sx={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              lineHeight: 1.5,
+            }}
+          >
+            {router.pathname === '/current/diaries' &&
+              omit(props.title)(40)('...')}{' '}
+            {router.pathname !== '/current/diaries' && props.title}
+          </Typography>
+          <Typography>({props.wordCount} words)</Typography>
+        </Box>
         <Typography>
           {router.pathname === '/current/diaries' &&
-            omit(props.content)(305)('...')}{' '}
-          {router.pathname !== '/current/diaries' && props.content} (
-          {props.wordCount} words)
+            omit(props.content)(295)('...')}{' '}
+          {router.pathname !== '/current/diaries' && props.content}
         </Typography>
         {props.status === 'shared' && (
           <Box sx={{ display: 'flex' }}>

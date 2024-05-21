@@ -125,7 +125,7 @@ const Profile: NextPage = () => {
   const onSubmit: SubmitHandler<profileFormData> = (data) => {
     if (data.name == '') {
       return setSnackbar({
-        message: '名前を入力してください',
+        message: 'Enter your name',
         severity: 'error',
         pathname: '/profile',
       })
@@ -163,7 +163,7 @@ const Profile: NextPage = () => {
       .then(() => {
         setUser({ ...user, isFetched: false })
         setSnackbar({
-          message: 'プロフィールを更新しました',
+          message: 'Profile updated!',
           severity: 'success',
           pathname: '/profile',
         })
@@ -171,7 +171,7 @@ const Profile: NextPage = () => {
       .catch((err: AxiosError<{ error: string }>) => {
         console.log(err.message)
         setSnackbar({
-          message: 'プロフィールの更新に失敗しました',
+          message: 'Failed to update profile',
           severity: 'error',
           pathname: '/profile',
         })

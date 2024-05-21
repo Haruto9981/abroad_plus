@@ -157,7 +157,7 @@ const CurrentDiariesEdit: NextPage = () => {
   const onSubmit: SubmitHandler<DiaryFormData> = (data) => {
     if (data.title == '') {
       return setSnackbar({
-        message: '日記の保存にはタイトルが必要です',
+        message: 'You need a title to save your diary',
         severity: 'error',
         pathname: '/current/diaries/edit/[id]',
       })
@@ -165,7 +165,7 @@ const CurrentDiariesEdit: NextPage = () => {
 
     if (data.content == '') {
       return setSnackbar({
-        message: '日記の保存には本文が必要です',
+        message: 'You need the text to save your diary',
         severity: 'error',
         pathname: '/current/diaries/edit/[id]',
       })
@@ -209,7 +209,7 @@ const CurrentDiariesEdit: NextPage = () => {
           isFetched: false,
         })
         setSnackbar({
-          message: '日記を保存しました',
+          message: 'Diary saved!',
           severity: 'success',
           pathname: '/current/diaries/edit/[id]',
         })
@@ -217,7 +217,7 @@ const CurrentDiariesEdit: NextPage = () => {
       .catch((err: AxiosError<{ error: string }>) => {
         console.log(err.message)
         setSnackbar({
-          message: '日記の保存に失敗しました',
+          message: 'Failed to save diary',
           severity: 'error',
           pathname: '/current/diaries/edit/[id]',
         })

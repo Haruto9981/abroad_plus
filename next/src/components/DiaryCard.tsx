@@ -171,30 +171,37 @@ const DiaryCard = (props: diaryCardProps) => {
           />
         </Box>
       )}
-      <Typography
-        component="h3"
+      <Box
         sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
           my: 1,
-          fontSize: 20,
-          fontWeight: 'bold',
-          lineHeight: 1.5,
         }}
       >
-        {(router.pathname === '/' ||
-          router.pathname === '/following_diaries') &&
-          omit(props.title)(40)('...')}{' '}
-        {router.pathname !== '/' &&
-          router.pathname !== '/following_diaries' &&
-          props.title}
-      </Typography>
+        <Typography
+          component="h3"
+          sx={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            lineHeight: 1.5,
+          }}
+        >
+          {(router.pathname === '/' ||
+            router.pathname === '/following_diaries') &&
+            omit(props.title)(40)('...')}{' '}
+          {router.pathname !== '/' &&
+            router.pathname !== '/following_diaries' &&
+            props.title}
+        </Typography>
+        <Typography sx={{ fontSize: 18 }}>({props.wordCount} words)</Typography>
+      </Box>
       <Typography>
         {(router.pathname === '/' ||
           router.pathname === '/following_diaries') &&
-          omit(props.content)(305)('...')}{' '}
+          omit(props.content)(295)('...')}{' '}
         {router.pathname !== '/' &&
           router.pathname !== '/following_diaries' &&
           props.content}{' '}
-        ({props.wordCount} words)
       </Typography>
       <Box sx={{ display: 'flex' }}>
         <Box>

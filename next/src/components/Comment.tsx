@@ -19,6 +19,7 @@ import axios, { AxiosResponse, AxiosError } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import useSWR from 'swr'
@@ -54,6 +55,7 @@ const imageCss = css({ marginTop: '4px' })
 
 const Comment = (props: diaryIdProps) => {
   const [user] = useUserState()
+  const router = useRouter()
   const [, setSnackbar] = useSnackbarState()
   const [open, setOpen] = useState<boolean>(false)
   const [commentId, setCommentId] = useState<number>(0)
@@ -68,6 +70,8 @@ const Comment = (props: diaryIdProps) => {
   })
 
   const comments = camelcaseKeys(data)
+
+  const pathname = router.pathname
 
   const validationRules = {
     comment: {
@@ -97,7 +101,7 @@ const Comment = (props: diaryIdProps) => {
         setSnackbar({
           message: 'Successfully posted!',
           severity: 'success',
-          pathname: '/diaries/[id]',
+          pathname: pathname,
         })
         mutateComments()
       })
@@ -106,7 +110,7 @@ const Comment = (props: diaryIdProps) => {
         setSnackbar({
           message: 'Try again',
           severity: 'error',
-          pathname: '/diaries/[id]',
+          pathname: pathname,
         })
       })
   }
@@ -143,9 +147,9 @@ const Comment = (props: diaryIdProps) => {
         localStorage.setItem('client', res.headers['client'])
         localStorage.setItem('uid', res.headers['uid'])
         setSnackbar({
-          message: 'Successfully deleted!',
+          message: 'Comment deleted',
           severity: 'success',
-          pathname: '/diaries/[id]',
+          pathname: pathname,
         })
         mutateComments()
         setCommentId(0)
@@ -153,9 +157,9 @@ const Comment = (props: diaryIdProps) => {
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
         setSnackbar({
-          message: 'Try again',
+          message: 'Failed to delete comment',
           severity: 'error',
-          pathname: '/diaries/[id]',
+          pathname: pathname,
         })
       })
   }
@@ -303,14 +307,14 @@ const Comment = (props: diaryIdProps) => {
             </Typography>
             <Button
               onClick={handleClose}
-              variant="contained"
-              color="warning"
+              variant="outlined"
               sx={{ marginRight: 2 }}
             >
               Cancel
             </Button>
             <Button
               variant="contained"
+              color="warning"
               onClick={() => handleDeleteChange(commentId)}
             >
               OK

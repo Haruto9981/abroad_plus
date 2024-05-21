@@ -14,16 +14,23 @@ const SignOut: NextPage = () => {
       id: 0,
       name: '',
       email: '',
-      start_date: new Date(),
-      end_date: new Date(),
+      start_date: '',
+      end_date: '',
       image: {
         url: '',
       },
       isSignedIn: false,
       isFetched: true,
+      country: '',
+      uni: '',
+      bio: '',
+      total_likes_count: 0,
+      diaries: [],
+      following: [],
+      followers: [],
     })
     setSnackbar({
-      message: 'サインアウトに成功しました',
+      message: 'You have successfully signed out',
       severity: 'success',
       pathname: '/',
     })

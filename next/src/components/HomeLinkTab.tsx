@@ -22,6 +22,7 @@ const LinkTab: React.FC<Props> = ({ label, href, value, selected }) => {
               color: '#f15922',
               borderBottom: '4px solid #f15922',
               mx: 4,
+              fontSize: '16px',
               textTransform: 'none',
             }}
           />
@@ -29,7 +30,7 @@ const LinkTab: React.FC<Props> = ({ label, href, value, selected }) => {
           <Tab
             label={label}
             value={value}
-            sx={{ textTransform: 'none', mx: 4 }}
+            sx={{ textTransform: 'none', fontSize: '16px', mx: 4 }}
           />
         )}
       </NextLink>

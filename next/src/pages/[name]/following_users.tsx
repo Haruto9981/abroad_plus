@@ -7,8 +7,6 @@ import {
   Avatar,
   Divider,
   Button,
-  Card,
-  CardContent,
 } from '@mui/material'
 import axios, { AxiosError } from 'axios'
 import type { NextPage } from 'next'
@@ -42,8 +40,18 @@ const Following: NextPage = () => {
     process.env.NEXT_PUBLIC_API_BASE_URL + '/users/' + router.query.name
 
   const { data, error } = useSWR(url, fetcher)
-  if (error) return <Error />
-  if (!data) return <Loading />
+  if (error)
+    return (
+      <Layout>
+        <Error />
+      </Layout>
+    )
+  if (!data)
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    )
 
   const getUserFollowingIdArray = (userFollowing: object[]): number[] => {
     const array = []
@@ -94,124 +102,118 @@ const Following: NextPage = () => {
 
   return (
     <Layout>
-      <Card sx={{ borderRadius: 2 }}>
-        <CardContent>
-          <Typography sx={{ fontSize: 20, mb: 2 }}>Following</Typography>
-          {data.profile.following.length === 0 && (
-            <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
-              No following users
-            </Typography>
-          )}
-          {data.profile.following.map((following: Following, i: number) => (
-            <>
-              <Divider sx={{ mt: 2 }} />
-              <Box key={i} sx={{ display: 'flex', mt: 1 }}>
-                <Link href={`/${following.name}`}>
-                  <IconButton>
-                    {following.image.url ? (
-                      <Avatar
-                        src={following.image.url}
-                        sx={{ width: 50, height: 50 }}
-                      ></Avatar>
-                    ) : (
-                      <Avatar sx={{ width: 50, height: 50 }}>
-                        <PersonIcon />
-                      </Avatar>
-                    )}
-                  </IconButton>
-                </Link>
-                <Box sx={{ width: '100%', mt: 1 }}>
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <Box sx={{ display: 'flex' }}>
-                      <Link href={`/${following.name}`}>
-                        <Typography
-                          sx={{
-                            mr: 1,
-                            fontSize: 16,
-                            fontWeight: 'bold',
-                            '&:hover': {
-                              textDecoration: 'underline',
-                            },
-                          }}
-                        >
-                          {following.name}
-                        </Typography>
-                      </Link>
-                      {following.country && (
-                        <Image
-                          css={imageCss}
-                          src={`/${following.country.toLowerCase()}.png`}
-                          height={15}
-                          width={30}
-                          alt="国旗"
-                        />
-                      )}
-                      {following.uni && (
-                        <Typography
-                          sx={{
-                            color: 'white',
-                            ml: 1,
-                            backgroundColor: 'orange',
-                            p: 0.3,
-                            fontSize: 11,
-                            fontWeight: 'bold',
-                            borderRadius: 0.5,
-                          }}
-                        >
-                          {following.uni}
-                        </Typography>
-                      )}
-                    </Box>
-                  </Box>
-                  <Box>
-                    <Typography>{following.bio}</Typography>
-                  </Box>
-                </Box>
-                {user.id !== following.id &&
-                  (!getUserFollowingIdArray(user.following).includes(
-                    following.id,
-                  ) ? (
-                    <Button
-                      onClick={() => handleFollowChange(following.id)}
-                      variant="contained"
-                      color="warning"
-                      type="submit"
+      <Typography sx={{ fontSize: 20, mb: 2 }}>Following</Typography>
+      {data.profile.following.length === 0 && (
+        <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
+          No following users
+        </Typography>
+      )}
+      {data.profile.following.map((following: Following, i: number) => (
+        <>
+          <Divider sx={{ mt: 2 }} />
+          <Box key={i} sx={{ display: 'flex', mt: 1 }}>
+            <Link href={`/${following.name}`}>
+              <IconButton>
+                {following.image.url ? (
+                  <Avatar
+                    src={following.image.url}
+                    sx={{ width: 50, height: 50 }}
+                  ></Avatar>
+                ) : (
+                  <Avatar sx={{ width: 50, height: 50 }}>
+                    <PersonIcon />
+                  </Avatar>
+                )}
+              </IconButton>
+            </Link>
+            <Box sx={{ width: '100%', mt: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex' }}>
+                  <Link href={`/${following.name}`}>
+                    <Typography
                       sx={{
+                        mr: 1,
+                        fontSize: 16,
                         fontWeight: 'bold',
+                        '&:hover': {
+                          textDecoration: 'underline',
+                        },
+                      }}
+                    >
+                      {following.name}
+                    </Typography>
+                  </Link>
+                  {following.country && (
+                    <Image
+                      css={imageCss}
+                      src={`/${following.country.toLowerCase()}.png`}
+                      height={15}
+                      width={30}
+                      alt="国旗"
+                    />
+                  )}
+                  {following.uni && (
+                    <Typography
+                      sx={{
                         color: 'white',
-                        textTransform: 'none',
-                        width: '25%',
-                        my: 2,
-                      }}
-                    >
-                      follow
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => handleUnfollowChange(following.id)}
-                      variant="outlined"
-                      color="warning"
-                      type="submit"
-                      sx={{
+                        ml: 1,
+                        backgroundColor: 'orange',
+                        p: 0.3,
+                        fontSize: 11,
                         fontWeight: 'bold',
-                        textTransform: 'none',
-                        boxShadow: 'none',
-                        border: '1.5px solid #f5a500',
-                        width: '25%',
-                        height: '25%',
-                        my: 2,
+                        borderRadius: 0.5,
                       }}
                     >
-                      unfollow
-                    </Button>
-                  ))}
+                      {following.uni}
+                    </Typography>
+                  )}
+                </Box>
               </Box>
-            </>
-          ))}
-        </CardContent>
-      </Card>
+              <Box>
+                <Typography>{following.bio}</Typography>
+              </Box>
+            </Box>
+            {user.id !== following.id &&
+              (!getUserFollowingIdArray(user.following).includes(
+                following.id,
+              ) ? (
+                <Button
+                  onClick={() => handleFollowChange(following.id)}
+                  variant="contained"
+                  color="warning"
+                  type="submit"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'white',
+                    textTransform: 'none',
+                    width: '25%',
+                    my: 2,
+                  }}
+                >
+                  follow
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => handleUnfollowChange(following.id)}
+                  variant="outlined"
+                  color="warning"
+                  type="submit"
+                  sx={{
+                    fontWeight: 'bold',
+                    textTransform: 'none',
+                    boxShadow: 'none',
+                    border: '1.5px solid #f5a500',
+                    width: '25%',
+                    height: '25%',
+                    my: 2,
+                  }}
+                >
+                  unfollow
+                </Button>
+              ))}
+          </Box>
+        </>
+      ))}
     </Layout>
   )
 }
