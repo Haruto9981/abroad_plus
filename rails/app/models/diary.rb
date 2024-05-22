@@ -1,4 +1,5 @@
 class Diary < ApplicationRecord
+  before_create :set_id
   belongs_to :user
   has_many :favorites, dependent: :destroy
   has_many :diary_comments, dependent: :destroy
@@ -13,4 +14,11 @@ class Diary < ApplicationRecord
   #     raise StandardError, "未保存の記事は複数保有できません"
   #   end
   # end
+  private
+
+  def set_id
+    while self.id.blank? || Diary.find_by(id: self.id).present? do
+      self.id = SecureRandom.urlsafe_base64(10)
+    end
+  end
 end
