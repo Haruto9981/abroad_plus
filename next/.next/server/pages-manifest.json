@@ -2,11 +2,9 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
+  "/sign_in": "pages/sign_in.js",
   "/diaries/[id]": "pages/diaries/[id].js",
-  "/current/diaries": "pages/current/diaries.js",
-  "/current/diaries/[id]": "pages/current/diaries/[id].js",
-  "/current/diaries/edit/[id]": "pages/current/diaries/edit/[id].js",
-  "/[name]/following_users": "pages/[name]/following_users.js",
-  "/[name]": "pages/[name].js"
+  "/": "pages/index.js",
+  "/sign_out": "pages/sign_out.js",
+  "/current/diaries": "pages/current/diaries.js"
 }
