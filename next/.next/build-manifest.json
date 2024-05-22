@@ -32,20 +32,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/current/diaries.js"
     ],
+    "/current/diaries/[id]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/current/diaries/[id].js"
+    ],
     "/diaries/[id]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/diaries/[id].js"
-    ],
-    "/sign_in": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/sign_in.js"
-    ],
-    "/sign_out": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/sign_out.js"
     ]
   },
   "ampFirstPages": []

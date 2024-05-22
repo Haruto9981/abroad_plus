@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_22_051030) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_22_112333) do
   create_table "diaries", id: :string, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", comment: "タイトル"
     t.text "content", comment: "本文"
@@ -35,9 +35,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_051030) do
   create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "diary_id", null: false
-    t.timestamp "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.timestamp "updated_at", default: -> { "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" }, null: false
-    t.index ["diary_id"], name: "diary_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["diary_id"], name: "fk_rails_746c75c8ab"
     t.index ["user_id", "diary_id"], name: "user_diary_unique", unique: true
   end
 
@@ -84,6 +84,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_051030) do
 
   add_foreign_key "diaries", "users"
   add_foreign_key "diary_comments", "users"
-  add_foreign_key "favorites", "diaries", name: "favorites_ibfk_2"
-  add_foreign_key "favorites", "users", name: "favorites_ibfk_1"
+  add_foreign_key "favorites", "diaries"
+  add_foreign_key "favorites", "users"
 end
