@@ -5,10 +5,12 @@ import {
   IconButton,
   Typography,
   Avatar,
+  Pagination,
   Divider,
   Button,
 } from '@mui/material'
 import axios, { AxiosError } from 'axios'
+import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -43,8 +45,13 @@ type Followers = {
 const Followers: NextPage = () => {
   const router = useRouter()
   const [user, setUser] = useUserState()
+  const page = 'page' in router.query ? Number(router.query.page) : 1
   const url =
-    process.env.NEXT_PUBLIC_API_BASE_URL + '/users/' + router.query.name
+    process.env.NEXT_PUBLIC_API_BASE_URL +
+    '/users/' +
+    router.query.name +
+    '/followers?page=' +
+    page
 
   const { data, error } = useSWR(url, fetcher)
   if (error)
@@ -59,6 +66,12 @@ const Followers: NextPage = () => {
         <Loading />
       </Layout>
     )
+
+  const followers = camelcaseKeys(data.users)
+  const meta = camelcaseKeys(data.meta)
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
+    router.push('/' + router.query.name + '/followers?page=' + value)
 
   const getUserFollowingIdArray = (user: User): number[] => {
     const array = []
@@ -110,20 +123,20 @@ const Followers: NextPage = () => {
   return (
     <Layout>
       <Typography sx={{ fontSize: 20, mb: 2 }}>Followers</Typography>
-      {data.profile.followers.length === 0 && (
+      {followers.length === 0 && (
         <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
           No followers
         </Typography>
       )}
-      {data.profile.followers.map((followers: Followers, i: number) => (
+      {followers.map((follower: Followers, i: number) => (
         <>
           <Divider sx={{ mt: 2 }} />
           <Box key={i} sx={{ display: 'flex', mt: 1 }}>
-            <Link href={`/${followers.name}`}>
+            <Link href={`/${follower.name}`}>
               <IconButton>
-                {followers.image.url ? (
+                {follower.image.url ? (
                   <Avatar
-                    src={followers.image.url}
+                    src={follower.image.url}
                     sx={{ width: 50, height: 50 }}
                   ></Avatar>
                 ) : (
@@ -136,7 +149,7 @@ const Followers: NextPage = () => {
             <Box sx={{ width: '100%', mt: 1 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex' }}>
-                  <Link href={`/${followers.name}`}>
+                  <Link href={`/${follower.name}`}>
                     <Typography
                       sx={{
                         mr: 1,
@@ -147,19 +160,19 @@ const Followers: NextPage = () => {
                         },
                       }}
                     >
-                      {followers.name}
+                      {follower.name}
                     </Typography>
                   </Link>
-                  {followers.country && (
+                  {follower.country && (
                     <Image
                       css={imageCss}
-                      src={`/${followers.country.toLowerCase()}.png`}
+                      src={`/${follower.country.toLowerCase()}.png`}
                       height={15}
                       width={30}
                       alt="国旗"
                     />
                   )}
-                  {followers.uni && (
+                  {follower.uni && (
                     <Typography
                       sx={{
                         color: 'white',
@@ -171,19 +184,19 @@ const Followers: NextPage = () => {
                         borderRadius: 0.5,
                       }}
                     >
-                      {followers.uni}
+                      {follower.uni}
                     </Typography>
                   )}
                 </Box>
               </Box>
               <Box>
-                <Typography>{followers.bio}</Typography>
+                <Typography>{follower.bio}</Typography>
               </Box>
             </Box>
-            {user.id !== followers.id &&
-              (!getUserFollowingIdArray(user).includes(followers.id) ? (
+            {user.id !== follower.id &&
+              (!getUserFollowingIdArray(user).includes(follower.id) ? (
                 <Button
-                  onClick={() => handleFollowChange(followers.id)}
+                  onClick={() => handleFollowChange(follower.id)}
                   variant="contained"
                   color="warning"
                   type="submit"
@@ -199,7 +212,7 @@ const Followers: NextPage = () => {
                 </Button>
               ) : (
                 <Button
-                  onClick={() => handleUnfollowChange(followers.id)}
+                  onClick={() => handleUnfollowChange(follower.id)}
                   variant="outlined"
                   color="warning"
                   type="submit"
@@ -219,6 +232,18 @@ const Followers: NextPage = () => {
           </Box>
         </>
       ))}
+      {followers.length !== 0 && (
+        <>
+          <Divider sx={{ my: 2 }} />
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+            <Pagination
+              count={meta.totalPages}
+              page={meta.currentPage}
+              onChange={handleChange}
+            />
+          </Box>
+        </>
+      )}
     </Layout>
   )
 }

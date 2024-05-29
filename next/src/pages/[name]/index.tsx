@@ -17,12 +17,12 @@ type DiaryProps = {
   image: {
     url: string
   }
-  word_count: number
+  wordCount: number
   day: string
-  month_name: string
+  monthName: string
   month: string
   year: string
-  w_day: string
+  wDay: string
   user: {
     id: number
     name: string
@@ -34,7 +34,7 @@ type DiaryProps = {
     }
   }
   favorites: { user_id: number }[]
-  diary_comments: Array<object>
+  diaryComments: Array<object>
 }
 
 const UserProfile: NextPage = () => {
@@ -44,10 +44,11 @@ const UserProfile: NextPage = () => {
     process.env.NEXT_PUBLIC_API_BASE_URL +
     '/users/' +
     router.query.name +
-    '/?page=' +
+    '/diaries/?page=' +
     page
 
   const { data, error } = useSWR(url, fetcher)
+
   if (error)
     return (
       <Layout>
@@ -61,7 +62,7 @@ const UserProfile: NextPage = () => {
       </Layout>
     )
 
-  const profile = camelcaseKeys(data.profile)
+  const diaries = camelcaseKeys(data.diaries)
   const meta = camelcaseKeys(data.meta)
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
@@ -72,7 +73,7 @@ const UserProfile: NextPage = () => {
       <Typography sx={{ fontSize: 20, mb: 2 }}>Diaries</Typography>
       <Divider sx={{ my: 2 }} />
       <Grid container>
-        {profile.diaries.map((diary: DiaryProps, i: number) => (
+        {diaries.map((diary: DiaryProps, i: number) => (
           <Grid key={i} item xs={12} md={12}>
             <Link href={'/diaries/' + diary.id}>
               <DiaryCard
@@ -80,18 +81,18 @@ const UserProfile: NextPage = () => {
                 title={diary.title}
                 content={diary.content}
                 image={diary.image.url}
-                wordCount={diary.word_count}
+                wordCount={diary.wordCount}
                 day={diary.day}
-                month={diary.month_name}
+                month={diary.monthName}
                 year={diary.year}
-                wDay={diary.w_day}
-                userName={profile.name}
-                userCountry={profile.country}
-                userUni={profile.uni}
-                userBio={profile.bio}
-                userImage={profile.image.url}
+                wDay={diary.wDay}
+                userName={diary.user.name}
+                userCountry={diary.user.country}
+                userUni={diary.user.uni}
+                userBio={diary.user.bio}
+                userImage={diary.user.image.url}
                 favorites={diary.favorites}
-                diaryComments={diary.diary_comments}
+                diaryComments={diary.diaryComments}
               />
             </Link>
             <Divider sx={{ my: 2 }} />

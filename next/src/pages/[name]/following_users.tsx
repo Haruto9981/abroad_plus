@@ -6,9 +6,11 @@ import {
   Typography,
   Avatar,
   Divider,
+  Pagination,
   Button,
 } from '@mui/material'
 import axios, { AxiosError } from 'axios'
+import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -36,8 +38,13 @@ interface Following {
 const Following: NextPage = () => {
   const [user, setUser] = useUserState()
   const router = useRouter()
+  const page = 'page' in router.query ? Number(router.query.page) : 1
   const url =
-    process.env.NEXT_PUBLIC_API_BASE_URL + '/users/' + router.query.name
+    process.env.NEXT_PUBLIC_API_BASE_URL +
+    '/users/' +
+    router.query.name +
+    '/following?page=' +
+    page
 
   const { data, error } = useSWR(url, fetcher)
   if (error)
@@ -52,6 +59,12 @@ const Following: NextPage = () => {
         <Loading />
       </Layout>
     )
+
+  const following_users = camelcaseKeys(data.users)
+  const meta = camelcaseKeys(data.meta)
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
+    router.push('/' + router.query.name + '/following?page=' + value)
 
   const getUserFollowingIdArray = (userFollowing: object[]): number[] => {
     const array = []
@@ -103,20 +116,20 @@ const Following: NextPage = () => {
   return (
     <Layout>
       <Typography sx={{ fontSize: 20, mb: 2 }}>Following</Typography>
-      {data.profile.following.length === 0 && (
+      {following_users.length === 0 && (
         <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
           No following users
         </Typography>
       )}
-      {data.profile.following.map((following: Following, i: number) => (
+      {following_users.map((following_user: Following, i: number) => (
         <>
           <Divider sx={{ mt: 2 }} />
           <Box key={i} sx={{ display: 'flex', mt: 1 }}>
-            <Link href={`/${following.name}`}>
+            <Link href={`/${following_user.name}`}>
               <IconButton>
-                {following.image.url ? (
+                {following_user.image.url ? (
                   <Avatar
-                    src={following.image.url}
+                    src={following_user.image.url}
                     sx={{ width: 50, height: 50 }}
                   ></Avatar>
                 ) : (
@@ -129,7 +142,7 @@ const Following: NextPage = () => {
             <Box sx={{ width: '100%', mt: 1 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex' }}>
-                  <Link href={`/${following.name}`}>
+                  <Link href={`/${following_user.name}`}>
                     <Typography
                       sx={{
                         mr: 1,
@@ -140,19 +153,19 @@ const Following: NextPage = () => {
                         },
                       }}
                     >
-                      {following.name}
+                      {following_user.name}
                     </Typography>
                   </Link>
-                  {following.country && (
+                  {following_user.country && (
                     <Image
                       css={imageCss}
-                      src={`/${following.country.toLowerCase()}.png`}
+                      src={`/${following_user.country.toLowerCase()}.png`}
                       height={15}
                       width={30}
                       alt="国旗"
                     />
                   )}
-                  {following.uni && (
+                  {following_user.uni && (
                     <Typography
                       sx={{
                         color: 'white',
@@ -164,21 +177,21 @@ const Following: NextPage = () => {
                         borderRadius: 0.5,
                       }}
                     >
-                      {following.uni}
+                      {following_user.uni}
                     </Typography>
                   )}
                 </Box>
               </Box>
               <Box>
-                <Typography>{following.bio}</Typography>
+                <Typography>{following_user.bio}</Typography>
               </Box>
             </Box>
-            {user.id !== following.id &&
+            {user.id !== following_user.id &&
               (!getUserFollowingIdArray(user.following).includes(
-                following.id,
+                following_user.id,
               ) ? (
                 <Button
-                  onClick={() => handleFollowChange(following.id)}
+                  onClick={() => handleFollowChange(following_user.id)}
                   variant="contained"
                   color="warning"
                   type="submit"
@@ -194,7 +207,7 @@ const Following: NextPage = () => {
                 </Button>
               ) : (
                 <Button
-                  onClick={() => handleUnfollowChange(following.id)}
+                  onClick={() => handleUnfollowChange(following_user.id)}
                   variant="outlined"
                   color="warning"
                   type="submit"
@@ -214,6 +227,18 @@ const Following: NextPage = () => {
           </Box>
         </>
       ))}
+      {following_users.length !== 0 && (
+        <>
+          <Divider sx={{ my: 2 }} />
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+            <Pagination
+              count={meta.totalPages}
+              page={meta.currentPage}
+              onChange={handleChange}
+            />
+          </Box>
+        </>
+      )}
     </Layout>
   )
 }

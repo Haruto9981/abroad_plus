@@ -2,9 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/[name]": "pages/[name].js",
   "/": "pages/index.js",
-  "/current/diaries": "pages/current/diaries.js",
-  "/sign_out": "pages/sign_out.js",
-  "/current/diaries/[id]": "pages/current/diaries/[id].js",
-  "/sign_in": "pages/sign_in.js"
+  "/[name]/followers": "pages/[name]/followers.js",
+  "/[name]/following_users": "pages/[name]/following_users.js"
 }
