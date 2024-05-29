@@ -14,6 +14,7 @@ export const useUserState = () => {
       url: string
     }
     total_likes_count: number
+    total_diaries_count: number
     diaries: Diary[]
     following: following[]
     followers: followers[]
@@ -65,6 +66,7 @@ export const useUserState = () => {
       url: '',
     },
     total_likes_count: 0,
+    total_diaries_count: 0,
     diaries: [],
     following: [],
     followers: [],

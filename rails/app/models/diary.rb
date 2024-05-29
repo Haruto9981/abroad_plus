@@ -16,9 +16,7 @@ class Diary < ApplicationRecord
   # end
   private
 
-  def set_id
-    while self.id.blank? || Diary.find_by(id: self.id).present? do
-      self.id = SecureRandom.urlsafe_base64(10)
+    def set_id
+      self.id = SecureRandom.urlsafe_base64(10) while self.id.blank? || Diary.find_by(id: self.id).present?
     end
-  end
 end

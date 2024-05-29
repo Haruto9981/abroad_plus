@@ -5,10 +5,7 @@ class Api::V1::DiaryCommentsController < Api::V1::BaseController
   end
 
   def create
-    diary = Diary.find(params[:diary_id])
-    comment = current_user.diary_comments.new(diary_comment_params)
-    comment.diary_id = diary.id
-    comment.save!
+    comment = current_user.diary_comments.create!(diary_comment_params.merge(diary_id: params[:diary_id]))
     render json: comment
   end
 

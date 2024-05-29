@@ -166,6 +166,7 @@ const Comment = (props: diaryIdProps) => {
 
   if (error) return <Error />
   if (!data) return <Loading />
+
   return (
     <Card sx={{ borderRadius: 2 }}>
       <CardContent>

@@ -1,10 +1,6 @@
 class DiaryCommentSerializer < ActiveModel::Serializer
-  attributes :id, :comment, :user_id, :diary_id, :created_at, :from_today
+  attributes :id, :comment, :user_id, :diary_id, :from_today
   belongs_to :user, serializer: UserSerializer
-
-  def created_at
-    object.created_at.strftime("%Y/%m/%d")
-  end
 
   def from_today # rubocop:disable Metrics/AbcSize
     now = Time.zone.now

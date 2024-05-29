@@ -10,29 +10,6 @@ import { useUserState } from '@/hooks/useGlobalState'
 import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
-type Diary = {
-  id: string
-  title: string
-  content: string
-  image: { url: string }
-  wordCount: number
-  day: number
-  monthName: string
-  year: number
-  wDay: string
-  user: {
-    id: string
-    name: string
-    country: string
-    uni: string
-    bio: string
-    image: { url: string }
-  }
-  status: string
-  favorites: number
-  diaryComments: number
-}
-
 type Props = {
   children: React.ReactNode
   pageUrl: string
@@ -46,14 +23,6 @@ const Layout = ({ children, pageUrl }: Props) => {
   const { data, error } = useSWR(url, fetcher)
   if (error) return <Error />
   if (!data) return <Loading />
-
-  const totalDiariesCount = (diaries: Diary[]) => {
-    let count = 0
-    for (let i = 0; i < diaries.length; i++) {
-      if (diaries[i] && diaries[i].status !== 'unsaved') count += 1
-    }
-    return count
-  }
 
   return (
     <Box
@@ -74,7 +43,7 @@ const Layout = ({ children, pageUrl }: Props) => {
           endDate={user.end_date}
           image={user.image.url}
           diaries={user.diaries}
-          totalDiariesCount={totalDiariesCount(user.diaries)}
+          totalDiariesCount={user.total_diaries_count}
           totalLikesCount={user.total_likes_count}
           following={user.following}
           followers={user.followers}

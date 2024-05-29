@@ -33,32 +33,8 @@ type DiaryProps = {
       url: string
     }
   }
-  diaries: Diary[]
   favorites: { user_id: number }[]
   diaryComments: object[]
-}
-
-type Diary = {
-  id: string
-  title: string
-  content: string
-  image: { url: string }
-  wordCount: number
-  day: number
-  monthName: string
-  year: number
-  wDay: string
-  user: {
-    id: string
-    name: string
-    country: string
-    uni: string
-    bio: string
-    image: { url: string }
-  }
-  status: string
-  favorites: number
-  diaryComments: number
 }
 
 const Index: NextPage = () => {
@@ -69,6 +45,7 @@ const Index: NextPage = () => {
     '/current/following_diaries?page=' +
     page
   const { data, error } = useSWR(url, fetcher)
+
   if (error)
     return (
       <Layout pageUrl={'/following_diaries'}>
