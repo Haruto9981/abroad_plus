@@ -26,6 +26,8 @@ type DiaryProps = {
   user: {
     id: number
     name: string
+    first_name: string
+    last_name: string
     country: string
     uni: string
     bio: string
@@ -71,6 +73,8 @@ const Index: NextPage = () => {
 
   const diaries = camelcaseKeys(data.diaries)
 
+  console.log(diaries)
+
   const meta = camelcaseKeys(data.meta)
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
@@ -93,6 +97,8 @@ const Index: NextPage = () => {
                 year={diary.year}
                 wDay={diary.wDay}
                 userName={diary.user.name}
+                userFirstName={diary.user.first_name}
+                userLastName={diary.user.last_name}
                 userCountry={diary.user.country}
                 userUni={diary.user.uni}
                 userBio={diary.user.bio}

@@ -1,0 +1,1 @@
+{"c":["pages/index","pages/[name]","webpack"],"r":["pages/[name]"],"m":["./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?absolutePagePath=%2Fapp%2Fsrc%2Fpages%2F%5Bname%5D%2Findex.tsx&page=%2F%5Bname%5D!","./src/components/ProfileLayout.tsx","./src/pages/[name]/index.tsx"]}

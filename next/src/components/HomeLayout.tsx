@@ -36,6 +36,8 @@ const Layout = ({ children, pageUrl }: Props) => {
         <ProfileCard
           id={user.id}
           name={user.name}
+          firstName={user.first_name}
+          lastName={user.last_name}
           country={user.country}
           uni={user.uni}
           bio={user.bio}

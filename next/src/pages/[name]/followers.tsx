@@ -160,7 +160,7 @@ const Followers: NextPage = () => {
                         },
                       }}
                     >
-                      {follower.name}
+                      @{follower.name}
                     </Typography>
                   </Link>
                   {follower.country && (

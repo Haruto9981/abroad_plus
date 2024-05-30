@@ -17,6 +17,8 @@ import { useUserState } from '@/hooks/useGlobalState'
 type profileCardProps = {
   id: number
   name: string
+  firstName: string
+  lastName: string
   country: string | null
   uni: string | null
   bio: string | null
@@ -128,13 +130,38 @@ const ProfileCard = (props: profileCardProps) => {
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            my: 2,
-            fontSize: 20,
+            my: 1,
+            fontSize: 18,
             fontWeight: 'bold',
           }}
         >
-          {props.name}
+          {props.firstName} {props.lastName}
         </Typography>
+        {props.firstName || props.lastName ? (
+          <Typography
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              my: 1,
+              fontSize: 18,
+              color: 'gray',
+            }}
+          >
+            @{props.name}
+          </Typography>
+        ) : (
+          <Typography
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              my: 1,
+              fontSize: 18,
+              fontWeight: 'bold',
+            }}
+          >
+            @{props.name}
+          </Typography>
+        )}
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
           {props.country && (
             <Box sx={{ mx: 1 }}>

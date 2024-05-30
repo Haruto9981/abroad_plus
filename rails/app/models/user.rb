@@ -22,8 +22,12 @@ class User < ApplicationRecord
   has_many :following, through: :active_relationships, source: :followed
   has_many :followers, through: :passive_relationships, source: :follower
 
-  VALID_ACCOUNT_NAME_REGEX = /\A[a-zA-Z0-9]+\z/ # 半角英数字のみ受け付ける正規表現
-  validates :name, presence: true, uniqueness: true, length: { minimum: 3, maximum: 25 }, format: { with: VALID_ACCOUNT_NAME_REGEX }
+  VALID_ACCOUNT_NAME_REGEX = /\A\w+\z/
+  VALID_NAME_REGEX = /\A[a-zA-Z]+\z/
+  validates :name, presence: true, uniqueness: true, length: { minimum: 3, maximum: 20 }, format: { with: VALID_ACCOUNT_NAME_REGEX }
+  validates :first_name, length: { maximum: 15 }, format: { with: VALID_NAME_REGEX }
+  validates :last_name, length: { maximum: 15 }, format: { with: VALID_NAME_REGEX }
+
 
   def follow(other_user)
     following << other_user unless self == other_user

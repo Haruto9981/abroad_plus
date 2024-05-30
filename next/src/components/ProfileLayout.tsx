@@ -27,6 +27,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <ProfileCard
           id={profile.id}
           name={profile.name}
+          firstName={profile.firstName}
+          lastName={profile.lastName}
           country={profile.country}
           uni={profile.uni}
           bio={profile.bio}

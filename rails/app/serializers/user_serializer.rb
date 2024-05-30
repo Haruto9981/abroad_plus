@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :name, :country, :uni, :start_date, :end_date, :bio, :image,
+  attributes :id, :name, :first_name, :last_name, :country, :uni, :start_date, :end_date, :bio, :image,
              :total_likes_count, :total_diaries_count
   has_many :following
   has_many :followers

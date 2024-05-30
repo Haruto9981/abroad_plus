@@ -1,5 +1,5 @@
 class CurrentUserSerializer < ActiveModel::Serializer
-  attributes :id, :name, :email, :country, :uni, :start_date, :end_date, :bio, :image,
+  attributes :id, :name, :first_name, :last_name, :email, :country, :uni, :start_date, :end_date, :bio, :image,
              :total_likes_count, :total_diaries_count
   has_many :diaries, serializer: DiarySerializer
   has_many :following

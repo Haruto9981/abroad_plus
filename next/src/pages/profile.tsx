@@ -28,7 +28,8 @@ import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
 type profileProps = {
-  name: string
+  first_name: string
+  last_name: string
   country: string
   uni: string
   start_date: string
@@ -37,7 +38,8 @@ type profileProps = {
 }
 
 type profileFormData = {
-  name: string
+  first_name: string
+  last_name: string
   country: string
   uni: string
   start_date: string
@@ -64,7 +66,8 @@ const Profile: NextPage = () => {
   const profile: profileProps = useMemo(() => {
     if (!data) {
       return {
-        name: '',
+        first_name: '',
+        last_name: '',
         country: '',
         uni: '',
         start_date: '',
@@ -73,7 +76,8 @@ const Profile: NextPage = () => {
       }
     }
     return {
-      name: data.name == null ? '' : data.name,
+      first_name: data.first_name == null ? '' : data.first_name,
+      last_name: data.last_name == null ? '' : data.last_name,
       country: data.country == null ? '' : data.country,
       uni: data.uni == null ? '' : data.uni,
       start_date: data.start_date == null ? '' : data.start_date,
@@ -123,14 +127,6 @@ const Profile: NextPage = () => {
   }
 
   const onSubmit: SubmitHandler<profileFormData> = (data) => {
-    if (data.name == '') {
-      return setSnackbar({
-        message: 'Enter your name',
-        severity: 'error',
-        pathname: '/profile',
-      })
-    }
-
     setIsLoading(true)
 
     const patchUrl = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
@@ -144,7 +140,8 @@ const Profile: NextPage = () => {
 
     const formData = new FormData()
 
-    formData.append('user[name]', data.name)
+    formData.append('user[first_name]', data.first_name)
+    formData.append('user[last_name]', data.last_name)
     formData.append('user[country]', data.country)
     formData.append('user[uni]', data.uni)
     formData.append('user[start_date]', data.start_date)
@@ -289,22 +286,42 @@ const Profile: NextPage = () => {
             />
           </Box>
           <Typography sx={{ mb: 1 }}>Name</Typography>
-          <Controller
-            name="name"
-            control={control}
-            render={({ field, fieldState }) => (
-              <TextField
-                {...field}
-                type="text"
-                error={fieldState.invalid}
-                helperText={fieldState.error?.message}
-                onChange={(e) => {
-                  field.onChange(e)
-                }}
-                sx={{ backgroundColor: 'white' }}
-              />
-            )}
-          />
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Controller
+              name="first_name"
+              control={control}
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  type="text"
+                  error={fieldState.invalid}
+                  helperText={fieldState.error?.message}
+                  placeholder="First name"
+                  onChange={(e) => {
+                    field.onChange(e)
+                  }}
+                  sx={{ backgroundColor: 'white', width: '100%', mr: 1 }}
+                />
+              )}
+            />
+            <Controller
+              name="last_name"
+              control={control}
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  type="text"
+                  error={fieldState.invalid}
+                  helperText={fieldState.error?.message}
+                  placeholder="Last name"
+                  onChange={(e) => {
+                    field.onChange(e)
+                  }}
+                  sx={{ backgroundColor: 'white', width: '100%', ml: 1 }}
+                />
+              )}
+            />
+          </Box>
           <Typography sx={{ mt: 3, mb: 1 }}>The Country of your SA</Typography>
           <Controller
             name="country"

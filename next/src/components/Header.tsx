@@ -175,10 +175,19 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
                     onClose={handleClose}
                     onClick={handleClose}
                   >
-                    <Box sx={{ pl: 2, py: 1 }}>
+                    <Box sx={{ px: 2, py: 1 }}>
                       <Typography sx={{ fontWeight: 'bold' }}>
-                        {user.name}
+                        {user.first_name} {user.last_name}
                       </Typography>
+                      {user.first_name || user.last_name ? (
+                        <Typography sx={{ color: 'gray' }}>
+                          @{user.name}
+                        </Typography>
+                      ) : (
+                        <Typography sx={{ fontWeight: 'bold' }}>
+                          @{user.name}
+                        </Typography>
+                      )}
                     </Box>
                     <Divider />
                     <Link href="/">

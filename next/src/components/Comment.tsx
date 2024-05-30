@@ -235,7 +235,7 @@ const Comment = (props: diaryIdProps) => {
                           },
                         }}
                       >
-                        {comment.user.name}
+                        @{comment.user.name}
                       </Typography>
                     </Link>
                     {comment.user.country && (

@@ -1,4 +1,4 @@
-import { Box, Grid, Pagination, Divider } from '@mui/material'
+import { Box, Grid, Pagination, Divider, Typography } from '@mui/material'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Link from 'next/link'
@@ -26,6 +26,8 @@ type DiaryProps = {
   user: {
     id: number
     name: string
+    first_name: string
+    last_name: string
     country: string
     uni: string
     bio: string
@@ -68,6 +70,11 @@ const Index: NextPage = () => {
 
   return (
     <Layout pageUrl={'/following_diaries'}>
+      {diaries.length === 0 && (
+        <Typography sx={{ textAlign: 'center', color: 'gray', my: 4 }}>
+          No posts
+        </Typography>
+      )}
       <Grid container spacing={2}>
         {diaries.map((diary: DiaryProps, i: number) => (
           <Grid key={i} item xs={12} md={12}>
@@ -83,6 +90,8 @@ const Index: NextPage = () => {
                 year={diary.year}
                 wDay={diary.wDay}
                 userName={diary.user.name}
+                userFirstName={diary.user.first_name}
+                userLastName={diary.user.last_name}
                 userCountry={diary.user.country}
                 userUni={diary.user.uni}
                 userBio={diary.user.bio}
@@ -95,13 +104,15 @@ const Index: NextPage = () => {
           </Grid>
         ))}
       </Grid>
-      <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
-        <Pagination
-          count={meta.totalPages}
-          page={meta.currentPage}
-          onChange={handleChange}
-        />
-      </Box>
+      {diaries.length !== 0 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+          <Pagination
+            count={meta.totalPages}
+            page={meta.currentPage}
+            onChange={handleChange}
+          />
+        </Box>
+      )}
     </Layout>
   )
 }

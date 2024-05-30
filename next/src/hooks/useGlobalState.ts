@@ -4,6 +4,8 @@ export const useUserState = () => {
   type userStateType = {
     id: number
     name: string
+    first_name: string
+    last_name: string
     email: string
     country: string
     uni: string
@@ -56,6 +58,8 @@ export const useUserState = () => {
   const fallbackData: userStateType = {
     id: 0,
     name: '',
+    first_name: '',
+    last_name: '',
     email: '',
     country: '',
     uni: '',

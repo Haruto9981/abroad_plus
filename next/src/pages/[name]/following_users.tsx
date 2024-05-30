@@ -64,7 +64,7 @@ const Following: NextPage = () => {
   const meta = camelcaseKeys(data.meta)
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
-    router.push('/' + router.query.name + '/following?page=' + value)
+    router.push('/' + router.query.name + '/following_users?page=' + value)
 
   const getUserFollowingIdArray = (userFollowing: object[]): number[] => {
     const array = []
@@ -153,7 +153,7 @@ const Following: NextPage = () => {
                         },
                       }}
                     >
-                      {following_user.name}
+                      @{following_user.name}
                     </Typography>
                   </Link>
                   {following_user.country && (

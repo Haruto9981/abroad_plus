@@ -116,7 +116,7 @@ const DiaryCard = (props: diaryCardProps) => {
                   },
                 }}
               >
-                {props.userName}
+                @{props.userName}
               </Typography>
             </Link>
             {props.userCountry && (
