@@ -37,6 +37,19 @@ const SignUp: NextPage = () => {
     },
     name: {
       required: 'Enter your username',
+      minLength: {
+        value: 3,
+        message: 'Your username must be at least 3 characters long.',
+      },
+      maxLength: {
+        value: 20,
+        message: 'Your username cannot exceed 20 characters.',
+      },
+      pattern: {
+        value: /^\w+$/,
+        message:
+          'Your username can only contain alphabet letters, numbers, and underscores. Please enter a valid username.',
+      },
     },
   }
 

@@ -126,7 +126,104 @@ const Profile: NextPage = () => {
     setIsExistImageDeleted(true)
   }
 
+  const validationRules = {
+    first_name: {
+      maxLength: {
+        value: 15,
+        message: 'Your first name cannot exceed 15 characters.',
+      },
+      pattern: {
+        value: /^[a-zA-Z]*$/,
+        message:
+          'Your name can only contain alphabet letters. Please enter a valid name.',
+      },
+    },
+
+    last_name: {
+      maxLength: {
+        value: 15,
+        message: 'Your first name cannot exceed 15 characters.',
+      },
+      pattern: {
+        value: /^[a-zA-Z]*$/,
+        message:
+          'Your name can only contain alphabet letters. Please enter a valid name.',
+      },
+    },
+
+    bio: {
+      maxLength: {
+        value: 600,
+        message: 'Your bio cannot exceed 600 characters.',
+      },
+    },
+  }
+
   const onSubmit: SubmitHandler<profileFormData> = (data) => {
+    // start_date, end_dateが両方入力された場合は、start_dateとend_dateが同じ日付、あるいは日付が論理的に誤っている場合弾く。
+    if (data.start_date && data.end_date && data.start_date >= data.end_date) {
+      return setSnackbar({
+        message: 'Invaid SA period',
+        severity: 'error',
+        pathname: '/profile',
+      })
+    }
+    if (data.country && data.uni) {
+      switch (data.country) {
+        case 'USA':
+          if (
+            !(
+              data.uni === 'CSUMB' ||
+              data.uni === 'Kansas' ||
+              data.uni === 'Utah'
+            )
+          ) {
+            return setSnackbar({
+              message: 'The country and the university do not match',
+              severity: 'error',
+              pathname: '/profile',
+            })
+          }
+          break
+        case 'UK':
+          if (!(data.uni === 'Aston' || data.uni === 'Canterbury')) {
+            return setSnackbar({
+              message: 'The country and the university do not match',
+              severity: 'error',
+              pathname: '/profile',
+            })
+          }
+          break
+        case 'Australia':
+          if (!(data.uni === 'Queensland' || data.uni === 'SouthernCross')) {
+            return setSnackbar({
+              message: 'The country and the university do not match',
+              severity: 'error',
+              pathname: '/profile',
+            })
+          }
+          break
+        case 'Canada':
+          if (data.uni !== 'Alberta') {
+            return setSnackbar({
+              message: 'The country and the university do not match',
+              severity: 'error',
+              pathname: '/profile',
+            })
+          }
+          break
+        case 'NewZealand':
+          if (!(data.uni === 'Otago' || data.uni === 'Auckland')) {
+            return setSnackbar({
+              message: 'The country and the university do not match',
+              severity: 'error',
+              pathname: '/profile',
+            })
+          }
+          break
+      }
+    }
+
     setIsLoading(true)
 
     const patchUrl = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
@@ -290,6 +387,7 @@ const Profile: NextPage = () => {
             <Controller
               name="first_name"
               control={control}
+              rules={validationRules.first_name}
               render={({ field, fieldState }) => (
                 <TextField
                   {...field}
@@ -307,6 +405,7 @@ const Profile: NextPage = () => {
             <Controller
               name="last_name"
               control={control}
+              rules={validationRules.last_name}
               render={({ field, fieldState }) => (
                 <TextField
                   {...field}
@@ -472,6 +571,7 @@ const Profile: NextPage = () => {
           </Box>
           <Typography sx={{ mt: 3, mb: 1 }}>Bio</Typography>
           <Controller
+            rules={validationRules.bio}
             name="bio"
             control={control}
             render={({ field, fieldState }) => (

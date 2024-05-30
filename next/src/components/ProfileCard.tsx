@@ -234,7 +234,9 @@ const ProfileCard = (props: profileCardProps) => {
           </Box>
         )}
         <Box sx={{ borderTop: 1, borderColor: 'gray' }}>
-          <Typography sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+          <Typography
+            sx={{ textAlign: 'center', my: 2, overflowWrap: 'break-word' }}
+          >
             {props.bio}
           </Typography>
         </Box>

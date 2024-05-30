@@ -2,9 +2,10 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
   "/following_diaries": "pages/following_diaries.js",
-  "/current/diaries/edit/[id]": "pages/current/diaries/edit/[id].js",
+  "/[name]": "pages/[name].js",
+  "/[name]/following_users": "pages/[name]/following_users.js",
+  "/": "pages/index.js",
   "/profile": "pages/profile.js",
-  "/current/diaries": "pages/current/diaries.js"
+  "/[name]/followers": "pages/[name]/followers.js"
 }
