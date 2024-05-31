@@ -8,6 +8,7 @@ import {
   Pagination,
   Divider,
   Button,
+  Tooltip,
 } from '@mui/material'
 import axios, { AxiosError } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
@@ -164,22 +165,26 @@ const Followers: NextPage = () => {
                     </Typography>
                   </Link>
                   {follower.country && (
-                    <Image
-                      css={imageCss}
-                      src={`/${follower.country.toLowerCase()}.png`}
-                      height={15}
-                      width={30}
-                      alt="国旗"
-                    />
+                    <Tooltip title={follower.country}>
+                      <Image
+                        css={imageCss}
+                        src={`/${follower.country.toLowerCase()}.png`}
+                        height={15}
+                        width={30}
+                        alt="国旗"
+                      />
+                    </Tooltip>
                   )}
                   {follower.uni && (
                     <Box sx={{ mx: 1 }}>
-                      <Image
-                        src={`/${follower.uni.toLowerCase()}.png`}
-                        height={22}
-                        width={22}
-                        alt="Uni flag"
-                      />
+                      <Tooltip title={follower.uni}>
+                        <Image
+                          src={`/${follower.uni.toLowerCase()}.png`}
+                          height={22}
+                          width={22}
+                          alt="Uni flag"
+                        />
+                      </Tooltip>
                     </Box>
                   )}
                 </Box>

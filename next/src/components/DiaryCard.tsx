@@ -3,12 +3,13 @@ import CommentIcon from '@mui/icons-material/Comment'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import PersonIcon from '@mui/icons-material/Person'
-import { Box, IconButton, Avatar, Typography } from '@mui/material'
+import { Box, IconButton, Avatar, Typography, Tooltip } from '@mui/material'
+import Popover from '@mui/material/Popover'
 import axios, { AxiosError } from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState, useEffect, MouseEventHandler, useRef } from 'react'
+import { useState, useEffect, MouseEventHandler } from 'react'
 import ProfileHoverCard from '@/components/ProfileHoverCard'
 import { useUserState } from '@/hooks/useGlobalState'
 
@@ -44,8 +45,7 @@ const DiaryCard = (props: diaryCardProps) => {
   const [user] = useUserState()
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [LikedCount, setLikedCount] = useState<number>(0)
-  const [displayCard, setDisplayCard] = useState<boolean>(false)
-  const timer = useRef<NodeJS.Timeout | null>(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     const favorites = props.favorites
@@ -92,32 +92,19 @@ const DiaryCard = (props: diaryCardProps) => {
       })
   }
 
-  const handleMouseEnterText: React.MouseEventHandler<HTMLSpanElement> = () => {
-    timer.current = setTimeout(() => {
-      setDisplayCard(true)
-    }, 200)
+  const handleHover = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
   }
 
-  const handleMouseLeaveText: React.MouseEventHandler<HTMLSpanElement> = () => {
-    if (timer.current) {
-      clearTimeout(timer.current)
-    }
-    setDisplayCard(false)
-  }
-
-  const handleMouseEnterCard = () => {
-    setDisplayCard(true)
-  }
-
-  const handleMouseLeaveCard = () => {
-    setDisplayCard(false)
+  const handleClose = () => {
+    setAnchorEl(null)
   }
 
   return (
     <>
       <Box sx={{ display: 'flex' }}>
         <Link href={`/${props.userName}`}>
-          <IconButton sx={{ p: 0 }}>
+          <IconButton sx={{ p: 0 }} onMouseEnter={handleHover}>
             {props.userImage ? (
               <Avatar
                 src={props.userImage}
@@ -132,60 +119,65 @@ const DiaryCard = (props: diaryCardProps) => {
         </Link>
         <Box>
           <Box sx={{ display: 'flex' }}>
-            <Box sx={{ position: 'relative' }}>
+            <Link href={`/${props.userName}`}>
+              <Typography
+                sx={{
+                  fontSize: 15,
+                  mx: 1,
+                  fontWeight: 'bold',
+                  color: 'black',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
+                }}
+                onMouseEnter={handleHover}
+              >
+                @{props.userName}
+              </Typography>
+            </Link>
+            <Popover
+              open={Boolean(anchorEl)}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
               <Link href={`/${props.userName}`}>
-                <Typography
-                  sx={{
-                    fontSize: 15,
-                    mx: 1,
-                    fontWeight: 'bold',
-                    color: 'black',
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
-                  }}
-                  onMouseEnter={handleMouseEnterText}
-                  onMouseLeave={handleMouseLeaveText}
-                >
-                  @{props.userName}
-                </Typography>
+                <ProfileHoverCard
+                  userId={props.userId}
+                  userName={props.userName}
+                  userFirstName={props.userFirstName}
+                  userLastName={props.userLastName}
+                  userCountry={props.userCountry}
+                  userUni={props.userUni}
+                  userBio={props.userBio}
+                  userImage={props.userImage}
+                  handleClose={handleClose}
+                />
               </Link>
-              {displayCard && (
-                <Box style={{ position: 'absolute', top: '-20px', left: '0' }}>
-                  <Link href={`/${props.userName}`}>
-                    <ProfileHoverCard
-                      userId={props.userId}
-                      userName={props.userName}
-                      userFirstName={props.userFirstName}
-                      userLastName={props.userLastName}
-                      userCountry={props.userCountry}
-                      userUni={props.userUni}
-                      userBio={props.userBio}
-                      userImage={props.userImage}
-                      handleMouseEnterCard={handleMouseEnterCard}
-                      handleMouseLeaveCard={handleMouseLeaveCard}
-                    />
-                  </Link>
-                </Box>
-              )}
-            </Box>
+            </Popover>
             {props.userCountry && (
-              <Image
-                css={imageCss}
-                src={`/${props.userCountry.toLowerCase()}.png`}
-                height={15}
-                width={30}
-                alt="国旗"
-              />
+              <Tooltip title={props.userCountry}>
+                <Image
+                  css={imageCss}
+                  src={`/${props.userCountry.toLowerCase()}.png`}
+                  height={15}
+                  width={30}
+                  alt="国旗"
+                />
+              </Tooltip>
             )}
             {props.userUni && (
               <Box sx={{ mx: 1 }}>
-                <Image
-                  src={`/${props.userUni.toLowerCase()}.png`}
-                  height={22}
-                  width={22}
-                  alt="Uni flag"
-                />
+                <Tooltip title={props.userUni}>
+                  <Image
+                    src={`/${props.userUni.toLowerCase()}.png`}
+                    height={22}
+                    width={22}
+                    alt="Uni flag"
+                  />
+                </Tooltip>
               </Box>
             )}
           </Box>

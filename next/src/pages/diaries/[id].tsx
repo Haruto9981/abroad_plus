@@ -33,7 +33,10 @@ type DiaryProps = {
   year: string
   wDay: string
   user: {
+    id: number
     name: string
+    first_name: string
+    last_name: string
     country: string
     uni: string
     startDate: string
@@ -90,7 +93,10 @@ const DiaryDetail: NextPage = () => {
               month={diary.monthName}
               year={diary.year}
               wDay={diary.wDay}
+              userId={diary.user.id}
               userName={diary.user.name}
+              userFirstName={diary.user.first_name}
+              userLastName={diary.user.last_name}
               userCountry={diary.user.country}
               userUni={diary.user.uni}
               userBio={diary.user.bio}

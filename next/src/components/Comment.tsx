@@ -13,8 +13,10 @@ import {
   TextField,
   Avatar,
   Typography,
+  Tooltip,
   Stack,
 } from '@mui/material'
+import Popover from '@mui/material/Popover'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
 import Image from 'next/image'
@@ -25,6 +27,7 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import useSWR from 'swr'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
+import ProfileHoverCard from '@/components/ProfileHoverCard'
 import { useUserState, useSnackbarState } from '@/hooks/useGlobalState'
 import { fetcher } from '@/utils'
 
@@ -38,9 +41,13 @@ type CommentProps = {
   userId: number
   fromToday: string
   user: {
+    id: number
     name: string
+    first_name: string
+    last_name: string
     country: string
     uni: string
+    bio: string
     image: {
       url: string
     }
@@ -59,6 +66,7 @@ const Comment = (props: diaryIdProps) => {
   const [, setSnackbar] = useSnackbarState()
   const [open, setOpen] = useState<boolean>(false)
   const [commentId, setCommentId] = useState<number>(0)
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const url =
     process.env.NEXT_PUBLIC_API_BASE_URL +
     '/diaries/' +
@@ -167,6 +175,14 @@ const Comment = (props: diaryIdProps) => {
   if (error) return <Error />
   if (!data) return <Loading />
 
+  const handleHover = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleUnhover = () => {
+    setAnchorEl(null)
+  }
+
   return (
     <Card sx={{ borderRadius: 2 }}>
       <CardContent>
@@ -208,7 +224,7 @@ const Comment = (props: diaryIdProps) => {
             <Divider sx={{ mt: 2 }} />
             <Box key={i} sx={{ display: 'flex', mt: 1 }}>
               <Link href={`/${comment.user.name}`}>
-                <IconButton>
+                <IconButton onMouseEnter={handleHover}>
                   {comment.user.image.url ? (
                     <Avatar
                       src={comment.user.image.url}
@@ -234,27 +250,54 @@ const Comment = (props: diaryIdProps) => {
                             textDecoration: 'underline',
                           },
                         }}
+                        onMouseEnter={handleHover}
                       >
                         @{comment.user.name}
                       </Typography>
                     </Link>
+                    <Link href={`/${comment.user.name}`}>
+                      <Popover
+                        open={Boolean(anchorEl)}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'left',
+                        }}
+                      >
+                        <ProfileHoverCard
+                          userId={comment.user.id}
+                          userName={comment.user.name}
+                          userFirstName={comment.user.first_name}
+                          userLastName={comment.user.last_name}
+                          userCountry={comment.user.country}
+                          userUni={comment.user.uni}
+                          userBio={comment.user.bio}
+                          userImage={comment.user.image.url}
+                          handleClose={handleUnhover}
+                        />
+                      </Popover>
+                    </Link>
                     {comment.user.country && (
-                      <Image
-                        css={imageCss}
-                        src={`/${comment.user.country.toLowerCase()}.png`}
-                        height={15}
-                        width={30}
-                        alt="国旗"
-                      />
+                      <Tooltip title={comment.user.country}>
+                        <Image
+                          css={imageCss}
+                          src={`/${comment.user.country.toLowerCase()}.png`}
+                          height={15}
+                          width={30}
+                          alt="国旗"
+                        />
+                      </Tooltip>
                     )}
                     {comment.user.uni && (
                       <Box sx={{ mx: 1 }}>
-                        <Image
-                          src={`/${comment.user.uni.toLowerCase()}.png`}
-                          height={22}
-                          width={22}
-                          alt="Uni flag"
-                        />
+                        <Tooltip title={comment.user.uni}>
+                          <Image
+                            src={`/${comment.user.uni.toLowerCase()}.png`}
+                            height={22}
+                            width={22}
+                            alt="Uni flag"
+                          />
+                        </Tooltip>
                       </Box>
                     )}
                   </Box>

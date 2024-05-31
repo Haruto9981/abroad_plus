@@ -6,6 +6,7 @@ import {
   CardContent,
   IconButton,
   Avatar,
+  Tooltip,
   Button,
   Typography,
 } from '@mui/material'
@@ -23,8 +24,7 @@ type ProfileHoverCardProps = {
   userUni: string
   userBio: string
   userImage: string
-  handleMouseEnterCard: React.MouseEventHandler<HTMLDivElement>
-  handleMouseLeaveCard: React.MouseEventHandler<HTMLDivElement>
+  handleClose: React.MouseEventHandler<HTMLDivElement>
 }
 const imageCss = css({ marginTop: '4px' })
 
@@ -81,11 +81,7 @@ const ProfileHoverCard = (props: ProfileHoverCardProps) => {
   }
 
   return (
-    <Box
-      style={{ position: 'absolute', top: '20px', left: '0' }}
-      onMouseEnter={props.handleMouseEnterCard}
-      onMouseLeave={props.handleMouseLeaveCard}
-    >
+    <Box onMouseLeave={props.handleClose}>
       <Card sx={{ borderRadius: 2, width: 400 }}>
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -124,23 +120,27 @@ const ProfileHoverCard = (props: ProfileHoverCardProps) => {
                         </Typography>
                         {props.userCountry &&
                           (props.userFirstName || props.userLastName) && (
-                            <Image
-                              css={imageCss}
-                              src={`/${props.userCountry.toLowerCase()}.png`}
-                              height={15}
-                              width={30}
-                              alt="国旗"
-                            />
+                            <Tooltip title={props.userCountry}>
+                              <Image
+                                css={imageCss}
+                                src={`/${props.userCountry.toLowerCase()}.png`}
+                                height={15}
+                                width={30}
+                                alt="国旗"
+                              />
+                            </Tooltip>
                           )}
                         {props.userUni &&
                           (props.userFirstName || props.userLastName) && (
                             <Box sx={{ mx: 1 }}>
-                              <Image
-                                src={`/${props.userUni.toLowerCase()}.png`}
-                                height={22}
-                                width={22}
-                                alt="Uni flag"
-                              />
+                              <Tooltip title={props.userUni}>
+                                <Image
+                                  src={`/${props.userUni.toLowerCase()}.png`}
+                                  height={22}
+                                  width={22}
+                                  alt="Uni flag"
+                                />
+                              </Tooltip>
                             </Box>
                           )}
                       </Box>
@@ -176,22 +176,26 @@ const ProfileHoverCard = (props: ProfileHoverCardProps) => {
                   {!(props.userFirstName || props.userLastName) && (
                     <Box sx={{ display: 'flex', mt: 1 }}>
                       {props.userCountry && (
-                        <Image
-                          css={imageCss}
-                          src={`/${props.userCountry.toLowerCase()}.png`}
-                          height={15}
-                          width={30}
-                          alt="国旗"
-                        />
+                        <Tooltip title={props.userCountry}>
+                          <Image
+                            css={imageCss}
+                            src={`/${props.userCountry.toLowerCase()}.png`}
+                            height={15}
+                            width={30}
+                            alt="国旗"
+                          />
+                        </Tooltip>
                       )}
                       {props.userUni && (
                         <Box sx={{ mx: 1 }}>
-                          <Image
-                            src={`/${props.userUni.toLowerCase()}.png`}
-                            height={22}
-                            width={22}
-                            alt="Uni flag"
-                          />
+                          <Tooltip title={props.userUni}>
+                            <Image
+                              src={`/${props.userUni.toLowerCase()}.png`}
+                              height={22}
+                              width={22}
+                              alt="Uni flag"
+                            />
+                          </Tooltip>
                         </Box>
                       )}
                     </Box>
