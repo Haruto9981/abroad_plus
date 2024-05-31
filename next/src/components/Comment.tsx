@@ -248,19 +248,14 @@ const Comment = (props: diaryIdProps) => {
                       />
                     )}
                     {comment.user.uni && (
-                      <Typography
-                        sx={{
-                          color: 'white',
-                          ml: 1,
-                          backgroundColor: 'orange',
-                          p: 0.3,
-                          fontSize: 11,
-                          fontWeight: 'bold',
-                          borderRadius: 0.5,
-                        }}
-                      >
-                        {comment.user.uni}
-                      </Typography>
+                      <Box sx={{ mx: 1 }}>
+                        <Image
+                          src={`/${comment.user.uni.toLowerCase()}.png`}
+                          height={22}
+                          width={22}
+                          alt="Uni flag"
+                        />
+                      </Box>
                     )}
                   </Box>
                 </Box>

@@ -110,209 +110,243 @@ const ProfileCard = (props: profileCardProps) => {
   }
 
   return (
-    <Card sx={{ borderRadius: 2 }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <IconButton sx={{ p: 0 }}>
-            {props.image ? (
-              <Avatar
-                src={props.image}
-                sx={{ width: 100, height: 100 }}
-              ></Avatar>
-            ) : (
-              <Avatar sx={{ width: 100, height: 100 }}>
-                <PersonIcon />
-              </Avatar>
-            )}
-          </IconButton>
-        </Box>
-        <Typography
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            my: 1,
-            fontSize: 18,
-            fontWeight: 'bold',
-          }}
-        >
-          {props.firstName} {props.lastName}
-        </Typography>
-        {props.firstName || props.lastName ? (
-          <Typography
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              my: 1,
-              fontSize: 18,
-              color: 'gray',
-            }}
-          >
-            @{props.name}
-          </Typography>
-        ) : (
-          <Typography
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              my: 1,
-              fontSize: 18,
-              fontWeight: 'bold',
-            }}
-          >
-            @{props.name}
-          </Typography>
-        )}
-        <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-          {props.country && (
-            <Box sx={{ mx: 1 }}>
-              <Box sx={{ textAlign: 'center' }}>
-                <Image
-                  src={`/${props.country.toLowerCase()}.png`}
-                  height={25}
-                  width={40}
-                  alt="国旗"
-                />
-              </Box>
-              <Typography sx={{ textAlign: 'center', mt: 1 }}>
-                {props.country}
-              </Typography>
-            </Box>
-          )}
-          {props.uni && (
-            <Box sx={{ mx: 1 }}>
-              <Box sx={{ textAlign: 'center' }}>
-                <Image
-                  src={`/${props.uni.toLowerCase()}.png`}
-                  height={25}
-                  width={25}
-                  alt="Uni flag"
-                />
-              </Box>
-              <Typography sx={{ textAlign: 'center', mt: 1 }}>
-                {props.uni}
-              </Typography>
-            </Box>
-          )}
-        </Box>
-        {props.startDate && props.endDate && (
-          <Box>
+    <Link href={`/${props.name}`}>
+      <Card sx={{ borderRadius: 2 }}>
+        <CardContent>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <IconButton sx={{ p: 0 }}>
+              {props.image ? (
+                <Avatar
+                  src={props.image}
+                  sx={{ width: 100, height: 100 }}
+                ></Avatar>
+              ) : (
+                <Avatar sx={{ width: 100, height: 100 }}>
+                  <PersonIcon />
+                </Avatar>
+              )}
+            </IconButton>
+          </Box>
+          <Link href={`/${props.name}`}>
             <Typography
-              sx={{ display: 'flex', justifyContent: 'center', my: 2 }}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                my: 1,
+                fontSize: 18,
+                fontWeight: 'bold',
+                '&:hover': {
+                  textDecoration: 'underline',
+                },
+              }}
             >
-              {props.startDate} ~ {props.endDate}
+              {props.firstName} {props.lastName}
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-              {startDateDifference <= 0 && endDateDifference > 0 && (
-                <Typography component="h2">
-                  <span
-                    style={{
-                      fontWeight: 'bold',
-                      color: '#ed1c24',
-                      fontSize: 20,
-                    }}
-                  >
-                    {endDateDifference}
-                  </span>{' '}
-                  days left to the end of your SA
-                </Typography>
-              )}
-              {startDateDifference > 0 && (
-                <Typography component="h2">
-                  <span
-                    style={{
-                      fontWeight: 'bold',
-                      color: '#ed1c24',
-                      fontSize: 20,
-                    }}
-                  >
-                    {startDateDifference}
-                  </span>{' '}
-                  days to the start of your SA
-                </Typography>
-              )}
-            </Box>
-          </Box>
-        )}
-        <Box sx={{ borderTop: 1, borderColor: 'gray' }}>
-          <Typography
-            sx={{ textAlign: 'center', my: 2, overflowWrap: 'break-word' }}
-          >
-            {props.bio}
-          </Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Box sx={{ display: 'flex' }}>
-            <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
-              <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                {props.totalDiariesCount}
-              </Typography>
-              <Link href={`/${props.name}`}>
-                <Typography
-                  sx={{
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
-                  }}
-                >
-                  Diary
-                </Typography>
-              </Link>
-            </Box>
-            <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
+          </Link>
+          <Link href={`/${props.name}`}>
+            {props.firstName || props.lastName ? (
               <Typography
                 sx={{
-                  textAlign: 'center',
-                  fontWeight: 'bold',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  my: 1,
+                  fontSize: 18,
+                  color: 'gray',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
                 }}
               >
-                {props.following.length}
+                @{props.name}
               </Typography>
-              <Link href={`/${props.name}/following_users`}>
-                <Typography
-                  sx={{
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
-                  }}
-                >
-                  Follow
-                </Typography>
-              </Link>
-            </Box>
-            <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
+            ) : (
               <Typography
                 sx={{
-                  textAlign: 'center',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  my: 1,
+                  fontSize: 18,
                   fontWeight: 'bold',
+                  '&:hover': {
+                    textDecoration: 'underline',
+                  },
                 }}
               >
-                {followersCount}
+                @{props.name}
               </Typography>
-              <Link href={`/${props.name}/followers`}>
-                <Typography
-                  sx={{
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
-                  }}
-                >
-                  Follower
+            )}
+          </Link>
+          <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+            {props.country && (
+              <Box sx={{ mx: 1 }}>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Image
+                    src={`/${props.country.toLowerCase()}.png`}
+                    height={25}
+                    width={40}
+                    alt="国旗"
+                  />
+                </Box>
+                <Typography sx={{ textAlign: 'center', mt: 1 }}>
+                  {props.country}
                 </Typography>
-              </Link>
-            </Box>
-            <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
-              <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>
-                {props.totalLikesCount}
+              </Box>
+            )}
+            {props.uni && (
+              <Box sx={{ mx: 1 }}>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Image
+                    src={`/${props.uni.toLowerCase()}.png`}
+                    height={25}
+                    width={25}
+                    alt="Uni flag"
+                  />
+                </Box>
+                <Typography sx={{ textAlign: 'center', mt: 1 }}>
+                  {props.uni}
+                </Typography>
+              </Box>
+            )}
+          </Box>
+          {props.startDate && props.endDate && (
+            <Box>
+              <Typography
+                sx={{ display: 'flex', justifyContent: 'center', my: 2 }}
+              >
+                {props.startDate} ~ {props.endDate}
               </Typography>
-              <Typography>Like</Typography>
+              {props.id === user.id && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+                  {startDateDifference <= 0 && endDateDifference > 0 && (
+                    <Typography component="h2">
+                      <span
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#ed1c24',
+                          fontSize: 20,
+                        }}
+                      >
+                        {endDateDifference}
+                      </span>{' '}
+                      days left to the end of your SA
+                    </Typography>
+                  )}
+                  {startDateDifference > 0 && (
+                    <Typography component="h2">
+                      <span
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#ed1c24',
+                          fontSize: 20,
+                        }}
+                      >
+                        {startDateDifference}
+                      </span>{' '}
+                      days to the start of your SA
+                    </Typography>
+                  )}
+                </Box>
+              )}
+            </Box>
+          )}
+          <Box sx={{ borderTop: 1, borderColor: 'gray' }}>
+            <Typography
+              sx={{ textAlign: 'center', my: 2, overflowWrap: 'break-word' }}
+            >
+              {props.bio}
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex' }}>
+              <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
+                <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+                  {props.totalDiariesCount}
+                </Typography>
+                <Link href={`/${props.name}`}>
+                  <Typography
+                    sx={{
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
+                    Diary
+                  </Typography>
+                </Link>
+              </Box>
+              <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
+                <Link href={`/${props.name}/following_users`}>
+                  <Typography
+                    sx={{
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {props.following.length}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
+                    Follow
+                  </Typography>
+                </Link>
+              </Box>
+              <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
+                <Link href={`/${props.name}/followers`}>
+                  <Typography
+                    sx={{
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {followersCount}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
+                    Follower
+                  </Typography>
+                </Link>
+              </Box>
+              <Box sx={{ px: 2, borderRight: 1, borderColor: 'gray' }}>
+                <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+                  {props.totalLikesCount}
+                </Typography>
+                <Typography>Like</Typography>
+              </Box>
             </Box>
           </Box>
-        </Box>
 
-        {props.id === user.id && (
-          <Link href="/profile">
+          {props.id === user.id && (
+            <Link href="/profile">
+              <Button
+                variant="contained"
+                color="warning"
+                type="submit"
+                sx={{
+                  fontWeight: 'bold',
+                  color: 'white',
+                  textTransform: 'none',
+                  width: '100%',
+                  my: 2,
+                }}
+              >
+                Change your profile
+              </Button>
+            </Link>
+          )}
+          {props.id !== user.id && !isFollowed && (
             <Button
+              onClick={handleFollowChange}
               variant="contained"
               color="warning"
               type="submit"
@@ -324,47 +358,30 @@ const ProfileCard = (props: profileCardProps) => {
                 my: 2,
               }}
             >
-              Change your profile
+              follow
             </Button>
-          </Link>
-        )}
-        {props.id !== user.id && !isFollowed && (
-          <Button
-            onClick={handleFollowChange}
-            variant="contained"
-            color="warning"
-            type="submit"
-            sx={{
-              fontWeight: 'bold',
-              color: 'white',
-              textTransform: 'none',
-              width: '100%',
-              my: 2,
-            }}
-          >
-            follow
-          </Button>
-        )}
-        {props.id !== user.id && isFollowed && (
-          <Button
-            onClick={handleUnfollowChange}
-            variant="outlined"
-            color="warning"
-            type="submit"
-            sx={{
-              fontWeight: 'bold',
-              textTransform: 'none',
-              boxShadow: 'none',
-              border: '1.5px solid #f5a500',
-              width: '100%',
-              my: 2,
-            }}
-          >
-            unfollow
-          </Button>
-        )}
-      </CardContent>
-    </Card>
+          )}
+          {props.id !== user.id && isFollowed && (
+            <Button
+              onClick={handleUnfollowChange}
+              variant="outlined"
+              color="warning"
+              type="submit"
+              sx={{
+                fontWeight: 'bold',
+                textTransform: 'none',
+                boxShadow: 'none',
+                border: '1.5px solid #f5a500',
+                width: '100%',
+                my: 2,
+              }}
+            >
+              unfollow
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+    </Link>
   )
 }
 

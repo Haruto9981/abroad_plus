@@ -166,19 +166,14 @@ const Following: NextPage = () => {
                     />
                   )}
                   {following_user.uni && (
-                    <Typography
-                      sx={{
-                        color: 'white',
-                        ml: 1,
-                        backgroundColor: 'orange',
-                        p: 0.3,
-                        fontSize: 11,
-                        fontWeight: 'bold',
-                        borderRadius: 0.5,
-                      }}
-                    >
-                      {following_user.uni}
-                    </Typography>
+                    <Box sx={{ mx: 1 }}>
+                      <Image
+                        src={`/${following_user.uni.toLowerCase()}.png`}
+                        height={22}
+                        width={22}
+                        alt="Uni flag"
+                      />
+                    </Box>
                   )}
                 </Box>
               </Box>

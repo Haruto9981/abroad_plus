@@ -89,6 +89,7 @@ const Index: NextPage = () => {
                 month={diary.monthName}
                 year={diary.year}
                 wDay={diary.wDay}
+                userId={diary.user.id}
                 userName={diary.user.name}
                 userFirstName={diary.user.first_name}
                 userLastName={diary.user.last_name}

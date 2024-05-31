@@ -73,12 +73,12 @@ const Index: NextPage = () => {
 
   const diaries = camelcaseKeys(data.diaries)
 
-  console.log(diaries)
-
   const meta = camelcaseKeys(data.meta)
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
     router.push('/?page=' + value)
+
+  console.log(diaries)
 
   return (
     <Layout pageUrl={'/'}>
@@ -96,6 +96,7 @@ const Index: NextPage = () => {
                 month={diary.monthName}
                 year={diary.year}
                 wDay={diary.wDay}
+                userId={diary.user.id}
                 userName={diary.user.name}
                 userFirstName={diary.user.first_name}
                 userLastName={diary.user.last_name}

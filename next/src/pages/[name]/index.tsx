@@ -26,6 +26,8 @@ type DiaryProps = {
   user: {
     id: number
     name: string
+    first_name: string
+    last_name: string
     country: string
     uni: string
     bio: string
@@ -86,7 +88,10 @@ const UserProfile: NextPage = () => {
                 month={diary.monthName}
                 year={diary.year}
                 wDay={diary.wDay}
+                userId={diary.user.id}
                 userName={diary.user.name}
+                userFirstName={diary.user.first_name}
+                userLastName={diary.user.last_name}
                 userCountry={diary.user.country}
                 userUni={diary.user.uni}
                 userBio={diary.user.bio}
