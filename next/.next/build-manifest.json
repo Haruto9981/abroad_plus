@@ -32,10 +32,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/current/diaries.js"
     ],
-    "/current/diaries/[id]": [
+    "/diaries/[id]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/current/diaries/[id].js"
+      "static/chunks/pages/diaries/[id].js"
+    ],
+    "/following_diaries": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/following_diaries.js"
     ]
   },
   "ampFirstPages": []

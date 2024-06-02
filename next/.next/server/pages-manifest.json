@@ -2,8 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/current/diaries/[id]": "pages/current/diaries/[id].js",
-  "/diaries/[id]": "pages/diaries/[id].js",
+  "/current/diaries": "pages/current/diaries.js",
   "/": "pages/index.js",
-  "/current/diaries": "pages/current/diaries.js"
+  "/diaries/[id]": "pages/diaries/[id].js",
+  "/following_diaries": "pages/following_diaries.js"
 }

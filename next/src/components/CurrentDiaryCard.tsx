@@ -230,6 +230,8 @@ const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: { xs: 365, sm: 540 },
+              maxHeight: '60vh',
+              overflowY: 'auto',
               bgcolor: 'background.paper',
               border: '0.5px solid #000',
               boxShadow: 24,

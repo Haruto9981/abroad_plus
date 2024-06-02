@@ -6,7 +6,6 @@ import {
   Typography,
   Avatar,
   Divider,
-  Pagination,
   Button,
   Tooltip,
 } from '@mui/material'
@@ -14,7 +13,6 @@ import axios, { AxiosError } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
@@ -41,26 +39,15 @@ interface Favorite {
 
 const LikesModal = (props: diaryIdProps) => {
   const [user, setUser] = useUserState()
-  const router = useRouter()
-  const page = 'page' in router.query ? Number(router.query.page) : 1
   const url =
-    process.env.NEXT_PUBLIC_API_BASE_URL +
-    '/diaries/' +
-    props.id +
-    '/favorites?page=' +
-    page
+    process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/' + props.id + '/favorites'
 
   const { data, error } = useSWR(url, fetcher)
+
   if (error) return <Error />
   if (!data) return <Loading />
 
-  const favorites = camelcaseKeys(data.favorites)
-  const meta = camelcaseKeys(data.meta)
-
-  console.log(favorites)
-
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
-    router.push('/diaries/' + props.id + '/favorites?page=' + value)
+  const favorites = camelcaseKeys(data)
 
   const getUserFollowingIdArray = (userFollowing: object[]): number[] => {
     const array = []
@@ -121,7 +108,7 @@ const LikesModal = (props: diaryIdProps) => {
       )}
       {favorites.map((favorite: Favorite, i: number) => (
         <>
-          <Divider sx={{ mt: 2 }} />
+          <Divider sx={{ mt: 1, mb: 1 }} />
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Box key={i} sx={{ display: 'flex', mt: 1 }}>
               <Link href={`/${favorite.user.name}`}>
@@ -224,18 +211,6 @@ const LikesModal = (props: diaryIdProps) => {
           </Box>
         </>
       ))}
-      {favorites.length !== 0 && (
-        <>
-          <Divider sx={{ my: 2 }} />
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
-            <Pagination
-              count={meta.totalPages}
-              page={meta.currentPage}
-              onChange={handleChange}
-            />
-          </Box>
-        </>
-      )}
     </Box>
   )
 }
