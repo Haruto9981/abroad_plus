@@ -1,9 +1,10 @@
 class Api::V1::FavoritesController < Api::V1::BaseController
   before_action :authenticate_user!
+  include Pagination
 
   def show
-    @diary_favorite = Favorite.where(diary_id: params[:diary_id])
-    render json: @diary_favorite, serializer: FavoriteSerializer
+    @diary_favorites = Favorite.where(diary_id: params[:diary_id]).page(params[:page] || 1).per(10)
+    render json: @diary_favorites, each_serializer: FavoriteSerializer, meta: pagination(@diary_favorites), adapter: :json
   end
 
   def create

@@ -11,7 +11,7 @@ import Loading from '@/components/Loading'
 import { fetcher } from '@/utils'
 
 type DiaryProps = {
-  id: number
+  id: string
   title: string
   content: string
   image: {
@@ -77,8 +77,6 @@ const Index: NextPage = () => {
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
     router.push('/?page=' + value)
-
-  console.log(diaries)
 
   return (
     <Layout pageUrl={'/'}>

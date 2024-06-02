@@ -244,7 +244,9 @@ const ProfileHoverCard = (props: ProfileHoverCardProps) => {
             </Box>
           </Box>
           <Box sx={{ mt: 1 }}>
-            <Typography>{props.userBio}</Typography>
+            <Typography sx={{ overflowWrap: 'break-word' }}>
+              {props.userBio}
+            </Typography>
           </Box>
         </CardContent>
       </Card>

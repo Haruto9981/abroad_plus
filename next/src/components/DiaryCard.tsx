@@ -3,18 +3,26 @@ import CommentIcon from '@mui/icons-material/Comment'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import PersonIcon from '@mui/icons-material/Person'
-import { Box, IconButton, Avatar, Typography, Tooltip } from '@mui/material'
+import {
+  Box,
+  IconButton,
+  Avatar,
+  Typography,
+  Tooltip,
+  Modal,
+} from '@mui/material'
 import Popover from '@mui/material/Popover'
 import axios, { AxiosError } from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState, useEffect, MouseEventHandler } from 'react'
+import LikesModal from '@/components/LikesModal'
 import ProfileHoverCard from '@/components/ProfileHoverCard'
 import { useUserState } from '@/hooks/useGlobalState'
 
 type diaryCardProps = {
-  id: number
+  id: string
   title: string
   content: string
   image: string
@@ -42,6 +50,7 @@ const omit = (text: string) => (len: number) => (ellipsis: string) =>
 
 const DiaryCard = (props: diaryCardProps) => {
   const router = useRouter()
+  const [open, setOpen] = useState<boolean>(false)
   const [user] = useUserState()
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [LikedCount, setLikedCount] = useState<number>(0)
@@ -90,6 +99,16 @@ const DiaryCard = (props: diaryCardProps) => {
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
       })
+  }
+
+  const handleModalOpen: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    setOpen(true)
+  }
+
+  const handleModalClose: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    setOpen(false)
   }
 
   const handleHover = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -253,12 +272,34 @@ const DiaryCard = (props: diaryCardProps) => {
             </IconButton>
           )}
         </Box>
-        <Typography sx={{ mt: 1 }}>{LikedCount}</Typography>
+        <Tooltip title="Who likes">
+          <Typography sx={{ mt: 1, mr: 1.5 }} onClick={handleModalOpen}>
+            {LikedCount}
+          </Typography>
+        </Tooltip>
         <IconButton>
           <CommentIcon />
         </IconButton>
         <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
       </Box>
+      <Modal open={open} onClose={handleModalClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: { xs: 365, sm: 540 },
+            bgcolor: 'background.paper',
+            border: '0.5px solid #000',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <LikesModal id={props.id} />
+        </Box>
+      </Modal>
     </>
   )
 }
