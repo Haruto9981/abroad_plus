@@ -154,28 +154,6 @@ const DiaryCard = (props: diaryCardProps) => {
                 @{props.userName}
               </Typography>
             </Link>
-            <Popover
-              open={Boolean(anchorEl)}
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-            >
-              <Link href={`/${props.userName}`}>
-                <ProfileHoverCard
-                  userId={props.userId}
-                  userName={props.userName}
-                  userFirstName={props.userFirstName}
-                  userLastName={props.userLastName}
-                  userCountry={props.userCountry}
-                  userUni={props.userUni}
-                  userBio={props.userBio}
-                  userImage={props.userImage}
-                  handleClose={handleClose}
-                />
-              </Link>
-            </Popover>
             {props.userCountry && (
               <Tooltip title={props.userCountry}>
                 <Image
@@ -282,6 +260,33 @@ const DiaryCard = (props: diaryCardProps) => {
         </IconButton>
         <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
       </Box>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        disableAutoFocus={true}
+      >
+        <Link href={`/${props.userName}`}>
+          <ProfileHoverCard
+            userId={props.userId}
+            userName={props.userName}
+            userFirstName={props.userFirstName}
+            userLastName={props.userLastName}
+            userCountry={props.userCountry}
+            userUni={props.userUni}
+            userBio={props.userBio}
+            userImage={props.userImage}
+            handleClose={handleClose}
+          />
+        </Link>
+      </Popover>
       <Modal open={open} onClose={handleModalClose}>
         <Box
           sx={{
