@@ -2,9 +2,17 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/diaries/[id]": "pages/diaries/[id].js",
   "/": "pages/index.js",
+<<<<<<< Updated upstream
   "/diaries/[id]": "pages/diaries/[id].js",
   "/current/diaries/edit/[id]": "pages/current/diaries/edit/[id].js",
   "/current/diaries": "pages/current/diaries.js",
   "/current/diaries/[id]": "pages/current/diaries/[id].js"
+=======
+  "/current/diaries/edit/[id]": "pages/current/diaries/edit/[id].js",
+  "/current/diaries": "pages/current/diaries.js",
+  "/current/diaries/[id]": "pages/current/diaries/[id].js",
+  "/following_diaries": "pages/following_diaries.js"
+>>>>>>> Stashed changes
 }
