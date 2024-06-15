@@ -1,20 +1,9 @@
-# Node.js
-node_modules/
+# Ignore .next directory
+next/.next/
 
-# Next.js
-.next/
-out/
-
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# OS-specific files
-.DS_Store
-Thumbs.db
-
-# Build output
-dist/
-build/
-*.cache
+# Ignore specific files in the next directory
+next/.next/build-manifest.json
+next/.next/server/middleware-build-manifest.js
+next/.next/server/pages-manifest.json
+next/.next/static/chunks/webpack.js
+next/.next/static/development/_buildManifest.js
