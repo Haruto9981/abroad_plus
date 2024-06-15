@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_30_052537) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_15_073912) do
   create_table "diaries", id: :string, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", comment: "タイトル"
     t.text "content", comment: "本文"
@@ -29,6 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_30_052537) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "diary_id"
+    t.index ["diary_id"], name: "fk_rails_0f3d78174b"
     t.index ["user_id"], name: "index_diary_comments_on_user_id"
   end
 
@@ -85,6 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_30_052537) do
   end
 
   add_foreign_key "diaries", "users"
+  add_foreign_key "diary_comments", "diaries"
   add_foreign_key "diary_comments", "users"
   add_foreign_key "favorites", "diaries"
   add_foreign_key "favorites", "users"
