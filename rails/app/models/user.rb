@@ -31,8 +31,6 @@ class User < ApplicationRecord
   validate :start_date_before_end_date
   validates :bio, length: { maximum: 600 }
 
-
-
   def follow(other_user)
     following << other_user unless self == other_user
   end
@@ -50,34 +48,31 @@ class User < ApplicationRecord
     end
 
     def country_match_uni
-      if country && uni
-        case country
-        when "USA"
-          unless ['CSUMB', 'Kansas', 'Utah'].include?(uni)
-            raise StandardError, "The country and the university do not match"
-          end
-        when "UK"
-          unless ['Aston', 'Canterbury'].include?(uni)
-            raise StandardError, "The country and the university do not match"
-          end
-        when "Australia"
-          unless ['Queensland', 'SouthernCross'].include?(uni)
-            raise StandardError, "The country and the university do not match"
-          end
-        when "Canada"
-          if uni != 'Alberta'
-            raise StandardError, "The country and the university do not match"
-          end
-        when "NewZealand"
-          unless ['Otago', 'Auckland'].include?(uni)
-            raise StandardError, "The country and the university do not match"
-          end
-        else
-          raise StandardError, "Country not recognized"
+      raise StandardError, "Country or university is missing" unless country && uni
+
+      case country
+      when "USA"
+        unless ["CSUMB", "Kansas", "Utah"].include?(uni)
+          raise StandardError, "The country and the university do not match"
+        end
+      when "UK"
+        unless ["Aston", "Canterbury"].include?(uni)
+          raise StandardError, "The country and the university do not match"
+        end
+      when "Australia"
+        unless ["Queensland", "SouthernCross"].include?(uni)
+          raise StandardError, "The country and the university do not match"
+        end
+      when "Canada"
+        if uni != "Alberta"
+          raise StandardError, "The country and the university do not match"
+        end
+      when "NewZealand"
+        unless ["Otago", "Auckland"].include?(uni)
+          raise StandardError, "The country and the university do not match"
         end
       else
-        raise StandardError, "Country or university is missing"
+        raise StandardError, "Country not recognized"
       end
     end
-    
 end

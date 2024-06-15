@@ -1,9 +1,2 @@
 # Ignore .next directory
 next/.next/
-
-# Ignore specific files in the next directory
-next/.next/build-manifest.json
-next/.next/server/middleware-build-manifest.js
-next/.next/server/pages-manifest.json
-next/.next/static/chunks/webpack.js
-next/.next/static/development/_buildManifest.js
