@@ -1,14 +1,23 @@
 import CommentIcon from '@mui/icons-material/Comment'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import { Box, Card, CardContent, IconButton, Typography } from '@mui/material'
+import {
+  Box,
+  Card,
+  CardContent,
+  IconButton,
+  Typography,
+  Tooltip,
+  Modal,
+} from '@mui/material'
 import axios, { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { useState, useEffect, MouseEventHandler } from 'react'
+import LikesModal from '@/components/LikesModal'
 import { useUserState } from '@/hooks/useGlobalState'
 
 type CurrentDiaryProps = {
-  id: number
+  id: string
   title: string
   content: string
   status: string
@@ -19,6 +28,7 @@ type CurrentDiaryProps = {
   year: string
   wDay: string
   favorites: { user_id: number }[]
+  diaryComments: Array<object>
 }
 
 const omit = (text: string) => (len: number) => (ellipsis: string) =>
@@ -29,6 +39,7 @@ const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
   const [user] = useUserState()
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [LikedCount, setLikedCount] = useState<number>(0)
+  const [open, setOpen] = useState<boolean>(false)
 
   useEffect(() => {
     const favorites = props.favorites
@@ -73,6 +84,16 @@ const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
       })
+  }
+
+  const handleModalOpen: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    setOpen(true)
+  }
+
+  const handleModalClose: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    setOpen(false)
   }
 
   return (
@@ -156,24 +177,25 @@ const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
             />
           </Box>
         )}
-        <Typography
-          component="h3"
-          sx={{
-            my: 1,
-            fontSize: 20,
-            fontWeight: 'bold',
-            lineHeight: 1.5,
-          }}
-        >
-          {router.pathname === '/current/diaries' &&
-            omit(props.title)(40)('...')}{' '}
-          {router.pathname !== '/current/diaries' && props.title}
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 1 }}>
+          <Typography
+            component="h3"
+            sx={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              lineHeight: 1.5,
+            }}
+          >
+            {router.pathname === '/current/diaries' &&
+              omit(props.title)(40)('...')}{' '}
+            {router.pathname !== '/current/diaries' && props.title}
+          </Typography>
+          <Typography>({props.wordCount} words)</Typography>
+        </Box>
         <Typography>
           {router.pathname === '/current/diaries' &&
-            omit(props.content)(305)('...')}{' '}
-          {router.pathname !== '/current/diaries' && props.content} (
-          {props.wordCount} words)
+            omit(props.content)(295)('...')}{' '}
+          {router.pathname !== '/current/diaries' && props.content}
         </Typography>
         {props.status === 'shared' && (
           <Box sx={{ display: 'flex' }}>
@@ -189,12 +211,37 @@ const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
                 </IconButton>
               )}
             </Box>
-            <Typography sx={{ mt: 1 }}>{LikedCount}</Typography>
+            <Tooltip title="Who likes">
+              <Typography sx={{ mt: 1, mr: 1.5 }} onClick={handleModalOpen}>
+                {LikedCount}
+              </Typography>
+            </Tooltip>
             <IconButton>
               <CommentIcon />
             </IconButton>
+            <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
           </Box>
         )}
+        <Modal open={open} onClose={handleModalClose}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: { xs: 365, sm: 540 },
+              maxHeight: '60vh',
+              overflowY: 'auto',
+              bgcolor: 'background.paper',
+              border: '0.5px solid #000',
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}
+          >
+            <LikesModal id={props.id} />
+          </Box>
+        </Modal>
       </CardContent>
     </Card>
   )

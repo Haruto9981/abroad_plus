@@ -25,18 +25,31 @@ const SignUp: NextPage = () => {
 
   const validationRules = {
     email: {
-      required: 'メールアドレスを入力してください。',
+      required: 'Enter your email address',
       pattern: {
         value:
           /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
-        message: '正しい形式のメールアドレスを入力してください。',
+        message: 'Enter your email address in the correct format',
       },
     },
     password: {
-      required: 'パスワードを入力してください。',
+      required: 'Enter your password',
     },
     name: {
-      required: 'ユーザー名を入力してください。',
+      required: 'Enter your username',
+      minLength: {
+        value: 3,
+        message: 'Your username must be at least 3 characters long.',
+      },
+      maxLength: {
+        value: 20,
+        message: 'Your username cannot exceed 20 characters.',
+      },
+      pattern: {
+        value: /^\w+$/,
+        message:
+          'Your username can only contain alphabet letters, numbers, and underscores. Please enter a valid username.',
+      },
     },
   }
 
@@ -62,7 +75,7 @@ const SignUp: NextPage = () => {
           localStorage.setItem('client', res.headers['client'] || '')
           localStorage.setItem('uid', res.headers['uid'] || '')
           setSnackbar({
-            message: '認証メールをご確認ください',
+            message: 'Please check your authentication email',
             severity: 'success',
             pathname: '/',
           })
@@ -71,7 +84,7 @@ const SignUp: NextPage = () => {
         .catch((e: AxiosError<{ error: string }>) => {
           console.log(e.message)
           setSnackbar({
-            message: '不正なユーザー情報です',
+            message: 'Invalid user information',
             severity: 'error',
             pathname: '/sign_up',
           })

@@ -18,6 +18,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
+import Comment from '@/components/Comment'
 import CurrentUserDiaryCard from '@/components/CurrentDiaryCard'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
@@ -41,11 +42,12 @@ type CurrentDiaryProps = {
   date: string
   wDay: string
   favorites: { user_id: number }[]
+  diaryComments: Array<object>
 }
 
 const CurrentDiaryDetail: NextPage = () => {
   useRequireSignedIn()
-  const [user] = useUserState()
+  const [user, setUser] = useUserState()
   const router = useRouter()
   const [, setSnackbar] = useSnackbarState()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -88,8 +90,12 @@ const CurrentDiaryDetail: NextPage = () => {
       headers: headers,
     })
       .then(() => {
+        setUser({
+          ...user,
+          isFetched: false,
+        })
         setSnackbar({
-          message: '日記を削除しました',
+          message: 'Diary deleted',
           severity: 'success',
           pathname: '/current/diaries',
         })
@@ -98,7 +104,7 @@ const CurrentDiaryDetail: NextPage = () => {
       .catch((err: AxiosError<{ error: string }>) => {
         console.log(err.message)
         setSnackbar({
-          message: '日記の削除に失敗しました',
+          message: 'Failed to delete diary',
           severity: 'error',
           pathname: '/current/diaries',
         })
@@ -152,7 +158,11 @@ const CurrentDiaryDetail: NextPage = () => {
             year={diary.year}
             wDay={diary.wDay}
             favorites={diary.favorites}
+            diaryComments={diary.diaryComments}
           />
+          <Box sx={{ my: 4 }}>
+            <Comment id={diary.id} />
+          </Box>
           <Box sx={{ mt: 4, textAlign: 'right' }}>
             <LoadingButton
               color="warning"
@@ -191,13 +201,16 @@ const CurrentDiaryDetail: NextPage = () => {
                 </Typography>
                 <Button
                   onClick={handleClose}
-                  variant="contained"
-                  color="warning"
+                  variant="outlined"
                   sx={{ marginRight: 2 }}
                 >
                   Cancel
                 </Button>
-                <Button variant="contained" onClick={deleteDiary}>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  onClick={deleteDiary}
+                >
                   OK
                 </Button>
               </Box>

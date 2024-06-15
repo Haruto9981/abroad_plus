@@ -47,7 +47,7 @@ type DiaryFormData = {
 const CurrentDiariesEdit: NextPage = () => {
   useRequireSignedIn()
   const router = useRouter()
-  const [user] = useUserState()
+  const [user, setUser] = useUserState()
   const [, setSnackbar] = useSnackbarState()
   const [statusChecked, setStatusChecked] = useState<boolean>(false)
   const [isFetched, setIsFetched] = useState<boolean>(false)
@@ -157,7 +157,7 @@ const CurrentDiariesEdit: NextPage = () => {
   const onSubmit: SubmitHandler<DiaryFormData> = (data) => {
     if (data.title == '') {
       return setSnackbar({
-        message: '日記の保存にはタイトルが必要です',
+        message: 'You need a title to save your diary',
         severity: 'error',
         pathname: '/current/diaries/edit/[id]',
       })
@@ -165,7 +165,7 @@ const CurrentDiariesEdit: NextPage = () => {
 
     if (data.content == '') {
       return setSnackbar({
-        message: '日記の保存には本文が必要です',
+        message: 'You need the text to save your diary',
         severity: 'error',
         pathname: '/current/diaries/edit/[id]',
       })
@@ -204,8 +204,12 @@ const CurrentDiariesEdit: NextPage = () => {
       headers: headers,
     })
       .then(() => {
+        setUser({
+          ...user,
+          isFetched: false,
+        })
         setSnackbar({
-          message: '日記を保存しました',
+          message: 'Diary saved!',
           severity: 'success',
           pathname: '/current/diaries/edit/[id]',
         })
@@ -213,7 +217,7 @@ const CurrentDiariesEdit: NextPage = () => {
       .catch((err: AxiosError<{ error: string }>) => {
         console.log(err.message)
         setSnackbar({
-          message: '日記の保存に失敗しました',
+          message: 'Failed to save diary',
           severity: 'error',
           pathname: '/current/diaries/edit/[id]',
         })
@@ -322,7 +326,7 @@ const CurrentDiariesEdit: NextPage = () => {
               name="image"
               control={control}
               render={({ field }) => (
-                <Tooltip title="サムネイルを追加する">
+                <Tooltip title="Add Image">
                   <Avatar sx={{ my: 2, mr: 4 }}>
                     <label htmlFor="image-upload">
                       <IconButton
@@ -363,24 +367,23 @@ const CurrentDiariesEdit: NextPage = () => {
                     width={360}
                     height={260}
                   />
-                  <Tooltip title="サムネイルを削除する">
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: -8,
-                        right: -8,
-                      }}
-                    >
-                      <Avatar>
-                        <IconButton
-                          sx={{ backgroundColor: '#F1F5FA' }}
-                          onClick={handleExistImageDeleteChange}
-                        >
-                          <CloseIcon sx={{ color: '#99AAB6' }} />
-                        </IconButton>
-                      </Avatar>
-                    </Box>
-                  </Tooltip>
+
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: -8,
+                      right: -8,
+                    }}
+                  >
+                    <Avatar>
+                      <IconButton
+                        sx={{ backgroundColor: '#F1F5FA' }}
+                        onClick={handleExistImageDeleteChange}
+                      >
+                        <CloseIcon sx={{ color: '#99AAB6' }} />
+                      </IconButton>
+                    </Avatar>
+                  </Box>
                 </Box>
               </Box>
             )}
@@ -400,24 +403,22 @@ const CurrentDiariesEdit: NextPage = () => {
                     width={360}
                     height={260}
                   />
-                  <Tooltip title="サムネイルを削除する">
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: -8,
-                        right: -8,
-                      }}
-                    >
-                      <Avatar>
-                        <IconButton
-                          sx={{ backgroundColor: '#F1F5FA' }}
-                          onClick={handleDeleteChange}
-                        >
-                          <CloseIcon sx={{ color: '#99AAB6' }} />
-                        </IconButton>
-                      </Avatar>
-                    </Box>
-                  </Tooltip>
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: -8,
+                      right: -8,
+                    }}
+                  >
+                    <Avatar>
+                      <IconButton
+                        sx={{ backgroundColor: '#F1F5FA' }}
+                        onClick={handleDeleteChange}
+                      >
+                        <CloseIcon sx={{ color: '#99AAB6' }} />
+                      </IconButton>
+                    </Avatar>
+                  </Box>
                 </Box>
               </Box>
             )}

@@ -20,10 +20,18 @@ interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
 }
 
+type NextPageWithLayout = AppProps['Component'] & {
+  getLayout?: (page: React.ReactElement) => React.ReactNode
+}
+
 export default function MyApp(props: MyAppProps): JSX.Element {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
   const router = useRouter()
   const url = router.pathname
+
+  const PageComponent = Component as NextPageWithLayout
+  const getLayout = PageComponent.getLayout || ((page) => page)
+
   return (
     <CacheProvider value={emotionCache}>
       <ThemeProvider theme={theme}>
@@ -31,7 +39,7 @@ export default function MyApp(props: MyAppProps): JSX.Element {
         <CssBaseline />
         <CurrentUserFetch />
         <Header pageUrl={url} />
-        <Component {...pageProps} />
+        {getLayout(<PageComponent {...pageProps} />)}
         <Snackbar />
       </ThemeProvider>
     </CacheProvider>

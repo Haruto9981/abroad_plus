@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close'
 import { LoadingButton } from '@mui/lab'
 import {
   Box,
@@ -10,6 +11,7 @@ import {
   FormControl,
   Avatar,
   Button,
+  IconButton,
   SelectChangeEvent,
 } from '@mui/material'
 import Select from '@mui/material/Select'
@@ -21,11 +23,13 @@ import useSWR from 'swr'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { useUserState, useSnackbarState } from '@/hooks/useGlobalState'
+import { useRequireSignedIn } from '@/hooks/useRequireSignedIn'
 import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
 type profileProps = {
-  name: string
+  first_name: string
+  last_name: string
   country: string
   uni: string
   start_date: string
@@ -34,7 +38,8 @@ type profileProps = {
 }
 
 type profileFormData = {
-  name: string
+  first_name: string
+  last_name: string
   country: string
   uni: string
   start_date: string
@@ -45,6 +50,7 @@ type profileFormData = {
 }
 
 const Profile: NextPage = () => {
+  useRequireSignedIn()
   const [user, setUser] = useUserState()
   const [, setSnackbar] = useSnackbarState()
   const [isFetched, setIsFetched] = useState<boolean>(false)
@@ -52,6 +58,7 @@ const Profile: NextPage = () => {
   const [selectedFile, setSelectedFile] = useState<File>()
   const [previewUrl, setPreviewUrl] = useState('')
   const [country, setCountry] = useState('')
+  const [isExistImageDeleted, setIsExistImageDeleted] = useState<boolean>(false)
 
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
   const { data, error } = useSWR(user.isSignedIn ? url : null, fetcher)
@@ -59,7 +66,8 @@ const Profile: NextPage = () => {
   const profile: profileProps = useMemo(() => {
     if (!data) {
       return {
-        name: '',
+        first_name: '',
+        last_name: '',
         country: '',
         uni: '',
         start_date: '',
@@ -68,7 +76,8 @@ const Profile: NextPage = () => {
       }
     }
     return {
-      name: data.name == null ? '' : data.name,
+      first_name: data.first_name == null ? '' : data.first_name,
+      last_name: data.last_name == null ? '' : data.last_name,
       country: data.country == null ? '' : data.country,
       uni: data.uni == null ? '' : data.uni,
       start_date: data.start_date == null ? '' : data.start_date,
@@ -80,6 +89,13 @@ const Profile: NextPage = () => {
   const { handleSubmit, control, reset } = useForm<profileFormData>({
     defaultValues: { profile },
   })
+
+  useEffect(() => {
+    if (data) {
+      reset(profile)
+      setIsFetched(true)
+    }
+  }, [data, profile, reset])
 
   const handleCountryChange = (e: SelectChangeEvent<string>) => {
     setCountry(e.target.value)
@@ -102,20 +118,110 @@ const Profile: NextPage = () => {
     }
   }
 
-  useEffect(() => {
-    if (data) {
-      reset(profile)
-      setIsFetched(true)
-    }
-  }, [data, profile, reset])
+  const handleDeleteChange = () => {
+    setSelectedFile(undefined)
+  }
+
+  const handleExistImageDeleteChange = () => {
+    setIsExistImageDeleted(true)
+  }
+
+  const validationRules = {
+    first_name: {
+      maxLength: {
+        value: 15,
+        message: 'Your first name cannot exceed 15 characters.',
+      },
+      pattern: {
+        value: /^[a-zA-Z]*$/,
+        message:
+          'Your name can only contain alphabet letters. Please enter a valid name.',
+      },
+    },
+
+    last_name: {
+      maxLength: {
+        value: 15,
+        message: 'Your first name cannot exceed 15 characters.',
+      },
+      pattern: {
+        value: /^[a-zA-Z]*$/,
+        message:
+          'Your name can only contain alphabet letters. Please enter a valid name.',
+      },
+    },
+
+    bio: {
+      maxLength: {
+        value: 600,
+        message: 'Your bio cannot exceed 600 characters.',
+      },
+    },
+  }
 
   const onSubmit: SubmitHandler<profileFormData> = (data) => {
-    if (data.name == '') {
+    // start_date, end_dateが両方入力された場合は、start_dateとend_dateが同じ日付、あるいは日付が論理的に誤っている場合弾く。
+    if (data.start_date && data.end_date && data.start_date >= data.end_date) {
       return setSnackbar({
-        message: '名前を入力してください',
+        message: 'Invaid SA period',
         severity: 'error',
         pathname: '/profile',
       })
+    }
+    if (data.country && data.uni) {
+      switch (data.country) {
+        case 'USA':
+          if (
+            !(
+              data.uni === 'CSUMB' ||
+              data.uni === 'Kansas' ||
+              data.uni === 'Utah'
+            )
+          ) {
+            return setSnackbar({
+              message: 'The country and the university do not match',
+              severity: 'error',
+              pathname: '/profile',
+            })
+          }
+          break
+        case 'UK':
+          if (!(data.uni === 'Aston' || data.uni === 'Canterbury')) {
+            return setSnackbar({
+              message: 'The country and the university do not match',
+              severity: 'error',
+              pathname: '/profile',
+            })
+          }
+          break
+        case 'Australia':
+          if (!(data.uni === 'Queensland' || data.uni === 'SouthernCross')) {
+            return setSnackbar({
+              message: 'The country and the university do not match',
+              severity: 'error',
+              pathname: '/profile',
+            })
+          }
+          break
+        case 'Canada':
+          if (data.uni !== 'Alberta') {
+            return setSnackbar({
+              message: 'The country and the university do not match',
+              severity: 'error',
+              pathname: '/profile',
+            })
+          }
+          break
+        case 'NewZealand':
+          if (!(data.uni === 'Otago' || data.uni === 'Auckland')) {
+            return setSnackbar({
+              message: 'The country and the university do not match',
+              severity: 'error',
+              pathname: '/profile',
+            })
+          }
+          break
+      }
     }
 
     setIsLoading(true)
@@ -131,14 +237,15 @@ const Profile: NextPage = () => {
 
     const formData = new FormData()
 
-    formData.append('user[name]', data.name)
+    formData.append('user[first_name]', data.first_name)
+    formData.append('user[last_name]', data.last_name)
     formData.append('user[country]', data.country)
     formData.append('user[uni]', data.uni)
     formData.append('user[start_date]', data.start_date)
     formData.append('user[end_date]', data.end_date)
     formData.append('user[bio]', data.bio)
-    if (selectedFile) {
-      formData.append('user[image]', selectedFile)
+    if (selectedFile || isExistImageDeleted) {
+      formData.append('user[image]', selectedFile || '')
     }
 
     axios({
@@ -150,7 +257,7 @@ const Profile: NextPage = () => {
       .then(() => {
         setUser({ ...user, isFetched: false })
         setSnackbar({
-          message: 'プロフィールを更新しました',
+          message: 'Profile updated!',
           severity: 'success',
           pathname: '/profile',
         })
@@ -158,7 +265,7 @@ const Profile: NextPage = () => {
       .catch((err: AxiosError<{ error: string }>) => {
         console.log(err.message)
         setSnackbar({
-          message: 'プロフィールの更新に失敗しました',
+          message: 'Failed to update profile',
           severity: 'error',
           pathname: '/profile',
         })
@@ -179,10 +286,7 @@ const Profile: NextPage = () => {
     >
       <Container maxWidth="md">
         <Box sx={{ mb: 4, pt: 4 }}>
-          <Typography
-            component="h2"
-            sx={{ fontSize: 28, color: 'black', fontWeight: 'bold' }}
-          >
+          <Typography component="h2" sx={{ fontSize: 28, color: 'black' }}>
             Profile
           </Typography>
         </Box>
@@ -196,12 +300,30 @@ const Profile: NextPage = () => {
           >
             {!selectedFile && (
               <>
-                {data.image.url ? (
-                  <Avatar
-                    sx={{ width: 175, height: 175, mb: 2 }}
-                    alt="プレビュー"
-                    src={data.image.url}
-                  />
+                {data.image.url && !isExistImageDeleted ? (
+                  <Box css={{ position: 'relative' }}>
+                    <Avatar
+                      sx={{ width: 175, height: 175, mb: 2 }}
+                      alt="プレビュー"
+                      src={data.image.url}
+                    />
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: -12,
+                        right: -12,
+                      }}
+                    >
+                      <Avatar>
+                        <IconButton
+                          sx={{ backgroundColor: '#F1F5FA' }}
+                          onClick={handleExistImageDeleteChange}
+                        >
+                          <CloseIcon sx={{ color: '#99AAB6' }} />
+                        </IconButton>
+                      </Avatar>
+                    </Box>
+                  </Box>
                 ) : (
                   <Avatar
                     sx={{ width: 175, height: 175, mb: 2 }}
@@ -211,11 +333,30 @@ const Profile: NextPage = () => {
               </>
             )}
             {selectedFile && (
-              <Avatar
-                sx={{ width: 175, height: 175, mb: 2 }}
-                alt="プレビュー"
-                src={previewUrl}
-              />
+              <Box css={{ position: 'relative' }}>
+                <Avatar
+                  sx={{ width: 175, height: 175, mb: 2 }}
+                  alt="プレビュー"
+                  src={previewUrl}
+                />
+
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: -12,
+                    right: -12,
+                  }}
+                >
+                  <Avatar>
+                    <IconButton
+                      sx={{ backgroundColor: '#F1F5FA' }}
+                      onClick={handleDeleteChange}
+                    >
+                      <CloseIcon sx={{ color: '#99AAB6' }} />
+                    </IconButton>
+                  </Avatar>
+                </Box>
+              </Box>
             )}
             <Controller
               name="image"
@@ -242,22 +383,44 @@ const Profile: NextPage = () => {
             />
           </Box>
           <Typography sx={{ mb: 1 }}>Name</Typography>
-          <Controller
-            name="name"
-            control={control}
-            render={({ field, fieldState }) => (
-              <TextField
-                {...field}
-                type="text"
-                error={fieldState.invalid}
-                helperText={fieldState.error?.message}
-                onChange={(e) => {
-                  field.onChange(e)
-                }}
-                sx={{ backgroundColor: 'white' }}
-              />
-            )}
-          />
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Controller
+              name="first_name"
+              control={control}
+              rules={validationRules.first_name}
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  type="text"
+                  error={fieldState.invalid}
+                  helperText={fieldState.error?.message}
+                  placeholder="First name"
+                  onChange={(e) => {
+                    field.onChange(e)
+                  }}
+                  sx={{ backgroundColor: 'white', width: '100%', mr: 1 }}
+                />
+              )}
+            />
+            <Controller
+              name="last_name"
+              control={control}
+              rules={validationRules.last_name}
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  type="text"
+                  error={fieldState.invalid}
+                  helperText={fieldState.error?.message}
+                  placeholder="Last name"
+                  onChange={(e) => {
+                    field.onChange(e)
+                  }}
+                  sx={{ backgroundColor: 'white', width: '100%', ml: 1 }}
+                />
+              )}
+            />
+          </Box>
           <Typography sx={{ mt: 3, mb: 1 }}>The Country of your SA</Typography>
           <Controller
             name="country"
@@ -408,6 +571,7 @@ const Profile: NextPage = () => {
           </Box>
           <Typography sx={{ mt: 3, mb: 1 }}>Bio</Typography>
           <Controller
+            rules={validationRules.bio}
             name="bio"
             control={control}
             render={({ field, fieldState }) => (

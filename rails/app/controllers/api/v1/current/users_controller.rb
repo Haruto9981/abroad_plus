@@ -13,6 +13,6 @@ class Api::V1::Current::UsersController < Api::V1::BaseController
   private
 
     def user_params
-      params.require(:user).permit(:name, :country, :uni, :start_date, :end_date, :bio, :image)
+      params.require(:user).permit(:first_name, :last_name, :country, :uni, :start_date, :end_date, :bio, :image)
     end
 end

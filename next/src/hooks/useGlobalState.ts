@@ -4,25 +4,76 @@ export const useUserState = () => {
   type userStateType = {
     id: number
     name: string
+    first_name: string
+    last_name: string
     email: string
-    start_date: Date
-    end_date: Date
+    country: string
+    uni: string
+    start_date: string
+    end_date: string
+    bio: string
     image: {
       url: string
     }
+    total_likes_count: number
+    total_diaries_count: number
+    diaries: Diary[]
+    following: following[]
+    followers: followers[]
     isSignedIn: boolean
     isFetched: boolean
+  }
+
+  type Diary = {
+    id: string
+    title: string
+    content: string
+    image: { url: string }
+    wordCount: number
+    day: number
+    monthName: string
+    year: number
+    wDay: string
+    user: {
+      id: string
+      name: string
+      country: string
+      uni: string
+      bio: string
+      image: { url: string }
+    }
+    status: string
+    favorites: number
+    diaryComments: number
+  }
+
+  type following = {
+    id: number
+  }
+
+  type followers = {
+    id: number
   }
 
   const fallbackData: userStateType = {
     id: 0,
     name: '',
+    first_name: '',
+    last_name: '',
     email: '',
-    start_date: new Date(),
-    end_date: new Date(),
+    country: '',
+    uni: '',
+    bio: '',
+    start_date: '',
+    end_date: '',
     image: {
       url: '',
     },
+    total_likes_count: 0,
+    total_diaries_count: 0,
+    diaries: [],
+    following: [],
+    followers: [],
     isSignedIn: false,
     isFetched: false,
   }

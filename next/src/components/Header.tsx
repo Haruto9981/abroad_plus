@@ -1,4 +1,5 @@
 import ArticleIcon from '@mui/icons-material/Article'
+import HomeIcon from '@mui/icons-material/Home'
 import Logout from '@mui/icons-material/Logout'
 import PersonIcon from '@mui/icons-material/Person'
 import {
@@ -20,7 +21,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import LinkTab from './LinkTab'
+import LinkTab from './HeaderLinkTab'
 import { useUserState } from '@/hooks/useGlobalState'
 
 type Props = {
@@ -31,6 +32,8 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const router = useRouter()
+  const url = router.pathname
+  const value = url === '/following_diaries' ? '/following_diaries' : '/'
 
   const hideHeaderPathnames = ['/current/diaries/edit/[id]']
   if (hideHeaderPathnames.includes(router.pathname)) return <></>
@@ -68,6 +71,7 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
         backgroundColor: 'white',
         color: 'black',
         boxShadow: 'none',
+        height: 88,
       }}
     >
       <Container maxWidth="lg" sx={{ px: 2 }}>
@@ -83,8 +87,11 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
               <Image src="/logo.png" width={85} height={85} alt="logo" />
             </Link>
 
-            <Tabs sx={{ mt: 5, ml: 4 }} value={pageUrl || false}>
-              <LinkTab label="Home" href="/" value="/" />
+            <Tabs
+              sx={{ mt: 5, ml: 4, display: { xs: 'none', sm: 'block' } }}
+              value={pageUrl || false}
+            >
+              <LinkTab label="Home" href="/" value={value} />
               <LinkTab
                 label="Diary"
                 href="/current/diaries"
@@ -168,26 +175,43 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
                     onClose={handleClose}
                     onClick={handleClose}
                   >
-                    <Box sx={{ pl: 2, py: 1 }}>
+                    <Box sx={{ px: 2, py: 1 }}>
                       <Typography sx={{ fontWeight: 'bold' }}>
-                        {user.name}
+                        {user.first_name} {user.last_name}
                       </Typography>
+                      {user.first_name || user.last_name ? (
+                        <Typography sx={{ color: 'gray' }}>
+                          @{user.name}
+                        </Typography>
+                      ) : (
+                        <Typography sx={{ fontWeight: 'bold' }}>
+                          @{user.name}
+                        </Typography>
+                      )}
                     </Box>
                     <Divider />
+                    <Link href="/">
+                      <MenuItem sx={{ display: { sm: 'none' } }}>
+                        <ListItemIcon>
+                          <HomeIcon fontSize="small" />
+                        </ListItemIcon>
+                        Home
+                      </MenuItem>
+                    </Link>
+                    <Link href="/current/diaries">
+                      <MenuItem sx={{ display: { sm: 'none' } }}>
+                        <ListItemIcon>
+                          <ArticleIcon fontSize="small" />
+                        </ListItemIcon>
+                        Diary
+                      </MenuItem>
+                    </Link>
                     <Link href="/profile">
                       <MenuItem>
                         <ListItemIcon>
                           <PersonIcon fontSize="small" />
                         </ListItemIcon>
                         Profile
-                      </MenuItem>
-                    </Link>
-                    <Link href="/current/diaries">
-                      <MenuItem>
-                        <ListItemIcon>
-                          <ArticleIcon fontSize="small" />
-                        </ListItemIcon>
-                        Diary
                       </MenuItem>
                     </Link>
                     <Link href="/sign_out">

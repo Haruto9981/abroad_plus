@@ -1,4 +1,4 @@
-import { Box, Grid, Container, Pagination } from '@mui/material'
+import { Box, Grid, Pagination, Divider } from '@mui/material'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Link from 'next/link'
@@ -6,12 +6,12 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import DiaryCard from '@/components/DiaryCard'
 import Error from '@/components/Error'
+import Layout from '@/components/HomeLayout'
 import Loading from '@/components/Loading'
-import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
 type DiaryProps = {
-  id: number
+  id: string
   title: string
   content: string
   image: {
@@ -24,17 +24,43 @@ type DiaryProps = {
   year: string
   wDay: string
   user: {
+    id: number
     name: string
+    first_name: string
+    last_name: string
     country: string
     uni: string
-    startDate: string
-    endDate: string
     bio: string
     image: {
       url: string
     }
   }
+  diaries: Diary[]
   favorites: { user_id: number }[]
+  diaryComments: object[]
+}
+
+type Diary = {
+  id: string
+  title: string
+  content: string
+  image: { url: string }
+  wordCount: number
+  day: number
+  monthName: string
+  year: number
+  wDay: string
+  user: {
+    id: string
+    name: string
+    country: string
+    uni: string
+    bio: string
+    image: { url: string }
+  }
+  status: string
+  favorites: number
+  diaryComments: number
 }
 
 const Index: NextPage = () => {
@@ -49,97 +75,50 @@ const Index: NextPage = () => {
 
   const meta = camelcaseKeys(data.meta)
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     router.push('/?page=' + value)
-
-  // const getDateDifference = (date1: Date, date2: Date) => {
-  //   const d1 = new Date(date1)
-  //   const d2 = new Date(date2)
-
-  //   const diffTime = d2.getTime() - d1.getTime()
-  //   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
-  //   return diffDays
-  // }
-
-  // const currentDate = new Date()
-  // const startDate = new Date(user.start_date)
-  // const endDate = new Date(user.end_date)
-  // const startDateDifference = getDateDifference(currentDate, startDate)
-  // const endDateDifference = getDateDifference(currentDate, endDate)
+  }
 
   return (
-    <Box
-      css={styles.pageMinHeight}
-      sx={{ backgroundColor: '#ffe0b6', display: 'flex' }}
-    >
-      <Container maxWidth="sm" sx={{ pt: 6 }}>
-        <Grid container spacing={2}>
-          {diaries.map((diary: DiaryProps, i: number) => (
-            <Grid key={i} item xs={12} md={12}>
-              <Link href={'/diaries/' + diary.id}>
-                <DiaryCard
-                  id={diary.id}
-                  title={diary.title}
-                  content={diary.content}
-                  image={diary.image.url}
-                  wordCount={diary.wordCount}
-                  day={diary.day}
-                  month={diary.monthName}
-                  year={diary.year}
-                  wDay={diary.wDay}
-                  userName={diary.user.name}
-                  userCountry={diary.user.country}
-                  userUni={diary.user.uni}
-                  userStartDate={diary.user.startDate}
-                  userEndDate={diary.user.endDate}
-                  userBio={diary.user.bio}
-                  userImage={diary.user.image.url}
-                  favorites={diary.favorites}
-                />
-              </Link>
-            </Grid>
-          ))}
-        </Grid>
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
-          <Pagination
-            count={meta.totalPages}
-            page={meta.currentPage}
-            onChange={handleChange}
-          />
-        </Box>
-      </Container>
-      {/* <Container
-        maxWidth="sm"
-        sx={{ pt: 6, display: { xs: 'none', lg: 'block' } }}
-      >
-        {startDateDifference <= 0 && endDateDifference > 0 && (
-          <Typography component="h2" sx={{ fontSize: 28, textAlign: 'left' }}>
-            <span
-              style={{ fontWeight: 'bold', color: '#ed1c24', fontSize: 36 }}
-            >
-              {endDateDifference}
-            </span>{' '}
-            days left to the end of your SA
-          </Typography>
-        )}
-        {endDateDifference <= 0 && (
-          <Typography component="h2" sx={{ fontSize: 28, textAlign: 'left' }}>
-            Your SA is already over
-          </Typography>
-        )}
-        {startDateDifference > 0 && (
-          <Typography component="h2" sx={{ fontSize: 28, textAlign: 'left' }}>
-            <span
-              style={{ fontWeight: 'bold', color: '#ed1c24', fontSize: 36 }}
-            >
-              {startDateDifference}
-            </span>{' '}
-            days to the start of your SA
-          </Typography>
-        )}
-      </Container> */}
-    </Box>
+    <Layout pageUrl={'/'}>
+      <Grid container spacing={2}>
+        {diaries.map((diary: DiaryProps, i: number) => (
+          <Grid key={i} item xs={12} md={12}>
+            <Link href={'/diaries/' + diary.id}>
+              <DiaryCard
+                id={diary.id}
+                title={diary.title}
+                content={diary.content}
+                image={diary.image.url}
+                wordCount={diary.wordCount}
+                day={diary.day}
+                month={diary.monthName}
+                year={diary.year}
+                wDay={diary.wDay}
+                userId={diary.user.id}
+                userName={diary.user.name}
+                userFirstName={diary.user.first_name}
+                userLastName={diary.user.last_name}
+                userCountry={diary.user.country}
+                userUni={diary.user.uni}
+                userBio={diary.user.bio}
+                userImage={diary.user.image.url}
+                favorites={diary.favorites}
+                diaryComments={diary.diaryComments}
+              />
+            </Link>
+            <Divider sx={{ my: 2 }} />
+          </Grid>
+        ))}
+      </Grid>
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+        <Pagination
+          count={meta.totalPages}
+          page={meta.currentPage}
+          onChange={handleChange}
+        />
+      </Box>
+    </Layout>
   )
 }
 
