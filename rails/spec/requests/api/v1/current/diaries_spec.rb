@@ -19,7 +19,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
         expect(res.length).to eq 3
         expect(res[0].keys).to eq ["id", "title", "content", "image", "word_count", "status", "day", "month_name", "month",
                                    "year", "w_day", "created_at", "user", "favorites", "diary_comments"]
-        expect(res[0]["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
+        expect(res[0]["user"].keys).to eq ["id", "name", "first_name", "last_name", "country", "uni", "start_date", "end_date",
+                                           "bio", "image", "total_likes_count", "total_diaries_count"]
         expect(response).to have_http_status(:ok)
       end
     end
@@ -49,7 +50,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
         res = JSON.parse(response.body)
         expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "day", "month_name", "month",
                                 "year", "w_day", "created_at", "user", "favorites", "diary_comments"]
-        expect(res["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
+        expect(res["user"].keys).to eq ["id", "name", "first_name", "last_name", "country", "uni", "start_date", "end_date",
+                                        "bio", "image", "total_likes_count", "total_diaries_count"]
         expect(response).to have_http_status(:ok)
       end
     end
@@ -77,7 +79,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
         res = JSON.parse(response.body)
         expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "day", "month_name", "month",
                                 "year", "w_day", "created_at", "user", "favorites", "diary_comments"]
-        expect(res["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
+        expect(res["user"].keys).to eq  ["id", "name", "first_name", "last_name", "country", "uni", "start_date", "end_date",
+                                         "bio", "image", "total_likes_count", "total_diaries_count"]
         expect(response).to have_http_status(:ok)
       end
     end
@@ -90,7 +93,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
         res = JSON.parse(response.body)
         expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "day", "month_name", "month",
                                 "year", "w_day", "created_at", "user", "favorites", "diary_comments"]
-        expect(res["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
+        expect(res["user"].keys).to eq ["id", "name", "first_name", "last_name", "country", "uni", "start_date", "end_date",
+                                        "bio", "image", "total_likes_count", "total_diaries_count"]
         expect(response).to have_http_status(:ok)
       end
     end
@@ -115,7 +119,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
         res = JSON.parse(response.body)
         expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "day", "month_name", "month",
                                 "year", "w_day", "created_at", "user", "favorites", "diary_comments"]
-        expect(res["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
+        expect(res["user"].keys).to eq  ["id", "name", "first_name", "last_name", "country", "uni", "start_date", "end_date",
+                                         "bio", "image", "total_likes_count", "total_diaries_count"]
         expect(response).to have_http_status(:ok)
       end
     end
@@ -146,7 +151,8 @@ RSpec.describe "Api::V1::Current::Diaries", type: :request do
         res = JSON.parse(response.body)
         expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "day", "month_name", "month",
                                 "year", "w_day", "created_at", "user", "favorites", "diary_comments"]
-        expect(res["user"].keys).to eq ["name", "country", "uni", "start_date", "end_date", "bio", "image"]
+        expect(res["user"].keys).to eq  ["id", "name", "first_name", "last_name", "country", "uni", "start_date", "end_date",
+                                         "bio", "image", "total_likes_count", "total_diaries_count"]
         expect(response).to have_http_status(:ok)
       end
     end

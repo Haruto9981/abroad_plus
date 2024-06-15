@@ -48,31 +48,16 @@ class User < ApplicationRecord
     end
 
     def country_match_uni
-      raise StandardError, "Country or university is missing" unless country && uni
+      return unless country.present? || uni.present?
 
-      case country
-      when "USA"
-        unless ["CSUMB", "Kansas", "Utah"].include?(uni)
-          raise StandardError, "The country and the university do not match"
-        end
-      when "UK"
-        unless ["Aston", "Canterbury"].include?(uni)
-          raise StandardError, "The country and the university do not match"
-        end
-      when "Australia"
-        unless ["Queensland", "SouthernCross"].include?(uni)
-          raise StandardError, "The country and the university do not match"
-        end
-      when "Canada"
-        if uni != "Alberta"
-          raise StandardError, "The country and the university do not match"
-        end
-      when "NewZealand"
-        unless ["Otago", "Auckland"].include?(uni)
-          raise StandardError, "The country and the university do not match"
-        end
-      else
-        raise StandardError, "Country not recognized"
-      end
+      universities_by_country = {
+        "USA" => ["CSUMB", "Kansas", "Utah"],
+        "UK" => ["Aston", "Canterbury"],
+        "Australia" => ["Queensland", "SouthernCross"],
+        "Canada" => ["Alberta"],
+        "NewZealand" => ["Otago", "Auckland"],
+      }
+      raise StandardError, "Country not recognized" unless universities_by_country.has_key?(country)
+      raise StandardError, "The country and the university do not match" unless universities_by_country[country].include?(uni)
     end
 end
