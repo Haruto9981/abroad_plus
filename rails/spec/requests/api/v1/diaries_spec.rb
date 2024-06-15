@@ -59,7 +59,7 @@ RSpec.describe "Api::V1::Diaries", type: :request do
       context "diariesレコードのステータスが公開の場合" do
         let(:status) { :shared }
 
-        it "正常にレコードを取得できる" do
+        it "正常にレコード取得できる" do
           subject
           res = JSON.parse(response.body)
           expect(res.keys).to eq ["id", "title", "content", "image", "word_count", "status", "day", "month_name", "month",
