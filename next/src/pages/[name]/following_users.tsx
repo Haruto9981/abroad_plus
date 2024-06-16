@@ -10,7 +10,6 @@ import {
   Button,
   Tooltip,
 } from '@mui/material'
-import axios, { AxiosError } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Image from 'next/image'
@@ -23,6 +22,11 @@ import { useUserState } from '@/hooks/useGlobalState'
 import { useRequireSignedIn } from '@/hooks/useRequireSignedIn'
 import Layout from '@/layout/profileLayout'
 import { fetcher } from '@/utils'
+import {
+  handleFollowChange,
+  handleUnfollowChange,
+  getUserFollowingIdArray,
+} from '@/utils/follow'
 
 const imageCss = css({ marginTop: '4px' })
 
@@ -68,53 +72,6 @@ const Following: NextPage = () => {
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
     router.push('/' + router.query.name + '/following_users?page=' + value)
-
-  const getUserFollowingIdArray = (userFollowing: object[]): number[] => {
-    const array = []
-    for (let i = 0; i < userFollowing.length; i++) {
-      array.push(user.following[i].id)
-    }
-
-    return array
-  }
-
-  const urlForFollow =
-    process.env.NEXT_PUBLIC_API_BASE_URL + '/current/relationships'
-
-  const headers = {
-    'Content-Type': 'application/json',
-    'access-token': localStorage.getItem('access-token'),
-    client: localStorage.getItem('client'),
-    uid: localStorage.getItem('uid'),
-  }
-
-  const handleFollowChange = (id: number) => {
-    const data = { followed_id: id }
-    axios({ method: 'POST', url: urlForFollow, data: data, headers: headers })
-      .then(() => {
-        setUser({
-          ...user,
-          following: [...user.following, { id: id }],
-        })
-      })
-      .catch((e: AxiosError<{ error: string }>) => {
-        console.log(e.message)
-      })
-  }
-
-  const handleUnfollowChange = (id: number) => {
-    const data = { followed_id: id }
-    axios({ method: 'DELETE', url: urlForFollow, data: data, headers: headers })
-      .then(() => {
-        setUser({
-          ...user,
-          following: user.following.filter((following) => following.id !== id),
-        })
-      })
-      .catch((e: AxiosError<{ error: string }>) => {
-        console.log(e.message)
-      })
-  }
 
   return (
     <Layout>
@@ -189,11 +146,13 @@ const Following: NextPage = () => {
               </Box>
             </Box>
             {user.id !== following_user.id &&
-              (!getUserFollowingIdArray(user.following).includes(
+              (!getUserFollowingIdArray(user.following, user).includes(
                 following_user.id,
               ) ? (
                 <Button
-                  onClick={() => handleFollowChange(following_user.id)}
+                  onClick={(e) =>
+                    handleFollowChange(following_user.id, e, user, setUser)
+                  }
                   variant="contained"
                   color="warning"
                   type="submit"
@@ -209,7 +168,9 @@ const Following: NextPage = () => {
                 </Button>
               ) : (
                 <Button
-                  onClick={() => handleUnfollowChange(following_user.id)}
+                  onClick={(e) =>
+                    handleUnfollowChange(following_user.id, e, user, setUser)
+                  }
                   variant="outlined"
                   color="warning"
                   type="submit"

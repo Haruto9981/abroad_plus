@@ -8,11 +8,14 @@ import {
   Button,
   Typography,
 } from '@mui/material'
-import axios, { AxiosError } from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useLayoutEffect } from 'react'
 import { useUserState } from '@/hooks/useGlobalState'
+import {
+  handleFollowChange,
+  handleUnfollowChange,
+  getUserFollowingIdArray,
+} from '@/utils/follow'
 
 type profileCardProps = {
   id: number
@@ -52,54 +55,6 @@ const ProfileCard = ({
   endDateDifference,
 }: profileCardProps) => {
   const [user, setUser] = useUserState()
-  const [isFollowed, setIsFollowed] = useState(false)
-
-  useLayoutEffect(() => {
-    const currentUserFollowingArray = user.following
-    const isFollowed: boolean = currentUserFollowingArray.some(
-      (currentUserFollowing) => currentUserFollowing.id === id,
-    )
-    setIsFollowed(isFollowed)
-  }, [user.following, id])
-
-  const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/relationships'
-
-  const headers = {
-    'Content-Type': 'application/json',
-    'access-token': localStorage.getItem('access-token'),
-    client: localStorage.getItem('client'),
-    uid: localStorage.getItem('uid'),
-  }
-
-  const data = { followed_id: id }
-
-  const handleFollowChange = () => {
-    axios({ method: 'POST', url: url, data: data, headers: headers })
-      .then(() => {
-        setIsFollowed(!isFollowed)
-        setUser({
-          ...user,
-          following: [...user.following, { id: id }],
-        })
-      })
-      .catch((e: AxiosError<{ error: string }>) => {
-        console.log(e.message)
-      })
-  }
-
-  const handleUnfollowChange = () => {
-    axios({ method: 'DELETE', url: url, data: data, headers: headers })
-      .then(() => {
-        setIsFollowed(!isFollowed)
-        setUser({
-          ...user,
-          following: user.following.filter((following) => following.id !== id),
-        })
-      })
-      .catch((e: AxiosError<{ error: string }>) => {
-        console.log(e.message)
-      })
-  }
 
   return (
     <Link href={`/${name}`}>
@@ -335,41 +290,41 @@ const ProfileCard = ({
               </Button>
             </Link>
           )}
-          {id !== user.id && !isFollowed && (
-            <Button
-              onClick={handleFollowChange}
-              variant="contained"
-              color="warning"
-              type="submit"
-              sx={{
-                fontWeight: 'bold',
-                color: 'white',
-                textTransform: 'none',
-                width: '100%',
-                my: 2,
-              }}
-            >
-              follow
-            </Button>
-          )}
-          {id !== user.id && isFollowed && (
-            <Button
-              onClick={handleUnfollowChange}
-              variant="outlined"
-              color="warning"
-              type="submit"
-              sx={{
-                fontWeight: 'bold',
-                textTransform: 'none',
-                boxShadow: 'none',
-                border: '1.5px solid #f5a500',
-                width: '100%',
-                my: 2,
-              }}
-            >
-              unfollow
-            </Button>
-          )}
+          {id !== user.id &&
+            (!getUserFollowingIdArray(user.following, user).includes(id) ? (
+              <Button
+                onClick={(e) => handleFollowChange(id, e, user, setUser)}
+                variant="contained"
+                color="warning"
+                type="submit"
+                sx={{
+                  fontWeight: 'bold',
+                  color: 'white',
+                  textTransform: 'none',
+                  width: '100%',
+                  my: 2,
+                }}
+              >
+                follow
+              </Button>
+            ) : (
+              <Button
+                onClick={(e) => handleUnfollowChange(id, e, user, setUser)}
+                variant="outlined"
+                color="warning"
+                type="submit"
+                sx={{
+                  fontWeight: 'bold',
+                  textTransform: 'none',
+                  boxShadow: 'none',
+                  border: '1.5px solid #f5a500',
+                  width: '100%',
+                  my: 2,
+                }}
+              >
+                unfollow
+              </Button>
+            ))}
         </CardContent>
       </Card>
     </Link>
