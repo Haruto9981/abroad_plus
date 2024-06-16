@@ -14,18 +14,18 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import Comment from '@/components/Comment'
-import DiaryCard from '@/components/DiaryCard'
+import Diary from '@/components/Diary'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
 type DiaryProps = {
-  id: number
+  id: string
   title: string
   content: string
   image: {
-    url: string
+    url: string | null
   }
   wordCount: number
   day: string
@@ -35,15 +35,15 @@ type DiaryProps = {
   user: {
     id: number
     name: string
-    first_name: string
-    last_name: string
-    country: string
-    uni: string
-    startDate: string
-    endDate: string
-    bio: string
+    first_name: string | null
+    last_name: string | null
+    country: string | null
+    uni: string | null
+    startDate: string | null
+    endDate: string | null
+    bio: string | null
     image: {
-      url: string
+      url: string | null
     }
   }
   favorites: { user_id: number }[]
@@ -83,7 +83,7 @@ const DiaryDetail: NextPage = () => {
         </Box>
         <Card sx={{ borderRadius: 2 }}>
           <CardContent>
-            <DiaryCard
+            <Diary
               id={diary.id}
               title={diary.title}
               content={diary.content}

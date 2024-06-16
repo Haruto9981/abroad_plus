@@ -4,18 +4,19 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
-import DiaryCard from '@/components/DiaryCard'
+import Diary from '@/components/Diary'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
-import Layout from '@/components/ProfileLayout'
+import { useRequireSignedIn } from '@/hooks/useRequireSignedIn'
+import Layout from '@/layout/profileLayout'
 import { fetcher } from '@/utils'
 
 type DiaryProps = {
-  id: number
+  id: string
   title: string
   content: string
   image: {
-    url: string
+    url: string | null
   }
   wordCount: number
   day: string
@@ -26,13 +27,13 @@ type DiaryProps = {
   user: {
     id: number
     name: string
-    first_name: string
-    last_name: string
-    country: string
-    uni: string
-    bio: string
+    first_name: string | null
+    last_name: string | null
+    country: string | null
+    uni: string | null
+    bio: string | null
     image: {
-      url: string
+      url: string | null
     }
   }
   favorites: { user_id: number }[]
@@ -40,6 +41,7 @@ type DiaryProps = {
 }
 
 const UserProfile: NextPage = () => {
+  useRequireSignedIn()
   const router = useRouter()
   const page = 'page' in router.query ? Number(router.query.page) : 1
   const url =
@@ -78,7 +80,7 @@ const UserProfile: NextPage = () => {
         {diaries.map((diary: DiaryProps, i: number) => (
           <Grid key={i} item xs={12} md={12}>
             <Link href={'/diaries/' + diary.id}>
-              <DiaryCard
+              <Diary
                 id={diary.id}
                 title={diary.title}
                 content={diary.content}

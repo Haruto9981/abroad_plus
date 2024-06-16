@@ -9,7 +9,6 @@ import {
   Button,
   Tooltip,
 } from '@mui/material'
-import axios, { AxiosError } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -18,6 +17,11 @@ import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { useUserState } from '@/hooks/useGlobalState'
 import { fetcher } from '@/utils'
+import {
+  handleFollowChange,
+  handleUnfollowChange,
+  getUserFollowingIdArray,
+} from '@/utils/follow'
 
 const imageCss = css({ marginTop: '4px' })
 
@@ -48,55 +52,6 @@ const LikesModal = (props: diaryIdProps) => {
   if (!data) return <Loading />
 
   const favorites = camelcaseKeys(data)
-
-  const getUserFollowingIdArray = (userFollowing: object[]): number[] => {
-    const array = []
-    for (let i = 0; i < userFollowing.length; i++) {
-      array.push(user.following[i].id)
-    }
-
-    return array
-  }
-
-  const urlForFollow =
-    process.env.NEXT_PUBLIC_API_BASE_URL + '/current/relationships'
-
-  const headers = {
-    'Content-Type': 'application/json',
-    'access-token': localStorage.getItem('access-token'),
-    client: localStorage.getItem('client'),
-    uid: localStorage.getItem('uid'),
-  }
-
-  const handleFollowChange = (id: number, e: React.MouseEvent) => {
-    e.preventDefault()
-    const data = { followed_id: id }
-    axios({ method: 'POST', url: urlForFollow, data: data, headers: headers })
-      .then(() => {
-        setUser({
-          ...user,
-          following: [...user.following, { id: id }],
-        })
-      })
-      .catch((e: AxiosError<{ error: string }>) => {
-        console.log(e.message)
-      })
-  }
-
-  const handleUnfollowChange = (id: number, e: React.MouseEvent) => {
-    e.preventDefault()
-    const data = { followed_id: id }
-    axios({ method: 'DELETE', url: urlForFollow, data: data, headers: headers })
-      .then(() => {
-        setUser({
-          ...user,
-          following: user.following.filter((following) => following.id !== id),
-        })
-      })
-      .catch((e: AxiosError<{ error: string }>) => {
-        console.log(e.message)
-      })
-  }
 
   return (
     <Box>
@@ -170,11 +125,13 @@ const LikesModal = (props: diaryIdProps) => {
               </Box>
             </Box>
             {user.id !== favorite.user.id &&
-              (!getUserFollowingIdArray(user.following).includes(
+              (!getUserFollowingIdArray(user.following, user).includes(
                 favorite.user.id,
               ) ? (
                 <Button
-                  onClick={(e) => handleFollowChange(favorite.user.id, e)}
+                  onClick={(e) =>
+                    handleFollowChange(favorite.user.id, e, user, setUser)
+                  }
                   variant="contained"
                   color="warning"
                   type="submit"
@@ -191,7 +148,9 @@ const LikesModal = (props: diaryIdProps) => {
                 </Button>
               ) : (
                 <Button
-                  onClick={(e) => handleUnfollowChange(favorite.user.id, e)}
+                  onClick={(e) =>
+                    handleUnfollowChange(favorite.user.id, e, user, setUser)
+                  }
                   variant="outlined"
                   color="warning"
                   type="submit"

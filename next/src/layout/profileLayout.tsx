@@ -8,11 +8,12 @@ import ProfileCard from '@/components/ProfileCard'
 import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const url =
     process.env.NEXT_PUBLIC_API_BASE_URL + '/users/' + router.query.name
   const { data, error } = useSWR(url, fetcher)
+
   if (error) return <Error />
   if (!data) return <Loading />
 
@@ -35,7 +36,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           startDate={profile.startDate}
           endDate={profile.endDate}
           image={profile.image.url}
-          diaries={profile.diaries}
           totalDiariesCount={profile.totalDiariesCount}
           totalLikesCount={profile.totalLikesCount}
           following={profile.following}
@@ -50,3 +50,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </Box>
   )
 }
+
+export default Layout

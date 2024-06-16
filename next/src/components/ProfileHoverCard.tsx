@@ -10,75 +10,30 @@ import {
   Button,
   Typography,
 } from '@mui/material'
-import axios, { AxiosError } from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useUserState } from '@/hooks/useGlobalState'
+import {
+  handleFollowChange,
+  handleUnfollowChange,
+  getUserFollowingIdArray,
+} from '@/utils/follow'
 
 type ProfileHoverCardProps = {
   userId: number
   userName: string
-  userFirstName: string
-  userLastName: string
-  userCountry: string
-  userUni: string
-  userBio: string
-  userImage: string
+  userFirstName: string | null
+  userLastName: string | null
+  userCountry: string | null
+  userUni: string | null
+  userBio: string | null
+  userImage: string | null
   handleClose: React.MouseEventHandler<HTMLDivElement>
 }
 const imageCss = css({ marginTop: '4px' })
 
 const ProfileHoverCard = (props: ProfileHoverCardProps) => {
   const [user, setUser] = useUserState()
-
-  const getUserFollowingIdArray = (userFollowing: object[]): number[] => {
-    const array = []
-    for (let i = 0; i < userFollowing.length; i++) {
-      array.push(user.following[i].id)
-    }
-
-    return array
-  }
-
-  const urlForFollow =
-    process.env.NEXT_PUBLIC_API_BASE_URL + '/current/relationships'
-
-  const headers = {
-    'Content-Type': 'application/json',
-    'access-token': localStorage.getItem('access-token'),
-    client: localStorage.getItem('client'),
-    uid: localStorage.getItem('uid'),
-  }
-
-  const handleFollowChange = (id: number, e: React.MouseEvent) => {
-    e.preventDefault()
-    const data = { followed_id: id }
-    axios({ method: 'POST', url: urlForFollow, data: data, headers: headers })
-      .then(() => {
-        setUser({
-          ...user,
-          following: [...user.following, { id: id }],
-        })
-      })
-      .catch((e: AxiosError<{ error: string }>) => {
-        console.log(e.message)
-      })
-  }
-
-  const handleUnfollowChange = (id: number, e: React.MouseEvent) => {
-    e.preventDefault()
-    const data = { followed_id: id }
-    axios({ method: 'DELETE', url: urlForFollow, data: data, headers: headers })
-      .then(() => {
-        setUser({
-          ...user,
-          following: user.following.filter((following) => following.id !== id),
-        })
-      })
-      .catch((e: AxiosError<{ error: string }>) => {
-        console.log(e.message)
-      })
-  }
 
   return (
     <Box onMouseLeave={props.handleClose}>
@@ -205,11 +160,13 @@ const ProfileHoverCard = (props: ProfileHoverCardProps) => {
             </Box>
             <Box>
               {user.id !== props.userId &&
-                (!getUserFollowingIdArray(user.following).includes(
+                (!getUserFollowingIdArray(user.following, user).includes(
                   props.userId,
                 ) ? (
                   <Button
-                    onClick={(e) => handleFollowChange(props.userId, e)}
+                    onClick={(e) =>
+                      handleFollowChange(props.userId, e, user, setUser)
+                    }
                     variant="contained"
                     color="warning"
                     type="submit"
@@ -225,7 +182,9 @@ const ProfileHoverCard = (props: ProfileHoverCardProps) => {
                   </Button>
                 ) : (
                   <Button
-                    onClick={(e) => handleUnfollowChange(props.userId, e)}
+                    onClick={(e) =>
+                      handleUnfollowChange(props.userId, e, user, setUser)
+                    }
                     variant="outlined"
                     color="warning"
                     type="submit"

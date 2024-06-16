@@ -28,7 +28,7 @@ import { styles } from '@/styles'
 import { fetcher } from '@/utils'
 
 type CurrentDiaryProps = {
-  id: number
+  id: string
   title: string
   content: string
   status: string

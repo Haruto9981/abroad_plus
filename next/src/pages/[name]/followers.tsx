@@ -10,7 +10,6 @@ import {
   Button,
   Tooltip,
 } from '@mui/material'
-import axios, { AxiosError } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Image from 'next/image'
@@ -19,31 +18,31 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
-import Layout from '@/components/ProfileLayout'
 import { useUserState } from '@/hooks/useGlobalState'
+import { useRequireSignedIn } from '@/hooks/useRequireSignedIn'
+import Layout from '@/layout/profileLayout'
 import { fetcher } from '@/utils'
+import {
+  handleFollowChange,
+  handleUnfollowChange,
+  getUserFollowingIdArray,
+} from '@/utils/follow'
+
 const imageCss = css({ marginTop: '4px' })
-
-interface Following {
-  id: number
-}
-
-interface User {
-  following: Following[]
-}
 
 type Followers = {
   id: number
   name: string
   image: {
-    url: string
+    url: string | null
   }
-  country: string
-  uni: string
-  bio: string
+  country: string | null
+  uni: string | null
+  bio: string | null
 }
 
 const Followers: NextPage = () => {
+  useRequireSignedIn()
   const router = useRouter()
   const [user, setUser] = useUserState()
   const page = 'page' in router.query ? Number(router.query.page) : 1
@@ -73,53 +72,6 @@ const Followers: NextPage = () => {
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
     router.push('/' + router.query.name + '/followers?page=' + value)
-
-  const getUserFollowingIdArray = (user: User): number[] => {
-    const array = []
-    for (let i = 0; i < user.following.length; i++) {
-      array.push(user.following[i].id)
-    }
-
-    return array
-  }
-
-  const urlForFollow =
-    process.env.NEXT_PUBLIC_API_BASE_URL + '/current/relationships'
-
-  const headers = {
-    'Content-Type': 'application/json',
-    'access-token': localStorage.getItem('access-token'),
-    client: localStorage.getItem('client'),
-    uid: localStorage.getItem('uid'),
-  }
-
-  const handleFollowChange = (id: number) => {
-    const data = { followed_id: id }
-    axios({ method: 'POST', url: urlForFollow, data: data, headers: headers })
-      .then(() => {
-        setUser({
-          ...user,
-          following: [...user.following, { id: id }],
-        })
-      })
-      .catch((e: AxiosError<{ error: string }>) => {
-        console.log(e.message)
-      })
-  }
-
-  const handleUnfollowChange = (id: number) => {
-    const data = { followed_id: id }
-    axios({ method: 'DELETE', url: urlForFollow, data: data, headers: headers })
-      .then(() => {
-        setUser({
-          ...user,
-          following: user.following.filter((following) => following.id !== id),
-        })
-      })
-      .catch((e: AxiosError<{ error: string }>) => {
-        console.log(e.message)
-      })
-  }
 
   return (
     <Layout>
@@ -194,9 +146,13 @@ const Followers: NextPage = () => {
               </Box>
             </Box>
             {user.id !== follower.id &&
-              (!getUserFollowingIdArray(user).includes(follower.id) ? (
+              (!getUserFollowingIdArray(user.following, user).includes(
+                follower.id,
+              ) ? (
                 <Button
-                  onClick={() => handleFollowChange(follower.id)}
+                  onClick={(e) =>
+                    handleFollowChange(follower.id, e, user, setUser)
+                  }
                   variant="contained"
                   color="warning"
                   type="submit"
@@ -212,7 +168,9 @@ const Followers: NextPage = () => {
                 </Button>
               ) : (
                 <Button
-                  onClick={() => handleUnfollowChange(follower.id)}
+                  onClick={(e) =>
+                    handleUnfollowChange(follower.id, e, user, setUser)
+                  }
                   variant="outlined"
                   color="warning"
                   type="submit"

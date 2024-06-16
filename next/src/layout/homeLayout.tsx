@@ -1,28 +1,33 @@
 import { Box, Container, Card, Divider, CardContent } from '@mui/material'
 import Tabs from '@mui/material/Tabs'
-import { useRouter } from 'next/router'
-import useSWR from 'swr'
-import LinkTab from './HomeLinkTab'
-import Error from '@/components/Error'
-import Loading from '@/components/Loading'
+import LinkTab from '@/components/HomeLinkTab'
 import ProfileCard from '@/components/ProfileCard'
 import { useUserState } from '@/hooks/useGlobalState'
 import { styles } from '@/styles'
-import { fetcher } from '@/utils'
 
-type Props = {
+type LayoutProps = {
   children: React.ReactNode
   pageUrl: string
 }
 
-const Layout = ({ children, pageUrl }: Props) => {
-  const router = useRouter()
+const Layout = ({ children, pageUrl }: LayoutProps) => {
   const [user] = useUserState()
-  const page = 'page' in router.query ? Number(router.query.page) : 1
-  const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/?page=' + page
-  const { data, error } = useSWR(url, fetcher)
-  if (error) return <Error />
-  if (!data) return <Loading />
+
+  const getDateDifference = (currentDate: Date, targetDate: Date) => {
+    const diffTime = currentDate.getTime() - targetDate.getTime()
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    return diffDays
+  }
+
+  // 留学開始まであと何日か
+  const startDateDifference = user.start_date
+    ? getDateDifference(new Date(), new Date(user.start_date))
+    : undefined
+
+  // 留学終了まであと何日か
+  const endDateDifference = user.end_date
+    ? getDateDifference(new Date(), new Date(user.end_date))
+    : undefined
 
   return (
     <Box
@@ -44,11 +49,12 @@ const Layout = ({ children, pageUrl }: Props) => {
           startDate={user.start_date}
           endDate={user.end_date}
           image={user.image.url}
-          diaries={user.diaries}
           totalDiariesCount={user.total_diaries_count}
           totalLikesCount={user.total_likes_count}
           following={user.following}
           followers={user.followers}
+          startDateDifference={startDateDifference}
+          endDateDifference={endDateDifference}
         />
       </Container>
       <Container maxWidth="sm" sx={{ py: 6 }}>

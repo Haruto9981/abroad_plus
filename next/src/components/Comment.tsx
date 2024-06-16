@@ -32,7 +32,7 @@ import { useUserState, useSnackbarState } from '@/hooks/useGlobalState'
 import { fetcher } from '@/utils'
 
 type diaryIdProps = {
-  id: number
+  id: string
 }
 
 type CommentProps = {
@@ -43,13 +43,13 @@ type CommentProps = {
   user: {
     id: number
     name: string
-    first_name: string
-    last_name: string
-    country: string
-    uni: string
-    bio: string
+    first_name: string | null
+    last_name: string | null
+    country: string | null
+    uni: string | null
+    bio: string | null
     image: {
-      url: string
+      url: string | null
     }
   }
 }

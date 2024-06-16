@@ -16,16 +16,16 @@ import axios, { AxiosError } from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState, useEffect, MouseEventHandler } from 'react'
+import { useState, useLayoutEffect, MouseEventHandler } from 'react'
 import LikesModal from '@/components/LikesModal'
 import ProfileHoverCard from '@/components/ProfileHoverCard'
 import { useUserState } from '@/hooks/useGlobalState'
 
-type diaryCardProps = {
+type diaryProps = {
   id: string
   title: string
   content: string
-  image: string
+  image: string | null
   wordCount: number
   day: string
   month: string
@@ -33,12 +33,12 @@ type diaryCardProps = {
   wDay: string
   userId: number
   userName: string
-  userFirstName: string
-  userLastName: string
-  userCountry: string
-  userUni: string
-  userBio: string
-  userImage: string
+  userFirstName: string | null
+  userLastName: string | null
+  userCountry: string | null
+  userUni: string | null
+  userBio: string | null
+  userImage: string | null
   favorites: { user_id: number }[]
   diaryComments: Array<object>
 }
@@ -48,7 +48,27 @@ const imageCss = css({ marginTop: '4px' })
 const omit = (text: string) => (len: number) => (ellipsis: string) =>
   text.length >= len ? text.slice(0, len - ellipsis.length) + ellipsis : text
 
-const DiaryCard = (props: diaryCardProps) => {
+const Diary = ({
+  id,
+  title,
+  content,
+  image,
+  wordCount,
+  day,
+  month,
+  year,
+  wDay,
+  userId,
+  userName,
+  userFirstName,
+  userLastName,
+  userCountry,
+  userUni,
+  userBio,
+  userImage,
+  favorites,
+  diaryComments,
+}: diaryProps) => {
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
   const [user] = useUserState()
@@ -56,17 +76,16 @@ const DiaryCard = (props: diaryCardProps) => {
   const [LikedCount, setLikedCount] = useState<number>(0)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
-  useEffect(() => {
-    const favorites = props.favorites
+  useLayoutEffect(() => {
     const liked: boolean = favorites.some(
       (favorite) => favorite.user_id === user.id,
     )
     setIsLiked(liked)
     setLikedCount(favorites.length)
-  }, [user.id, props.favorites])
+  }, [user.id, favorites])
 
   const url =
-    process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/' + props.id + '/favorites'
+    process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/' + id + '/favorites'
 
   const headers = {
     'Content-Type': 'application/json',
@@ -122,13 +141,10 @@ const DiaryCard = (props: diaryCardProps) => {
   return (
     <>
       <Box sx={{ display: 'flex' }}>
-        <Link href={`/${props.userName}`}>
+        <Link href={`/${userName}`}>
           <IconButton sx={{ p: 0 }} onMouseEnter={handleHover}>
-            {props.userImage ? (
-              <Avatar
-                src={props.userImage}
-                sx={{ width: 50, height: 50 }}
-              ></Avatar>
+            {userImage ? (
+              <Avatar src={userImage} sx={{ width: 50, height: 50 }}></Avatar>
             ) : (
               <Avatar sx={{ width: 50, height: 50 }}>
                 <PersonIcon />
@@ -138,7 +154,7 @@ const DiaryCard = (props: diaryCardProps) => {
         </Link>
         <Box>
           <Box sx={{ display: 'flex' }}>
-            <Link href={`/${props.userName}`}>
+            <Link href={`/${userName}`}>
               <Typography
                 sx={{
                   fontSize: 15,
@@ -151,25 +167,25 @@ const DiaryCard = (props: diaryCardProps) => {
                 }}
                 onMouseEnter={handleHover}
               >
-                @{props.userName}
+                @{userName}
               </Typography>
             </Link>
-            {props.userCountry && (
-              <Tooltip title={props.userCountry}>
+            {userCountry && (
+              <Tooltip title={userCountry}>
                 <Image
                   css={imageCss}
-                  src={`/${props.userCountry.toLowerCase()}.png`}
+                  src={`/${userCountry.toLowerCase()}.png`}
                   height={15}
                   width={30}
                   alt="国旗"
                 />
               </Tooltip>
             )}
-            {props.userUni && (
+            {userUni && (
               <Box sx={{ mx: 1 }}>
-                <Tooltip title={props.userUni}>
+                <Tooltip title={userUni}>
                   <Image
-                    src={`/${props.userUni.toLowerCase()}.png`}
+                    src={`/${userUni.toLowerCase()}.png`}
                     height={22}
                     width={22}
                     alt="Uni flag"
@@ -179,16 +195,14 @@ const DiaryCard = (props: diaryCardProps) => {
             )}
           </Box>
           <Box sx={{ display: 'flex', mx: 1, color: 'gray' }}>
-            <Typography sx={{ fontSize: 15, mr: 0.5 }}>{props.day}</Typography>
-            <Typography sx={{ fontSize: 15, mr: 0.5 }}>
-              {props.month}
-            </Typography>
-            <Typography sx={{ fontSize: 15, mr: 0.5 }}>{props.year}</Typography>
-            <Typography sx={{ fontSize: 15 }}>{props.wDay}</Typography>
+            <Typography sx={{ fontSize: 15, mr: 0.5 }}>{day}</Typography>
+            <Typography sx={{ fontSize: 15, mr: 0.5 }}>{month}</Typography>
+            <Typography sx={{ fontSize: 15, mr: 0.5 }}>{year}</Typography>
+            <Typography sx={{ fontSize: 15 }}>{wDay}</Typography>
           </Box>
         </Box>
       </Box>
-      {props.image && (
+      {image && (
         <Box
           sx={{
             my: 2,
@@ -200,7 +214,7 @@ const DiaryCard = (props: diaryCardProps) => {
           {/* なぜかImageだとうまく画像を読み込めない。nextのpublicから探してるっぽい。style.cssからレスポンシブデザイン適応 */}
             <img // eslint-disable-line
             alt="日記画像"
-            src={props.image}
+            src={image}
             className="image"
           />
         </Box>
@@ -222,20 +236,20 @@ const DiaryCard = (props: diaryCardProps) => {
         >
           {(router.pathname === '/' ||
             router.pathname === '/following_diaries') &&
-            omit(props.title)(40)('...')}{' '}
+            omit(title)(40)('...')}{' '}
           {router.pathname !== '/' &&
             router.pathname !== '/following_diaries' &&
-            props.title}
+            title}
         </Typography>
-        <Typography sx={{ fontSize: 18 }}>({props.wordCount} words)</Typography>
+        <Typography sx={{ fontSize: 18 }}>({wordCount} words)</Typography>
       </Box>
       <Typography>
         {(router.pathname === '/' ||
           router.pathname === '/following_diaries') &&
-          omit(props.content)(295)('...')}{' '}
+          omit(content)(295)('...')}{' '}
         {router.pathname !== '/' &&
           router.pathname !== '/following_diaries' &&
-          props.content}{' '}
+          content}{' '}
       </Typography>
       <Box sx={{ display: 'flex' }}>
         <Box>
@@ -258,7 +272,7 @@ const DiaryCard = (props: diaryCardProps) => {
         <IconButton>
           <CommentIcon />
         </IconButton>
-        <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
+        <Typography sx={{ mt: 1 }}>{diaryComments.length}</Typography>
       </Box>
       <Popover
         open={Boolean(anchorEl)}
@@ -273,16 +287,16 @@ const DiaryCard = (props: diaryCardProps) => {
         }}
         disableAutoFocus={true}
       >
-        <Link href={`/${props.userName}`}>
+        <Link href={`/${userName}`}>
           <ProfileHoverCard
-            userId={props.userId}
-            userName={props.userName}
-            userFirstName={props.userFirstName}
-            userLastName={props.userLastName}
-            userCountry={props.userCountry}
-            userUni={props.userUni}
-            userBio={props.userBio}
-            userImage={props.userImage}
+            userId={userId}
+            userName={userName}
+            userFirstName={userFirstName}
+            userLastName={userLastName}
+            userCountry={userCountry}
+            userUni={userUni}
+            userBio={userBio}
+            userImage={userImage}
             handleClose={handleClose}
           />
         </Link>
@@ -304,11 +318,11 @@ const DiaryCard = (props: diaryCardProps) => {
             borderRadius: 2,
           }}
         >
-          <LikesModal id={props.id} />
+          <LikesModal id={id} />
         </Box>
       </Modal>
     </>
   )
 }
 
-export default DiaryCard
+export default Diary
