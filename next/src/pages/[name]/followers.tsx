@@ -19,8 +19,9 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
-import Layout from '@/components/ProfileLayout'
 import { useUserState } from '@/hooks/useGlobalState'
+import { useRequireSignedIn } from '@/hooks/useRequireSignedIn'
+import Layout from '@/layout/profileLayout'
 import { fetcher } from '@/utils'
 const imageCss = css({ marginTop: '4px' })
 
@@ -36,14 +37,15 @@ type Followers = {
   id: number
   name: string
   image: {
-    url: string
+    url: string | null
   }
-  country: string
-  uni: string
-  bio: string
+  country: string | null
+  uni: string | null
+  bio: string | null
 }
 
 const Followers: NextPage = () => {
+  useRequireSignedIn()
   const router = useRouter()
   const [user, setUser] = useUserState()
   const page = 'page' in router.query ? Number(router.query.page) : 1

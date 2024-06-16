@@ -1,13 +1,13 @@
-import { Box, Grid, Pagination, Divider } from '@mui/material'
+import { Box, Grid, Pagination, Divider, Typography } from '@mui/material'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
-import DiaryCard from '@/components/DiaryCard'
+import Diary from '@/components/Diary'
 import Error from '@/components/Error'
-import Layout from '@/components/HomeLayout'
 import Loading from '@/components/Loading'
+import Layout from '@/layout/homeLayout'
 import { fetcher } from '@/utils'
 
 type DiaryProps = {
@@ -15,7 +15,7 @@ type DiaryProps = {
   title: string
   content: string
   image: {
-    url: string
+    url: string | null
   }
   wordCount: number
   day: string
@@ -26,41 +26,17 @@ type DiaryProps = {
   user: {
     id: number
     name: string
-    first_name: string
-    last_name: string
-    country: string
-    uni: string
-    bio: string
+    first_name: string | null
+    last_name: string | null
+    country: string | null
+    uni: string | null
+    bio: string | null
     image: {
-      url: string
+      url: string | null
     }
   }
-  diaries: Diary[]
   favorites: { user_id: number }[]
   diaryComments: object[]
-}
-
-type Diary = {
-  id: string
-  title: string
-  content: string
-  image: { url: string }
-  wordCount: number
-  day: number
-  monthName: string
-  year: number
-  wDay: string
-  user: {
-    id: string
-    name: string
-    country: string
-    uni: string
-    bio: string
-    image: { url: string }
-  }
-  status: string
-  favorites: number
-  diaryComments: number
 }
 
 const Index: NextPage = () => {
@@ -68,11 +44,11 @@ const Index: NextPage = () => {
   const page = 'page' in router.query ? Number(router.query.page) : 1
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/diaries/?page=' + page
   const { data, error } = useSWR(url, fetcher)
+
   if (error) return <Error />
   if (!data) return <Loading />
 
   const diaries = camelcaseKeys(data.diaries)
-
   const meta = camelcaseKeys(data.meta)
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -81,11 +57,16 @@ const Index: NextPage = () => {
 
   return (
     <Layout pageUrl={'/'}>
-      <Grid container spacing={2}>
+      {diaries.length === 0 && (
+        <Typography sx={{ textAlign: 'center', color: 'gray', my: 4 }}>
+          No posts
+        </Typography>
+      )}
+      <Grid container>
         {diaries.map((diary: DiaryProps, i: number) => (
           <Grid key={i} item xs={12} md={12}>
             <Link href={'/diaries/' + diary.id}>
-              <DiaryCard
+              <Diary
                 id={diary.id}
                 title={diary.title}
                 content={diary.content}

@@ -41,7 +41,7 @@ type DiaryProps = {
 type DiaryFormData = {
   title: string
   content: string
-  image: string
+  image: string | undefined
 }
 
 const CurrentDiariesEdit: NextPage = () => {

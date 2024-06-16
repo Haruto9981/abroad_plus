@@ -18,12 +18,12 @@ import { useUserState } from '@/hooks/useGlobalState'
 type ProfileHoverCardProps = {
   userId: number
   userName: string
-  userFirstName: string
-  userLastName: string
-  userCountry: string
-  userUni: string
-  userBio: string
-  userImage: string
+  userFirstName: string | null
+  userLastName: string | null
+  userCountry: string | null
+  userUni: string | null
+  userBio: string | null
+  userImage: string | null
   handleClose: React.MouseEventHandler<HTMLDivElement>
 }
 const imageCss = css({ marginTop: '4px' })

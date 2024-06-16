@@ -4,18 +4,19 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
-import DiaryCard from '@/components/DiaryCard'
+import Diary from '@/components/Diary'
 import Error from '@/components/Error'
-import Layout from '@/components/HomeLayout'
 import Loading from '@/components/Loading'
+import { useRequireSignedIn } from '@/hooks/useRequireSignedIn'
+import Layout from '@/layout/homeLayout'
 import { fetcher } from '@/utils'
 
 type DiaryProps = {
-  id: number
+  id: string
   title: string
   content: string
   image: {
-    url: string
+    url: string | null
   }
   wordCount: number
   day: string
@@ -26,13 +27,13 @@ type DiaryProps = {
   user: {
     id: number
     name: string
-    first_name: string
-    last_name: string
-    country: string
-    uni: string
-    bio: string
+    first_name: string | null
+    last_name: string | null
+    country: string | null
+    uni: string | null
+    bio: string | null
     image: {
-      url: string
+      url: string | null
     }
   }
   favorites: { user_id: number }[]
@@ -40,6 +41,7 @@ type DiaryProps = {
 }
 
 const Index: NextPage = () => {
+  useRequireSignedIn()
   const router = useRouter()
   const page = 'page' in router.query ? Number(router.query.page) : 1
   const url =
@@ -62,7 +64,6 @@ const Index: NextPage = () => {
     )
 
   const diaries = camelcaseKeys(data.diaries)
-
   const meta = camelcaseKeys(data.meta)
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) =>
@@ -71,15 +72,15 @@ const Index: NextPage = () => {
   return (
     <Layout pageUrl={'/following_diaries'}>
       {diaries.length === 0 && (
-        <Typography sx={{ textAlign: 'center', color: 'gray', my: 4 }}>
+        <Typography sx={{ textAlign: 'center', color: 'gray', mt: 4, mb: 2 }}>
           No posts
         </Typography>
       )}
-      <Grid container spacing={2}>
+      <Grid container>
         {diaries.map((diary: DiaryProps, i: number) => (
           <Grid key={i} item xs={12} md={12}>
             <Link href={'/diaries/' + diary.id}>
-              <DiaryCard
+              <Diary
                 id={diary.id}
                 title={diary.title}
                 content={diary.content}
