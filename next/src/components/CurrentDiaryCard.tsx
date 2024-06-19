@@ -171,7 +171,7 @@ const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
           >
             {/* なぜかImageだとうまく画像を読み込めない。nextのpublicから探してるっぽい。style.cssからレスポンシブデザイン適応 */}
             <img // eslint-disable-line
-              alt="日記"
+              alt="日記画像"
               src={props.image}
               className="image"
             />
