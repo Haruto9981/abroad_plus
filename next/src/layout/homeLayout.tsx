@@ -14,7 +14,7 @@ const Layout = ({ children, pageUrl }: LayoutProps) => {
   const [user] = useUserState()
 
   const getDateDifference = (currentDate: Date, targetDate: Date) => {
-    const diffTime = currentDate.getTime() - targetDate.getTime()
+    const diffTime = targetDate.getTime() - currentDate.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
     return diffDays
   }

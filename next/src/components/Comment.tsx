@@ -43,13 +43,13 @@ type CommentProps = {
   user: {
     id: number
     name: string
-    first_name: string | null
-    last_name: string | null
-    country: string | null
-    uni: string | null
-    bio: string | null
+    first_name: string
+    last_name: string
+    country: string
+    uni: string
+    bio: string
     image: {
-      url: string | null
+      url: string
     }
   }
 }

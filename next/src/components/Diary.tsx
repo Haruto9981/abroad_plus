@@ -25,7 +25,7 @@ type diaryProps = {
   id: string
   title: string
   content: string
-  image: string | null
+  image: string
   wordCount: number
   day: string
   month: string
@@ -33,12 +33,12 @@ type diaryProps = {
   wDay: string
   userId: number
   userName: string
-  userFirstName: string | null
-  userLastName: string | null
-  userCountry: string | null
-  userUni: string | null
-  userBio: string | null
-  userImage: string | null
+  userFirstName: string
+  userLastName: string
+  userCountry: string
+  userUni: string
+  userBio: string
+  userImage: string
   favorites: { user_id: number }[]
   diaryComments: Array<object>
 }

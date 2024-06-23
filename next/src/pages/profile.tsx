@@ -63,6 +63,8 @@ const Profile: NextPage = () => {
   const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/user'
   const { data, error } = useSWR(user.isSignedIn ? url : null, fetcher)
 
+  console.log(data)
+
   const profile: profileProps = useMemo(() => {
     if (!data) {
       return {
@@ -70,19 +72,19 @@ const Profile: NextPage = () => {
         last_name: '',
         country: '',
         uni: '',
-        start_date: '',
-        end_date: '',
+        start_date: null,
+        end_date: null,
         bio: '',
       }
     }
     return {
-      first_name: data.first_name == null ? '' : data.first_name,
-      last_name: data.last_name == null ? '' : data.last_name,
-      country: data.country == null ? '' : data.country,
-      uni: data.uni == null ? '' : data.uni,
+      first_name: data.first_name == '' ? '' : data.first_name,
+      last_name: data.last_name == '' ? '' : data.last_name,
+      country: data.country == '' ? '' : data.country,
+      uni: data.uni == '' ? '' : data.uni,
       start_date: data.start_date == null ? '' : data.start_date,
       end_date: data.end_date == null ? '' : data.end_date,
-      bio: data.bio == null ? '' : data.bio,
+      bio: data.bio == '' ? '' : data.bio,
     }
   }, [data])
 

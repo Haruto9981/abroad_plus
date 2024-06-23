@@ -22,12 +22,12 @@ type profileCardProps = {
   name: string
   firstName: string
   lastName: string
-  country: string | null
-  uni: string | null
-  bio: string | null
-  startDate: string | null
-  endDate: string | null
-  image: string | null
+  country: string
+  uni: string
+  bio: string
+  startDate: string
+  endDate: string
+  image: string
   totalDiariesCount: number
   totalLikesCount: number
   following: object[]
@@ -155,11 +155,9 @@ const ProfileCard = ({
 
           <Box>
             {startDate && endDate && (
-              <Typography
-                sx={{ display: 'flex', justifyContent: 'center', my: 2 }}
-              >
+              <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
                 {startDate} ~ {endDate}
-              </Typography>
+              </Box>
             )}
             {/* currentUserのHome画面のみで表示 */}
             {startDateDifference && endDateDifference && (

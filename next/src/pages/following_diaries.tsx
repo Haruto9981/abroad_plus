@@ -16,7 +16,7 @@ type DiaryProps = {
   title: string
   content: string
   image: {
-    url: string | null
+    url: string
   }
   wordCount: number
   day: string
@@ -27,13 +27,13 @@ type DiaryProps = {
   user: {
     id: number
     name: string
-    first_name: string | null
-    last_name: string | null
-    country: string | null
-    uni: string | null
-    bio: string | null
+    first_name: string
+    last_name: string
+    country: string
+    uni: string
+    bio: string
     image: {
-      url: string | null
+      url: string
     }
   }
   favorites: { user_id: number }[]

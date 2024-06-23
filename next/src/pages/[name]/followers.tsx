@@ -34,11 +34,11 @@ type Followers = {
   id: number
   name: string
   image: {
-    url: string | null
+    url: string
   }
-  country: string | null
-  uni: string | null
-  bio: string | null
+  country: string
+  uni: string
+  bio: string
 }
 
 const Followers: NextPage = () => {
