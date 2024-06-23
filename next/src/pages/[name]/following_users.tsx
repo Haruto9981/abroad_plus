@@ -36,9 +36,9 @@ interface Following {
   image: {
     url: string
   }
-  country: string | null
-  uni: string | null
-  bio: string | null
+  country: string
+  uni: string
+  bio: string
 }
 
 const Following: NextPage = () => {

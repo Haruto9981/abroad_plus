@@ -22,12 +22,12 @@ import {
 type ProfileHoverCardProps = {
   userId: number
   userName: string
-  userFirstName: string | null
-  userLastName: string | null
-  userCountry: string | null
-  userUni: string | null
-  userBio: string | null
-  userImage: string | null
+  userFirstName: string
+  userLastName: string
+  userCountry: string
+  userUni: string
+  userBio: string
+  userImage: string
   handleClose: React.MouseEventHandler<HTMLDivElement>
 }
 const imageCss = css({ marginTop: '4px' })
