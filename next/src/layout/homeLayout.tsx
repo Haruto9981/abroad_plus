@@ -2,6 +2,7 @@ import { Box, Container, Card, Divider, CardContent } from '@mui/material'
 import Tabs from '@mui/material/Tabs'
 import LinkTab from '@/components/HomeLinkTab'
 import ProfileCard from '@/components/ProfileCard'
+import RecommendedUser from '@/components/RecommendedUser'
 import { useUserState } from '@/hooks/useGlobalState'
 import { styles } from '@/styles'
 
@@ -35,8 +36,7 @@ const Layout = ({ children, pageUrl }: LayoutProps) => {
       sx={{ backgroundColor: '#ffe0b6', display: 'flex' }}
     >
       <Container
-        maxWidth="xs"
-        sx={{ pt: 6, display: { xs: 'none', lg: 'block' } }}
+        sx={{ width: '400px', pt: 6, display: { xs: 'none', lg: 'block' } }}
       >
         <ProfileCard
           id={user.id}
@@ -70,6 +70,15 @@ const Layout = ({ children, pageUrl }: LayoutProps) => {
             </Tabs>
             <Divider sx={{ mb: 2 }} />
             <Box>{children}</Box>
+          </CardContent>
+        </Card>
+      </Container>
+      <Container
+        sx={{ width: '400px', py: 6, display: { xs: 'none', lg: 'block' } }}
+      >
+        <Card>
+          <CardContent>
+            <RecommendedUser />
           </CardContent>
         </Card>
       </Container>
