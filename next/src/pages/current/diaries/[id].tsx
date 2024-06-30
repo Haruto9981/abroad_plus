@@ -160,9 +160,11 @@ const CurrentDiaryDetail: NextPage = () => {
             favorites={diary.favorites}
             diaryComments={diary.diaryComments}
           />
-          <Box sx={{ my: 4 }}>
-            <Comment id={diary.id} />
-          </Box>
+          {diary.status === 'shared' && (
+            <Box sx={{ my: 4 }}>
+              <Comment id={diary.id} />
+            </Box>
+          )}
           <Box sx={{ mt: 4, textAlign: 'right' }}>
             <LoadingButton
               color="warning"

@@ -55,13 +55,6 @@ type followers = {
 }
 
 const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/current/relationships'
-const headers = {
-  'Content-Type': 'application/json',
-  'access-token':
-    typeof window !== 'undefined' ? localStorage.getItem('access-token') : null,
-  client: typeof window !== 'undefined' ? localStorage.getItem('client') : null,
-  uid: typeof window !== 'undefined' ? localStorage.getItem('uid') : null,
-}
 
 export const handleFollowChange = (
   id: number,
@@ -70,6 +63,12 @@ export const handleFollowChange = (
   setUser: (value: userStateType) => void,
 ) => {
   e.preventDefault()
+  const headers = {
+    'Content-Type': 'application/json',
+    'access-token': localStorage.getItem('access-token'),
+    client: localStorage.getItem('client'),
+    uid: localStorage.getItem('uid'),
+  }
   const data = { followed_id: id }
   axios({
     method: 'POST',
@@ -95,6 +94,12 @@ export const handleUnfollowChange = (
   setUser: (value: userStateType) => void,
 ) => {
   e.preventDefault()
+  const headers = {
+    'Content-Type': 'application/json',
+    'access-token': localStorage.getItem('access-token'),
+    client: localStorage.getItem('client'),
+    uid: localStorage.getItem('uid'),
+  }
   const data = { followed_id: id }
   axios({ method: 'DELETE', url: url, data: data, headers: headers })
     .then(() => {

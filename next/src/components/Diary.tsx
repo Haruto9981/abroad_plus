@@ -287,19 +287,17 @@ const Diary = ({
         }}
         disableAutoFocus={true}
       >
-        <Link href={`/${userName}`}>
-          <ProfileHoverCard
-            userId={userId}
-            userName={userName}
-            userFirstName={userFirstName}
-            userLastName={userLastName}
-            userCountry={userCountry}
-            userUni={userUni}
-            userBio={userBio}
-            userImage={userImage}
-            handleClose={handleClose}
-          />
-        </Link>
+        <ProfileHoverCard
+          userId={userId}
+          userName={userName}
+          userFirstName={userFirstName}
+          userLastName={userLastName}
+          userCountry={userCountry}
+          userUni={userUni}
+          userBio={userBio}
+          userImage={userImage}
+          handleClose={handleClose}
+        />
       </Popover>
       <Modal open={open} onClose={handleModalClose}>
         <Box
