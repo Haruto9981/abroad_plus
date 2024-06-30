@@ -54,7 +54,6 @@ ActiveRecord::Base.transaction do
   user14 = User.create!(name: "haruto_aketa12321", email: "test14@example.com", password: "password", confirmed_at: Time.current,
                         image: File.open("./public/images/827120BA-FD2A-48AF-9F8C-2EE0105BF5AE_4_5005_c.jpeg"),
                         country: "UK", uni: "Aston", bio: "Hello!")
-                      
 
   user15 = User.create!(name: "Ryo_98_tako", email: "test15@example.com", password: "password", confirmed_at: Time.current,
                         image: File.open("./public/images/6E633585-E231-45D0-92BF-83A0CC03E3DC_1_105_c.jpeg"),
@@ -71,7 +70,7 @@ ActiveRecord::Base.transaction do
   user18 = User.create!(name: "haruto_aketa321", email: "test18@example.com", password: "password", confirmed_at: Time.current,
                         image: File.open("./public/images/80550F09-3687-486F-BD8F-34A4E99FF052_4_5005_c.jpeg"),
                         country: "UK", uni: "Canterbury", bio: "Hello!")
-                      
+
   user19 = User.create!(name: "aya11", email: "test19@example.com", password: "password", confirmed_at: Time.current,
                         image: File.open("./public/images/0477E005-3F30-4EE5-A073-6582185CE9E7_4_5005_c.jpeg"),
                         country: "Australia", uni: "Queensland", bio: "Hello!")
@@ -142,4 +141,3 @@ ActiveRecord::Base.transaction do
     Favorite.create!(user:, diary_id: "1O2GvHTXc_0d-g")
   end
 end
-
