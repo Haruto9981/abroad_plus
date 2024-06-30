@@ -30,6 +30,7 @@ type diaryIdProps = {
 }
 
 interface Favorite {
+  userId: number
   user: {
     id: number
     name: string
@@ -51,7 +52,23 @@ const LikesModal = (props: diaryIdProps) => {
   if (error) return <Error />
   if (!data) return <Loading />
 
-  const favorites = camelcaseKeys(data)
+  let favorites = camelcaseKeys(data)
+
+  const moveUserToFront = () => {
+    const index = favorites.findIndex(
+      (favorite: Favorite) => favorite.userId === user.id,
+    )
+
+    if (index !== -1) {
+      const [matchedElement] = favorites.splice(index, 1)
+
+      favorites.unshift(matchedElement)
+    }
+
+    return favorites
+  }
+
+  favorites = moveUserToFront()
 
   return (
     <Box>

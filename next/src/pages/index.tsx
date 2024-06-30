@@ -46,7 +46,12 @@ const Index: NextPage = () => {
   const { data, error } = useSWR(url, fetcher)
 
   if (error) return <Error />
-  if (!data) return <Loading />
+  if (!data)
+    return (
+      <Layout pageUrl="/">
+        <Loading />
+      </Layout>
+    )
 
   const diaries = camelcaseKeys(data.diaries)
   const meta = camelcaseKeys(data.meta)

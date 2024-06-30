@@ -50,15 +50,10 @@ const Index: NextPage = () => {
     page
   const { data, error } = useSWR(url, fetcher)
 
-  if (error)
-    return (
-      <Layout pageUrl={'/following_diaries'}>
-        <Error />
-      </Layout>
-    )
+  if (error) return <Error />
   if (!data)
     return (
-      <Layout pageUrl={'/following_diaries'}>
+      <Layout pageUrl="/following_diaries">
         <Loading />
       </Layout>
     )
