@@ -1,15 +1,7 @@
 import CommentIcon from '@mui/icons-material/Comment'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import {
-  Box,
-  Card,
-  CardContent,
-  IconButton,
-  Typography,
-  Tooltip,
-  Modal,
-} from '@mui/material'
+import { Box, IconButton, Typography, Tooltip, Modal } from '@mui/material'
 import axios, { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { useState, useEffect, MouseEventHandler } from 'react'
@@ -97,153 +89,149 @@ const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
   }
 
   return (
-    <Card sx={{ borderRadius: 2 }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex' }}>
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: 40,
-                  mr: 1,
-                  fontWeight: 'bold',
-                  color: '#f15922',
-                }}
-              >
-                {props.day}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography sx={{ fontSize: 16, mr: 1 }}>
-                {props.month}
-              </Typography>
-              <Typography sx={{ fontSize: 16, mr: 1 }}>
-                {props.year} {props.wDay}
-              </Typography>
-            </Box>
+    <>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex' }}>
+          <Box>
+            <Typography
+              sx={{
+                fontSize: 40,
+                mr: 1,
+                fontWeight: 'bold',
+                color: '#f15922',
+              }}
+            >
+              {props.day}
+            </Typography>
           </Box>
-          {props.status === 'personal' && (
-            <Box
-              sx={{
-                display: 'inline',
-                fontSize: 15,
-                textAlign: 'center',
-                border: '1px solid #f15922',
-                pt: 1,
-                px: 1,
-                borderRadius: 1,
-                color: '#f15922',
-                fontWeight: 'bold',
-                mb: 2,
-              }}
-            >
-              {props.status}
-            </Box>
-          )}
-
-          {props.status === 'shared' && (
-            <Box
-              sx={{
-                display: 'inline',
-                fontSize: 15,
-                textAlign: 'center',
-                border: '1px solid #f15922',
-                pt: 1,
-                px: 1,
-                borderRadius: 1,
-                color: '#f15922',
-                fontWeight: 'bold',
-                mb: 2,
-              }}
-            >
-              {props.status}
-            </Box>
-          )}
+          <Box>
+            <Typography sx={{ fontSize: 16, mr: 1 }}>{props.month}</Typography>
+            <Typography sx={{ fontSize: 16, mr: 1 }}>
+              {props.year} {props.wDay}
+            </Typography>
+          </Box>
         </Box>
-        {props.image && (
+        {props.status === 'personal' && (
           <Box
             sx={{
-              my: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {/* なぜかImageだとうまく画像を読み込めない。nextのpublicから探してるっぽい。style.cssからレスポンシブデザイン適応 */}
-            <img // eslint-disable-line
-              alt="日記"
-              src={props.image}
-              className="image"
-            />
-          </Box>
-        )}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 1 }}>
-          <Typography
-            component="h3"
-            sx={{
-              fontSize: 20,
+              display: 'inline',
+              fontSize: 15,
+              textAlign: 'center',
+              border: '1px solid #f15922',
+              pt: 1,
+              px: 1,
+              borderRadius: 1,
+              color: '#f15922',
               fontWeight: 'bold',
-              lineHeight: 1.5,
+              mb: 2,
             }}
           >
-            {router.pathname === '/current/diaries' &&
-              omit(props.title)(40)('...')}{' '}
-            {router.pathname !== '/current/diaries' && props.title}
-          </Typography>
-          <Typography>({props.wordCount} words)</Typography>
-        </Box>
-        <Typography>
-          {router.pathname === '/current/diaries' &&
-            omit(props.content)(295)('...')}{' '}
-          {router.pathname !== '/current/diaries' && props.content}
-        </Typography>
-        {props.status === 'shared' && (
-          <Box sx={{ display: 'flex' }}>
-            <Box>
-              {!isLiked && (
-                <IconButton onClick={handleLikedChange}>
-                  <FavoriteBorderIcon />
-                </IconButton>
-              )}
-              {isLiked && (
-                <IconButton onClick={handleDislikedChange}>
-                  <FavoriteIcon color="secondary" />
-                </IconButton>
-              )}
-            </Box>
-            <Tooltip title="Who likes">
-              <Typography sx={{ mt: 1, mr: 1.5 }} onClick={handleModalOpen}>
-                {LikedCount}
-              </Typography>
-            </Tooltip>
-            <IconButton>
-              <CommentIcon />
-            </IconButton>
-            <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
+            {props.status}
           </Box>
         )}
-        <Modal open={open} onClose={handleModalClose}>
+
+        {props.status === 'shared' && (
           <Box
             sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: { xs: 365, sm: 540 },
-              maxHeight: '60vh',
-              overflowY: 'auto',
-              bgcolor: 'background.paper',
-              border: '0.5px solid #000',
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 2,
+              display: 'inline',
+              fontSize: 15,
+              textAlign: 'center',
+              border: '1px solid #f15922',
+              pt: 1,
+              px: 1,
+              borderRadius: 1,
+              color: '#f15922',
+              fontWeight: 'bold',
+              mb: 2,
             }}
           >
-            <LikesModal id={props.id} />
+            {props.status}
           </Box>
-        </Modal>
-      </CardContent>
-    </Card>
+        )}
+      </Box>
+      {props.image && (
+        <Box
+          sx={{
+            my: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {/* なぜかImageだとうまく画像を読み込めない。nextのpublicから探してるっぽい。style.cssからレスポンシブデザイン適応 */}
+            <img // eslint-disable-line
+            alt="日記"
+            src={props.image}
+            className="image"
+          />
+        </Box>
+      )}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 1 }}>
+        <Typography
+          component="h3"
+          sx={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            lineHeight: 1.5,
+          }}
+        >
+          {router.pathname === '/current/diaries' &&
+            omit(props.title)(40)('...')}{' '}
+          {router.pathname !== '/current/diaries' && props.title}
+        </Typography>
+        <Typography>({props.wordCount} words)</Typography>
+      </Box>
+      <Typography>
+        {router.pathname === '/current/diaries' &&
+          omit(props.content)(295)('...')}{' '}
+        {router.pathname !== '/current/diaries' && props.content}
+      </Typography>
+      {props.status === 'shared' && (
+        <Box sx={{ display: 'flex' }}>
+          <Box>
+            {!isLiked && (
+              <IconButton onClick={handleLikedChange}>
+                <FavoriteBorderIcon />
+              </IconButton>
+            )}
+            {isLiked && (
+              <IconButton onClick={handleDislikedChange}>
+                <FavoriteIcon color="secondary" />
+              </IconButton>
+            )}
+          </Box>
+          <Tooltip title="Who likes">
+            <Typography sx={{ mt: 1, mr: 1.5 }} onClick={handleModalOpen}>
+              {LikedCount}
+            </Typography>
+          </Tooltip>
+          <IconButton>
+            <CommentIcon />
+          </IconButton>
+          <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
+        </Box>
+      )}
+      <Modal open={open} onClose={handleModalClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: { xs: 365, sm: 540 },
+            maxHeight: '60vh',
+            overflowY: 'auto',
+            bgcolor: 'background.paper',
+            border: '0.5px solid #000',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <LikesModal id={props.id} />
+        </Box>
+      </Modal>
+    </>
   )
 }
 
