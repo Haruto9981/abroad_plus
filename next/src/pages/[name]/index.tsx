@@ -77,6 +77,11 @@ const UserProfile: NextPage = () => {
     <Layout>
       <Typography sx={{ fontSize: 20, mb: 2 }}>Diaries</Typography>
       <Divider sx={{ my: 2 }} />
+      {diaries.length === 0 && (
+        <Typography sx={{ textAlign: 'center', color: 'gray', mt: 2 }}>
+          No diaries
+        </Typography>
+      )}
       <Grid container>
         {diaries.map((diary: DiaryProps, i: number) => (
           <Grid key={i} item xs={12} md={12}>
@@ -103,17 +108,21 @@ const UserProfile: NextPage = () => {
                 diaryComments={diary.diaryComments}
               />
             </Link>
-            <Divider sx={{ my: 2 }} />
           </Grid>
         ))}
       </Grid>
-      <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
-        <Pagination
-          count={meta.totalPages}
-          page={meta.currentPage}
-          onChange={handleChange}
-        />
-      </Box>
+      {diaries.length !== 0 && (
+        <>
+          <Divider sx={{ my: 2 }} />
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+            <Pagination
+              count={meta.totalPages}
+              page={meta.currentPage}
+              onChange={handleChange}
+            />
+          </Box>
+        </>
+      )}
     </Layout>
   )
 }

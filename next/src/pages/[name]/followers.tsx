@@ -76,14 +76,14 @@ const Followers: NextPage = () => {
   return (
     <Layout>
       <Typography sx={{ fontSize: 20, mb: 2 }}>Followers</Typography>
+      <Divider sx={{ mt: 2 }} />
       {followers.length === 0 && (
-        <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
+        <Typography sx={{ textAlign: 'center', color: 'gray', mt: 2 }}>
           No followers
         </Typography>
       )}
       {followers.map((follower: Followers, i: number) => (
         <>
-          <Divider sx={{ mt: 2 }} />
           <Box key={i} sx={{ display: 'flex', mt: 1 }}>
             <Link href={`/${follower.name}`}>
               <IconButton>
