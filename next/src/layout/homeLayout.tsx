@@ -36,7 +36,7 @@ const Layout = ({ children, pageUrl }: LayoutProps) => {
       sx={{ backgroundColor: '#ffe0b6', display: 'flex' }}
     >
       <Container
-        sx={{ width: '400px', pt: 6, display: { xs: 'none', lg: 'block' } }}
+        sx={{ width: '400px', pt: 4, display: { xs: 'none', lg: 'block' } }}
       >
         <ProfileCard
           id={user.id}
@@ -57,7 +57,7 @@ const Layout = ({ children, pageUrl }: LayoutProps) => {
           endDateDifference={endDateDifference}
         />
       </Container>
-      <Container maxWidth="sm" sx={{ py: 6 }}>
+      <Container maxWidth="sm" sx={{ py: 4 }}>
         <Card sx={{ borderRadius: 2 }}>
           <CardContent>
             <Tabs value={pageUrl || false} centered>
@@ -74,7 +74,7 @@ const Layout = ({ children, pageUrl }: LayoutProps) => {
         </Card>
       </Container>
       <Container
-        sx={{ width: '400px', py: 6, display: { xs: 'none', lg: 'block' } }}
+        sx={{ width: '400px', py: 4, display: { xs: 'none', lg: 'block' } }}
       >
         <Card>
           <CardContent>
