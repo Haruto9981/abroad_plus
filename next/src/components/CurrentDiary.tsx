@@ -26,7 +26,7 @@ type CurrentDiaryProps = {
 const omit = (text: string) => (len: number) => (ellipsis: string) =>
   text.length >= len ? text.slice(0, len - ellipsis.length) + ellipsis : text
 
-const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
+const CurrentUserDiary = (props: CurrentDiaryProps) => {
   const router = useRouter()
   const [user] = useUserState()
   const [isLiked, setIsLiked] = useState<boolean>(false)
@@ -235,4 +235,4 @@ const CurrentUserDiaryCard = (props: CurrentDiaryProps) => {
   )
 }
 
-export default CurrentUserDiaryCard
+export default CurrentUserDiary

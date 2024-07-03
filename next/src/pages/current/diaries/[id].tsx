@@ -21,7 +21,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
 import Comment from '@/components/Comment'
-import CurrentUserDiaryCard from '@/components/CurrentDiaryCard'
+import CurrentUserDiary from '@/components/CurrentDiary'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { useUserState, useSnackbarState } from '@/hooks/useGlobalState'
@@ -150,7 +150,7 @@ const CurrentDiaryDetail: NextPage = () => {
           </Box>
           <Card sx={{ borderRadius: 2 }}>
             <CardContent>
-              <CurrentUserDiaryCard
+              <CurrentUserDiary
                 id={diary.id}
                 title={diary.title}
                 content={diary.content}

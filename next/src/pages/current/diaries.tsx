@@ -17,7 +17,7 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import useSWR from 'swr'
-import CurrentUserDiaryCard from '@/components/CurrentDiaryCard'
+import CurrentUserDiary from '@/components/CurrentDiary'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { useUserState } from '@/hooks/useGlobalState'
@@ -359,7 +359,7 @@ const CurrentDiaries: NextPage = () => {
           </LocalizationProvider>
         </Container>
         <Grid container spacing={2}>
-          <Container maxWidth="sm">
+          <Container>
             {!diariesInSpecificMonth && !diariesInSpecificDay && (
               <Card sx={{ borderRadius: 2 }}>
                 <CardContent>
@@ -381,7 +381,7 @@ const CurrentDiaries: NextPage = () => {
                         (diary: CurrentDiaryProps, i: number) => (
                           <Grid key={i} item xs={12} md={12}>
                             <Link href={'/current/diaries/' + diary.id}>
-                              <CurrentUserDiaryCard
+                              <CurrentUserDiary
                                 id={diary.id}
                                 title={diary.title}
                                 content={diary.content}
@@ -435,7 +435,7 @@ const CurrentDiaries: NextPage = () => {
                         (diary: CurrentDiaryProps, i: number) => (
                           <Grid key={i} item xs={12} md={12}>
                             <Link href={'/current/diaries/' + diary.id}>
-                              <CurrentUserDiaryCard
+                              <CurrentUserDiary
                                 id={diary.id}
                                 title={diary.title}
                                 content={diary.content}
@@ -490,7 +490,7 @@ const CurrentDiaries: NextPage = () => {
                         (diary: CurrentDiaryProps, i: number) => (
                           <Grid key={i} item xs={12} md={12}>
                             <Link href={'/current/diaries/' + diary.id}>
-                              <CurrentUserDiaryCard
+                              <CurrentUserDiary
                                 id={diary.id}
                                 title={diary.title}
                                 content={diary.content}
@@ -517,14 +517,24 @@ const CurrentDiaries: NextPage = () => {
           </Container>
         </Grid>
       </Container>
+      <Box></Box>
       <Container
         maxWidth="sm"
-        sx={{ mt: 4, display: { xs: 'none', lg: 'block' } }}
+        sx={{
+          mt: 4,
+          display: { xs: 'none', lg: 'block' },
+        }}
       >
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Card sx={{ borderRadius: 2 }}>
+          <Card
+            sx={{
+              borderRadius: 2,
+              position: 'fixed',
+              minWidth: '550px',
+            }}
+          >
             <CardContent sx={{ p: 4 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between  ' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography sx={{ mt: 2, fontSize: 20 }}>
                   Diary Calender
                 </Typography>
