@@ -82,14 +82,14 @@ ActiveRecord::Base.transaction do
   require "date"
 
   start_date = Date.new(2024, 5, 15)
-  end_date = Date.new(2024, 7, 15)
+  end_date = Date.new(2024, 7, 28)
 
   10.times do |_i|
     Diary.create!(title: "Had ramen",
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user1,
+                  text text text text text text text text text text text text text text", word_count: rand(50..200), status: :shared, user: user1,
                   image: open("./public/images/sample#{_i}.jpeg"),
                   created_at: rand(start_date..end_date),
                   updated_at: rand(start_date..end_date))
@@ -97,7 +97,7 @@ ActiveRecord::Base.transaction do
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 18, status: :shared, user: user2,
+                  text text text text text text text text text text text text text text", word_count: rand(50..200), status: :shared, user: user2,
                   image: open("./public/images/sample#{_i}.jpeg"),
                   created_at: rand(start_date..end_date),
                   updated_at: rand(start_date..end_date))
@@ -105,7 +105,7 @@ ActiveRecord::Base.transaction do
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user3,
+                  text text text text text text text text text text text text text text", word_count: rand(50..200), status: :shared, user: user3,
                   image: open("./public/images/sample#{_i}.jpeg"),
                   created_at: rand(start_date..end_date),
                   updated_at: rand(start_date..end_date))
@@ -113,7 +113,7 @@ ActiveRecord::Base.transaction do
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user4,
+                  text text text text text text text text text text text text text text", word_count: rand(50..200), status: :shared, user: user4,
                   image: open("./public/images/sample#{_i}.jpeg"),
                   created_at: rand(start_date..end_date),
                   updated_at: rand(start_date..end_date))
@@ -121,8 +121,22 @@ ActiveRecord::Base.transaction do
                   content: "text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
                   text text text text text text text text text text text text text text
-                  text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user5,
+                  text text text text text text text text text text text text text text", word_count: rand(50..200), status: :shared, user: user5,
                   image: open("./public/images/sample#{_i}.jpeg"),
+                  created_at: rand(start_date..end_date),
+                  updated_at: rand(start_date..end_date))
+  end
+
+  start_date = Date.new(2023, 7, 15)
+  end_date = Date.new(2024, 7, 28)
+
+  150.times do |_i|
+    Diary.create!(title: "Had ramen",
+                  content: "text text text text text text text text text text text text
+                  text text text text text text text text text text text text text text
+                  text text text text text text text text text text text text text text
+                  text text text text text text text text text text text text text text", word_count: rand(50..200), status: :shared, user: user5,
+                  image: open("./public/images/sample1.jpeg"),
                   created_at: rand(start_date..end_date),
                   updated_at: rand(start_date..end_date))
   end
@@ -131,7 +145,7 @@ ActiveRecord::Base.transaction do
                 content: "text text text text text text text text text text text text
                 text text text text text text text text text text text text text text
                 text text text text text text text text text text text text text text
-                text text text text text text text text text text text text text text", word_count: 54, status: :shared, user: user5,
+                text text text text text text text text text text text text text text", word_count: rand(50..200), status: :shared, user: user5,
                 image: open("./public/images/sample1.jpeg"))
 
   users = [user1, user2, user3, user4, user5, user6, user7, user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18, user19,
