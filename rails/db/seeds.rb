@@ -82,7 +82,7 @@ ActiveRecord::Base.transaction do
   require "date"
 
   start_date = Date.new(2024, 5, 15)
-  end_date = Date.new(2024, 6, 1)
+  end_date = Date.new(2024, 7, 15)
 
   10.times do |_i|
     Diary.create!(title: "Had ramen",
