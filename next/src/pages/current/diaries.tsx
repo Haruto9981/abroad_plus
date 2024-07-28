@@ -126,10 +126,10 @@ const CurrentDiaries: NextPage = () => {
     const isClicked = clickedDate && dayjs(day).isSame(clickedDate, 'day')
 
     const cellStyle = {
-      backgroundColor: isSpecificDay ? '#f15922' : '#f5f5f5',
-      border: '1px solid transparent',
+      backgroundColor: isSpecificDay ? 'rgba(255, 170, 0, 0.3)' : '#f5f5f5',
+      border: '2px solid transparent',
       cursor: 'pointer',
-      ...(isClicked && { borderColor: 'black' }),
+      ...(isClicked && { borderColor: '#FF6600' }),
     }
 
     return (

@@ -1,5 +1,7 @@
-import { Button, Box, Typography } from '@mui/material'
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker'
+import { Button, Box } from '@mui/material'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,11 +10,18 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import dayjs from 'dayjs'
 import { useState } from 'react'
 import { Bar } from 'react-chartjs-2'
 
 export const ChartBar = ({ diaries }) => {
-  const [range, setRange] = useState(7)
+  const today = new Date()
+  const initialStartDate = new Date(today.getTime())
+  initialStartDate.setDate(today.getDate() - 7)
+
+  const [startDate, setStartDate] = useState(initialStartDate)
+  const [endDate, setEndDate] = useState(today)
+
   ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
   const options = {
@@ -32,7 +41,7 @@ export const ChartBar = ({ diaries }) => {
   }
   const getDates = (startDate: Date, endDate: Date) => {
     const dateArray = []
-    const currentDate = startDate
+    const currentDate = new Date(startDate.getTime())
 
     while (currentDate <= endDate) {
       dateArray.push(formatDate(currentDate))
@@ -50,8 +59,6 @@ export const ChartBar = ({ diaries }) => {
     return stringDates
   }
 
-  const startDate = new Date(new Date().setDate(new Date().getDate() - range))
-  const endDate = new Date()
   const labels = getDates(startDate, endDate)
   const diaryWrittenDates = getDiaryWrittenDates()
 
@@ -89,43 +96,124 @@ export const ChartBar = ({ diaries }) => {
       {
         label: 'Diary Word Count',
         data: wordCount,
-        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-        borderColor: 'rgba(255, 206, 86, 1)',
+        backgroundColor: 'rgba(255, 170, 0, 0.2)',
+        borderColor: 'rgba(255, 170, 0, 1)',
         borderWidth: 1,
       },
     ],
   }
 
   const handleChange = (type: string) => {
+    const today = new Date()
+    let startDate
+
     switch (type) {
       case '1w':
-        setRange(7)
+        startDate = new Date(today.getTime())
+        startDate.setDate(today.getDate() - 7)
         break
       case '1m':
-        setRange(30)
+        startDate = new Date(today.getTime())
+        startDate.setDate(today.getDate() - 30)
         break
       case '3m':
-        setRange(90)
+        startDate = new Date(today.getTime())
+        startDate.setDate(today.getDate() - 90)
         break
       case '6m':
-        setRange(180)
+        startDate = new Date(today.getTime())
+        startDate.setDate(today.getDate() - 180)
         break
       case '1y':
-        setRange(365)
+        startDate = new Date(today.getTime())
+        startDate.setDate(today.getDate() - 365)
         break
+      default:
+        return
+    }
+
+    setStartDate(startDate)
+    setEndDate(today)
+  }
+
+  const handleFromChange = (value: dayjs.Dayjs | null) => {
+    if (value) {
+      setStartDate(value.toDate())
+    }
+  }
+
+  const handleToChange = (value: dayjs.Dayjs | null) => {
+    if (value) {
+      setEndDate(value.toDate())
     }
   }
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 2 }}>
-        <Typography sx={{ fontSize: 28 }}>Word Count</Typography>
         <Box>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              format="YYYY-MM-DD"
+              label="From"
+              value={dayjs(startDate)}
+              sx={{ mx: 1 }}
+              onChange={(value) => {
+                handleFromChange(value)
+              }}
+              slotProps={{
+                day: {
+                  sx: {
+                    '&.MuiPickersDay-root.Mui-selected': {
+                      backgroundColor: '#FF6600',
+                    },
+                  },
+                },
+                desktopPaper: {
+                  sx: {
+                    '.MuiPickersYear-yearButton.Mui-selected': {
+                      backgroundColor: '#FF6600',
+                    },
+                  },
+                },
+              }}
+            />
+          </LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              format="YYYY-MM-DD"
+              label="To"
+              value={dayjs(endDate)}
+              sx={{ mx: 1 }}
+              onChange={(value) => {
+                handleToChange(value)
+              }}
+              slotProps={{
+                day: {
+                  sx: {
+                    '&.MuiPickersDay-root.Mui-selected': {
+                      backgroundColor: '#FF6600',
+                    },
+                  },
+                },
+                desktopPaper: {
+                  sx: {
+                    '.MuiPickersYear-yearButton.Mui-selected': {
+                      backgroundColor: '#FF6600',
+                    },
+                  },
+                },
+              }}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box sx={{ mt: 1, ml: 4 }}>
           <Button
             color="warning"
             variant="outlined"
             sx={{
+              color: 'black',
+              borderColor: '#c0c0c0',
               textTransform: 'none',
-              fontSize: 14,
               borderRadius: 2,
               boxShadow: 'none',
               mr: 1,
@@ -140,8 +228,10 @@ export const ChartBar = ({ diaries }) => {
             color="warning"
             variant="outlined"
             sx={{
+              color: 'black',
+              borderColor: '#c0c0c0',
               textTransform: 'none',
-              fontSize: 14,
+
               borderRadius: 2,
               boxShadow: 'none',
               mr: 1,
@@ -156,8 +246,10 @@ export const ChartBar = ({ diaries }) => {
             color="warning"
             variant="outlined"
             sx={{
+              color: 'black',
+              borderColor: '#c0c0c0',
               textTransform: 'none',
-              fontSize: 14,
+
               borderRadius: 2,
               boxShadow: 'none',
               mr: 1,
@@ -172,8 +264,9 @@ export const ChartBar = ({ diaries }) => {
             color="warning"
             variant="outlined"
             sx={{
+              color: 'black',
+              borderColor: '#c0c0c0',
               textTransform: 'none',
-              fontSize: 14,
               borderRadius: 2,
               boxShadow: 'none',
               mr: 1,
@@ -188,8 +281,9 @@ export const ChartBar = ({ diaries }) => {
             color="warning"
             variant="outlined"
             sx={{
+              color: 'black',
+              borderColor: '#c0c0c0',
               textTransform: 'none',
-              fontSize: 14,
               borderRadius: 2,
               boxShadow: 'none',
               mr: 1,
