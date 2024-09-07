@@ -108,12 +108,12 @@ const UserProfile: NextPage = () => {
                 diaryComments={diary.diaryComments}
               />
             </Link>
+            <Divider sx={{ my: 2 }} />
           </Grid>
         ))}
       </Grid>
       {diaries.length !== 0 && (
         <>
-          <Divider sx={{ my: 2 }} />
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
             <Pagination
               count={meta.totalPages}
