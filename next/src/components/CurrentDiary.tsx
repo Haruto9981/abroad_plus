@@ -1,7 +1,14 @@
 import CommentIcon from '@mui/icons-material/Comment'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import { Box, IconButton, Typography, Tooltip, Modal } from '@mui/material'
+import {
+  Box,
+  Button,
+  IconButton,
+  Typography,
+  Tooltip,
+  Modal,
+} from '@mui/material'
 import axios, { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { useState, useEffect, MouseEventHandler } from 'react'
@@ -32,6 +39,7 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [LikedCount, setLikedCount] = useState<number>(0)
   const [open, setOpen] = useState<boolean>(false)
+  const [translatedText, setTranslatedText] = useState('')
 
   useEffect(() => {
     const favorites = props.favorites
@@ -78,6 +86,22 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
       })
   }
 
+  const handleTranslation = (text: string) => {
+    const url = 'https://api-free.deepl.com/v2/translate'
+    const params = {
+      auth_key: process.env.NEXT_PUBLIC_DEEPL_KEY,
+      target_lang: 'JA',
+      text: text,
+    }
+    axios({ method: 'GET', url: url, params: params })
+      .then((res) => {
+        setTranslatedText(res.data.translations[0].text)
+      })
+      .catch((e: AxiosError<{ error: string }>) => {
+        console.log(e.message)
+      })
+  }
+
   const handleModalOpen: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
     setOpen(true)
@@ -87,6 +111,8 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
     e.preventDefault()
     setOpen(false)
   }
+
+  const isTopPage = router.pathname === '/current/diaries'
 
   return (
     <>
@@ -175,17 +201,28 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
             lineHeight: 1.5,
           }}
         >
-          {router.pathname === '/current/diaries' &&
-            omit(props.title)(40)('...')}{' '}
-          {router.pathname !== '/current/diaries' && props.title}
+          {isTopPage && omit(props.title)(40)('...')}{' '}
+          {!isTopPage && props.title}
         </Typography>
         <Typography>({props.wordCount} words)</Typography>
       </Box>
       <Typography>
-        {router.pathname === '/current/diaries' &&
-          omit(props.content)(295)('...')}{' '}
-        {router.pathname !== '/current/diaries' && props.content}
+        {isTopPage && omit(props.content)(295)('...')}{' '}
+        {!isTopPage && !translatedText && props.content}
+        {translatedText && translatedText}
       </Typography>
+      {!isTopPage && (
+        <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+          <Button
+            sx={{ color: 'gray', textTransform: 'none', fontSize: 14 }}
+            onClick={() => {
+              handleTranslation(props.content)
+            }}
+          >
+            see tralslation
+          </Button>
+        </Box>
+      )}
       {props.status === 'shared' && (
         <Box sx={{ display: 'flex' }}>
           <Box>
