@@ -73,7 +73,7 @@ const Comment = (props: diaryIdProps) => {
     props.id +
     '/diary_comments'
   const { data, error, mutate: mutateComments } = useSWR(url, fetcher)
-  const { handleSubmit, control } = useForm<CommentFormData>({
+  const { handleSubmit, control, reset } = useForm<CommentFormData>({
     defaultValues: { comment: '' },
   })
 
@@ -112,6 +112,7 @@ const Comment = (props: diaryIdProps) => {
           pathname: pathname,
         })
         mutateComments()
+        reset()
       })
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
