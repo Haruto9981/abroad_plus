@@ -75,6 +75,7 @@ const Diary = ({
   const [isLiked, setIsLiked] = useState<boolean>(false)
   const [LikedCount, setLikedCount] = useState<number>(0)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
 
   useLayoutEffect(() => {
     const liked: boolean = favorites.some(
@@ -131,7 +132,17 @@ const Diary = ({
   }
 
   const handleHover = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+    const timeout = setTimeout(() => {
+      setAnchorEl(event.currentTarget ?? event.target)
+    }, 500)
+    setHoverTimeout(timeout)
+  }
+
+  const handleHoverEnd = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout)
+      setHoverTimeout(null)
+    }
   }
 
   const handleClose = () => {
@@ -142,7 +153,11 @@ const Diary = ({
     <>
       <Box sx={{ display: 'flex' }}>
         <Link href={`/${userName}`}>
-          <IconButton sx={{ p: 0 }} onMouseEnter={handleHover}>
+          <IconButton
+            sx={{ p: 0 }}
+            onMouseEnter={handleHover}
+            onMouseLeave={handleHoverEnd}
+          >
             {userImage ? (
               <Avatar src={userImage} sx={{ width: 50, height: 50 }}></Avatar>
             ) : (
@@ -166,6 +181,7 @@ const Diary = ({
                   },
                 }}
                 onMouseEnter={handleHover}
+                onMouseLeave={handleHoverEnd}
               >
                 @{userName}
               </Typography>
@@ -285,6 +301,7 @@ const Diary = ({
           vertical: 'top',
           horizontal: 'left',
         }}
+        onClose={handleClose}
         disableAutoFocus={true}
       >
         <ProfileHoverCard
