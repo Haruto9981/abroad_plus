@@ -127,8 +127,8 @@ ActiveRecord::Base.transaction do
                   updated_at: rand(start_date..end_date))
   end
 
-  start_date = Date.new(2023, 7, 15)
-  end_date = Date.new(2024, 7, 28)
+  start_date = Date.new(2023, 9, 1)
+  end_date = Date.new(2024, 9, 1)
 
   150.times do |_i|
     Diary.create!(title: "Had ramen",
