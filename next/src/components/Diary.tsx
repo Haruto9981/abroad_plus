@@ -280,7 +280,7 @@ const Diary = ({
         {!isTopPage && !translatedText && content}{' '}
         {translatedText && translatedText}
       </Typography>
-      {!isTopPage && (
+      {!isTopPage && !translatedText && (
         <Box sx={{ display: 'flex', justifyContent: 'end' }}>
           <Button
             sx={{ color: 'gray', textTransform: 'none', fontSize: 14 }}

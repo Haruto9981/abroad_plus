@@ -211,7 +211,7 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
         {!isTopPage && !translatedText && props.content}
         {translatedText && translatedText}
       </Typography>
-      {!isTopPage && (
+      {!isTopPage && !translatedText && (
         <Box sx={{ display: 'flex', justifyContent: 'end' }}>
           <Button
             sx={{ color: 'gray', textTransform: 'none', fontSize: 14 }}
