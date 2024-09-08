@@ -67,4 +67,6 @@ group :development, :test do
   gem "rubocop-faker"
   gem "rubocop-rails"
   gem "rubocop-rspec"
+  # solargraph拡張機能
+  gem "solargraph"
 end
