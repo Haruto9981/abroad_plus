@@ -112,6 +112,9 @@ GEM
       devise (> 3.5.2, < 5)
       rails (>= 4.2.0, < 7.1)
     diff-lcs (1.5.1)
+    e2mmap (0.1.0)
+    engtagger (0.4.1)
+      lru_redux
     enum_help (0.0.19)
       activesupport (>= 3.0.0)
     erubi (1.12.0)
@@ -158,6 +161,7 @@ GEM
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
+    lru_redux (1.1.0)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
@@ -324,6 +328,7 @@ DEPENDENCIES
   devise
   devise-i18n
   devise_token_auth
+  engtagger (~> 0.4.0)
   enum_help
   factory_bot_rails
   faker
