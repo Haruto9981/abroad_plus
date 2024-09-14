@@ -51,6 +51,8 @@ gem "engtagger", "~> 0.4.0"
 
 gem "lemmatizer"
 
+gem "vader_sentiment_ruby"
+
 group :development, :test do
   # N+1発生時にアラートを表示する
   gem "bullet"

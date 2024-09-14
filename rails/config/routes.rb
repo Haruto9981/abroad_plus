@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       end
       namespace :current do
         get "analyze/frequent_vocab", to: "analyze#frequent_vocab"
+        get "analyze/sentiment", to: "analyze#sentiment"
         resource :user, only: [:show, :update]
         resources :following_diaries, only: [:index]
         resources :recommended_users, only: [:index]
