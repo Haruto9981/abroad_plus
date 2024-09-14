@@ -6,6 +6,7 @@ import { ChartBar } from '@/components/ChartBar'
 import Error from '@/components/Error'
 import { FrequentVocab } from '@/components/FrequentVocab'
 import Loading from '@/components/Loading'
+import { Sentiment } from '@/components/Sentiment'
 import { useUserState } from '@/hooks/useGlobalState'
 import { useRequireSignedIn } from '@/hooks/useRequireSignedIn'
 import { styles } from '@/styles'
@@ -31,6 +32,7 @@ const Analyze: NextPage = () => {
           <CardContent>
             <ChartBar diaries={camelcaseKeys(data)} />
             <FrequentVocab></FrequentVocab>
+            <Sentiment diaries={camelcaseKeys(data)} />
           </CardContent>
         </Card>
       </Container>
