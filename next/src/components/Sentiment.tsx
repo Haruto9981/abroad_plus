@@ -33,9 +33,13 @@ export const Sentiment = () => {
   const url =
     process.env.NEXT_PUBLIC_API_BASE_URL + '/current/analyze/sentiment'
   const { data, error } = useSWR(url, fetcher)
-  const [filteredData, setFilteredData] = useState(data)
-  const [startDate, setStartDate] = useState(null)
-  const [endDate, setEndDate] = useState(null)
+  const [setFilteredData] = useState(data)
+  const [startDate, setStartDate] = useState(() => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - 1);
+    return date;
+  });
+  const [endDate, setEndDate] = useState(new Date())
 
   const options = {
     responsive: true,
@@ -84,7 +88,9 @@ export const Sentiment = () => {
       default:
         startDate = new Date(0)
     }
-    return filterData(data, startDate, null)
+    setStartDate(startDate)
+    setEndDate(new Date())
+    return filterData(data, startDate, endDate)
   }
 
   const handlePresetFilter = (range) => {
@@ -93,12 +99,14 @@ export const Sentiment = () => {
   }
 
   const handleFilter = (startDate, endDate) => {
+    setStartDate(startDate)
+    setEndDate(endDate)
     const newData = filterData(data, startDate, endDate)
     setFilteredData(newData)
   }
 
-  const labels = filteredData?.map((obj) => obj.date)
-  const sentiment = filteredData?.map((obj) => obj.sentiment)
+  const labels = filterData(data, startDate, endDate)?.map((obj) => obj.date)
+  const sentiment = filterData(data, startDate, endDate)?.map((obj) => obj.sentiment)
 
   const sentimentData = {
     labels: labels,
@@ -134,7 +142,6 @@ export const Sentiment = () => {
               value={dayjs(startDate)}
               sx={{ mx: 1 }}
               onChange={(value) => {
-                setStartDate(value.toDate())
                 handleFilter(value.toDate(), endDate)
               }}
               slotProps={{
@@ -162,7 +169,6 @@ export const Sentiment = () => {
               value={dayjs(endDate)}
               sx={{ mx: 1 }}
               onChange={(value) => {
-                setEndDate(value.toDate())
                 handleFilter(startDate, value.toDate())
               }}
               slotProps={{
