@@ -3,12 +3,17 @@ class Api::V1::Current::AnalyzeController < Api::V1::BaseController
   require "lemmatizer"
 
   before_action :authenticate_user!
-
-  STOP_WORDS = %w[a an and are as at but by for from has have he I in is it its on or she that the they this to was we with be ].freeze
+  STOPWORDS = %w[a an and are as at be by for from has have he her his in it its is on or she that the they to was with it’s i’m couldn’t].freeze
 
   def frequent_vocab
     target_month = params["target-month"]
     diaries = fetch_diaries_for_month(target_month)
+
+    if diaries.empty?
+      render json: []
+      return
+    end
+    
     target_text = combine_diary_contents(diaries)
     
     tagged_text = tag_text(target_text)
@@ -58,13 +63,13 @@ class Api::V1::Current::AnalyzeController < Api::V1::BaseController
 
   def process_words(words, lemmatizer)
     lemmatized_counts = words.each_with_object(Hash.new(0)) do |(word, count), hash|
-      lemmatized_word = lemmatizer.lemma(word)
-      next if STOP_WORDS.include?(lemmatized_word.downcase) # Skip stop words after lemmatization
+      lemmatized_word = lemmatizer.lemma(word).downcase
+      next if STOPWORDS.include?(lemmatized_word)
       hash[lemmatized_word] += count
     end
-
+  
     lemmatized_counts.map do |word, count|
       { lemmatized: word, count: count }
     end.sort_by { |word| -word[:count] }.first(10)
-  end
+  end  
 end

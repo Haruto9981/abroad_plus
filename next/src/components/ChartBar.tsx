@@ -1,4 +1,4 @@
-import { Button, Box } from '@mui/material'
+import { Button, Box, Typography } from '@mui/material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -149,6 +149,7 @@ export const ChartBar = ({ diaries }) => {
   }
   return (
     <>
+      <Typography sx={{ fontSize: 20, mt: 1, ml: 2 }}>Word Count</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 2 }}>
         <Box>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

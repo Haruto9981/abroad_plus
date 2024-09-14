@@ -4,6 +4,7 @@ import type { NextPage } from 'next'
 import useSWR from 'swr'
 import { ChartBar } from '@/components/ChartBar'
 import Error from '@/components/Error'
+import { FrequentVocab } from '@/components/FrequentVocab'
 import Loading from '@/components/Loading'
 import { useUserState } from '@/hooks/useGlobalState'
 import { useRequireSignedIn } from '@/hooks/useRequireSignedIn'
@@ -29,6 +30,7 @@ const Analyze: NextPage = () => {
         <Card sx={{ borderRadius: 2 }}>
           <CardContent>
             <ChartBar diaries={camelcaseKeys(data)} />
+            <FrequentVocab></FrequentVocab>
           </CardContent>
         </Card>
       </Container>
