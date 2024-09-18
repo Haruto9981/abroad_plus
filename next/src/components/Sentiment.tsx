@@ -33,7 +33,7 @@ export const Sentiment = () => {
   const url =
     process.env.NEXT_PUBLIC_API_BASE_URL + '/current/analyze/sentiment'
   const { data, error } = useSWR(url, fetcher)
-  const [setFilteredData] = useState(data)
+  const [,setFilteredData] = useState(data)
   const [startDate, setStartDate] = useState(() => {
     const date = new Date();
     date.setMonth(date.getMonth() - 1);

@@ -355,9 +355,9 @@ const CurrentDiaries: NextPage = () => {
           </Card>
         </LocalizationProvider>
       </Container>
-      <Container sx={{ py: 6 }}>
+      <Container sx={{ py: 6 }} maxWidth="sm">
         <Grid container spacing={2}>
-          <Container maxWidth="sm">
+          <Container>
             <Card sx={{ borderRadius: 2 }}>
               <CardContent>
                 {!diariesInSpecificMonth && !diariesInSpecificDay && (
