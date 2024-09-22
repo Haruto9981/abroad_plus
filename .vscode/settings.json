@@ -2,4 +2,8 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
     },
+    "solargraph.useBundler": false,
+    "solargraph.commandPath": "/Users/harutoaketa/.rbenv/shims/solargraph",
+    "solargraph.diagnostics": true,
+    "solargraph.formatting": true,
 }

@@ -76,14 +76,14 @@ const Following: NextPage = () => {
   return (
     <Layout>
       <Typography sx={{ fontSize: 20, mb: 2 }}>Following</Typography>
+      <Divider sx={{ mt: 2 }} />
       {following_users.length === 0 && (
-        <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
+        <Typography sx={{ textAlign: 'center', color: 'gray', mt: 2 }}>
           No following users
         </Typography>
       )}
       {following_users.map((following_user: Following, i: number) => (
         <>
-          <Divider sx={{ mt: 2 }} />
           <Box key={i} sx={{ display: 'flex', mt: 1 }}>
             <Link href={`/${following_user.name}`}>
               <IconButton>

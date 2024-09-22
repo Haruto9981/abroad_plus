@@ -10,6 +10,7 @@ import {
   Typography,
   Tooltip,
   Modal,
+  Button,
 } from '@mui/material'
 import Popover from '@mui/material/Popover'
 import axios, { AxiosError } from 'axios'
@@ -73,8 +74,10 @@ const Diary = ({
   const [open, setOpen] = useState<boolean>(false)
   const [user] = useUserState()
   const [isLiked, setIsLiked] = useState<boolean>(false)
+  const [translatedText, setTranslatedText] = useState('')
   const [LikedCount, setLikedCount] = useState<number>(0)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
 
   useLayoutEffect(() => {
     const liked: boolean = favorites.some(
@@ -131,18 +134,51 @@ const Diary = ({
   }
 
   const handleHover = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+    const timeout = setTimeout(() => {
+      setAnchorEl(event.currentTarget ?? event.target)
+    }, 500)
+    setHoverTimeout(timeout)
+  }
+
+  const handleHoverEnd = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout)
+      setHoverTimeout(null)
+    }
   }
 
   const handleClose = () => {
     setAnchorEl(null)
   }
 
+  const handleTranslation = (text: string) => {
+    const url = 'https://api-free.deepl.com/v2/translate'
+    const params = {
+      auth_key: process.env.NEXT_PUBLIC_DEEPL_KEY,
+      target_lang: 'JA',
+      text: text,
+    }
+    axios({ method: 'GET', url: url, params: params })
+      .then((res) => {
+        setTranslatedText(res.data.translations[0].text)
+      })
+      .catch((e: AxiosError<{ error: string }>) => {
+        console.log(e.message)
+      })
+  }
+
+  const isTopPage =
+    router.pathname === '/' || router.pathname === '/following_diaries'
+
   return (
     <>
       <Box sx={{ display: 'flex' }}>
         <Link href={`/${userName}`}>
-          <IconButton sx={{ p: 0 }} onMouseEnter={handleHover}>
+          <IconButton
+            sx={{ p: 0 }}
+            onMouseEnter={handleHover}
+            onMouseLeave={handleHoverEnd}
+          >
             {userImage ? (
               <Avatar src={userImage} sx={{ width: 50, height: 50 }}></Avatar>
             ) : (
@@ -166,6 +202,7 @@ const Diary = ({
                   },
                 }}
                 onMouseEnter={handleHover}
+                onMouseLeave={handleHoverEnd}
               >
                 @{userName}
               </Typography>
@@ -234,23 +271,27 @@ const Diary = ({
             lineHeight: 1.5,
           }}
         >
-          {(router.pathname === '/' ||
-            router.pathname === '/following_diaries') &&
-            omit(title)(40)('...')}{' '}
-          {router.pathname !== '/' &&
-            router.pathname !== '/following_diaries' &&
-            title}
+          {isTopPage && omit(title)(40)('...')} {!isTopPage && title}
         </Typography>
         <Typography sx={{ fontSize: 18 }}>({wordCount} words)</Typography>
       </Box>
       <Typography>
-        {(router.pathname === '/' ||
-          router.pathname === '/following_diaries') &&
-          omit(content)(295)('...')}{' '}
-        {router.pathname !== '/' &&
-          router.pathname !== '/following_diaries' &&
-          content}{' '}
+        {isTopPage && omit(content)(295)('...')}{' '}
+        {!isTopPage && !translatedText && content}{' '}
+        {translatedText && translatedText}
       </Typography>
+      {!isTopPage && !translatedText && (
+        <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+          <Button
+            sx={{ color: 'gray', textTransform: 'none', fontSize: 14 }}
+            onClick={() => {
+              handleTranslation(content)
+            }}
+          >
+            see tralslation
+          </Button>
+        </Box>
+      )}
       <Box sx={{ display: 'flex' }}>
         <Box>
           {!isLiked && (
@@ -285,6 +326,7 @@ const Diary = ({
           vertical: 'top',
           horizontal: 'left',
         }}
+        onClose={handleClose}
         disableAutoFocus={true}
       >
         <ProfileHoverCard

@@ -47,6 +47,12 @@ gem "carrierwave"
 # タイムゾーン情報を提供する（標準gem）
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
+gem "engtagger", "~> 0.4.0"
+
+gem "lemmatizer"
+
+gem "vader_sentiment_ruby"
+
 group :development, :test do
   # N+1発生時にアラートを表示する
   gem "bullet"
@@ -65,4 +71,6 @@ group :development, :test do
   gem "rubocop-faker"
   gem "rubocop-rails"
   gem "rubocop-rspec"
+  # solargraph拡張機能
+  gem "solargraph"
 end

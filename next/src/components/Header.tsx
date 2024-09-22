@@ -97,6 +97,11 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
                 href="/current/diaries"
                 value="/current/diaries"
               />
+              <LinkTab
+                label="Analyze"
+                href="/current/analyze"
+                value="/current/analyze"
+              />
             </Tabs>
           </Box>
           {user.isFetched && (

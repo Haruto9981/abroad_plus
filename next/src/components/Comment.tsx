@@ -67,13 +67,14 @@ const Comment = (props: diaryIdProps) => {
   const [open, setOpen] = useState<boolean>(false)
   const [commentId, setCommentId] = useState<number>(0)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
   const url =
     process.env.NEXT_PUBLIC_API_BASE_URL +
     '/diaries/' +
     props.id +
     '/diary_comments'
   const { data, error, mutate: mutateComments } = useSWR(url, fetcher)
-  const { handleSubmit, control } = useForm<CommentFormData>({
+  const { handleSubmit, control, reset } = useForm<CommentFormData>({
     defaultValues: { comment: '' },
   })
 
@@ -112,6 +113,7 @@ const Comment = (props: diaryIdProps) => {
           pathname: pathname,
         })
         mutateComments()
+        reset()
       })
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
@@ -176,7 +178,17 @@ const Comment = (props: diaryIdProps) => {
   if (!data) return <Loading />
 
   const handleHover = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+    const timeout = setTimeout(() => {
+      setAnchorEl(event.currentTarget ?? event.target)
+    }, 500)
+    setHoverTimeout(timeout)
+  }
+
+  const handleHoverEnd = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout)
+      setHoverTimeout(null)
+    }
   }
 
   const handleUnhover = () => {
@@ -224,7 +236,10 @@ const Comment = (props: diaryIdProps) => {
             <Divider sx={{ mt: 2 }} />
             <Box key={i} sx={{ display: 'flex', mt: 1 }}>
               <Link href={`/${comment.user.name}`}>
-                <IconButton onMouseEnter={handleHover}>
+                <IconButton
+                  onMouseEnter={handleHover}
+                  onMouseLeave={handleHoverEnd}
+                >
                   {comment.user.image.url ? (
                     <Avatar
                       src={comment.user.image.url}
@@ -251,6 +266,7 @@ const Comment = (props: diaryIdProps) => {
                           },
                         }}
                         onMouseEnter={handleHover}
+                        onMouseLeave={handleHoverEnd}
                       >
                         @{comment.user.name}
                       </Typography>
