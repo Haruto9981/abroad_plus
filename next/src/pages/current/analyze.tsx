@@ -32,7 +32,7 @@ const Analyze: NextPage = () => {
           <CardContent>
             <ChartBar diaries={camelcaseKeys(data)} />
             <FrequentVocab></FrequentVocab>
-            <Sentiment diaries={camelcaseKeys(data)} />
+            <Sentiment />
           </CardContent>
         </Card>
       </Container>

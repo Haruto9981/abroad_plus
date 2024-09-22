@@ -3,6 +3,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import {
+  ChartOptions,
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -14,7 +15,30 @@ import dayjs from 'dayjs'
 import { useState } from 'react'
 import { Bar } from 'react-chartjs-2'
 
-export const ChartBar = ({ diaries }) => {
+type CurrentDiaryProps = {
+  diaries: [
+    {
+      id: string
+      title: string
+      content: string
+      status: string
+      image: {
+        url: string
+      }
+      wordCount: number
+      day: string
+      monthName: string
+      month: string
+      year: string
+      createdAt: string
+      wDay: string
+      favorites: { user_id: number }[]
+      diaryComments: object[]
+    },
+  ]
+}
+
+export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
   const today = new Date()
   const initialStartDate = new Date(today.getTime())
   initialStartDate.setDate(today.getDate() - 7)
@@ -24,7 +48,7 @@ export const ChartBar = ({ diaries }) => {
 
   ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
-  const options = {
+  const options: ChartOptions<'bar'> = {
     responsive: true,
     plugins: {
       legend: {
@@ -53,7 +77,7 @@ export const ChartBar = ({ diaries }) => {
 
   const getDiaryWrittenDates = () => {
     const dates = diaries.map((diary) => diary.createdAt)
-    const uniqueDates: Date[] = Array.from(new Set(dates))
+    const uniqueDates = Array.from(new Set(dates))
     const stringDates = uniqueDates.map((date) => date.toString())
 
     return stringDates
@@ -298,7 +322,7 @@ export const ChartBar = ({ diaries }) => {
         </Box>
       </Box>
 
-      <Bar options={options} data={data} sx={{ width: 'auto' }} />
+      <Bar options={options} data={data} />
     </>
   )
 }

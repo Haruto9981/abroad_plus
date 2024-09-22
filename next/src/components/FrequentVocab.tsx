@@ -9,7 +9,7 @@ export const FrequentVocab = () => {
   const formattedDate = `${year}-${month}`
   const [targetMonth, setTargetMonth] = useState(formattedDate)
 
-  function getNextMonth(dateString) {
+  function getNextMonth(dateString: string) {
     const [year, month] = dateString.split('-').map(Number)
 
     const nextMonthDate = new Date(year, month)
@@ -19,7 +19,7 @@ export const FrequentVocab = () => {
     return `${nextYear}-${nextMonth}`
   }
 
-  function getPreviousMonth(dateString) {
+  function getPreviousMonth(dateString: string) {
     const [year, month] = dateString.split('-').map(Number)
     const prevMonthDate = new Date(year, month - 2)
     const prevYear = prevMonthDate.getFullYear()

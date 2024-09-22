@@ -3,6 +3,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import {
+  ChartOptions,
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -20,6 +21,11 @@ import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { fetcher } from '@/utils'
 
+type SentimentData = {
+  date: string
+  sentiment: number
+}
+
 export const Sentiment = () => {
   ChartJS.register(
     CategoryScale,
@@ -33,15 +39,15 @@ export const Sentiment = () => {
   const url =
     process.env.NEXT_PUBLIC_API_BASE_URL + '/current/analyze/sentiment'
   const { data, error } = useSWR(url, fetcher)
-  const [,setFilteredData] = useState(data)
+  const [, setFilteredData] = useState(data)
   const [startDate, setStartDate] = useState(() => {
-    const date = new Date();
-    date.setMonth(date.getMonth() - 1);
-    return date;
-  });
+    const date = new Date()
+    date.setMonth(date.getMonth() - 1)
+    return date
+  })
   const [endDate, setEndDate] = useState(new Date())
 
-  const options = {
+  const options: ChartOptions<'line'> = {
     responsive: true,
     plugins: {
       legend: {
@@ -53,7 +59,11 @@ export const Sentiment = () => {
   if (error) return <Error />
   if (!data) return <Loading />
 
-  const filterData = (data, startDate, endDate) => {
+  const filterData = (
+    data: SentimentData[],
+    startDate: Date,
+    endDate: Date,
+  ) => {
     return data
       .filter((item) => {
         const itemDate = new Date(item.date)
@@ -62,10 +72,13 @@ export const Sentiment = () => {
           (!endDate || itemDate <= new Date(endDate))
         )
       })
-      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .sort(
+        (a: SentimentData, b: SentimentData) =>
+          new Date(a.date).getTime() - new Date(b.date).getTime(),
+      )
   }
 
-  const filterDataByPreset = (data, range) => {
+  const filterDataByPreset = (data: SentimentData[], range: string) => {
     const now = new Date()
     let startDate
 
@@ -93,12 +106,12 @@ export const Sentiment = () => {
     return filterData(data, startDate, endDate)
   }
 
-  const handlePresetFilter = (range) => {
+  const handlePresetFilter = (range: string) => {
     const newData = filterDataByPreset(data, range)
     setFilteredData(newData)
   }
 
-  const handleFilter = (startDate, endDate) => {
+  const handleFilter = (startDate: Date, endDate: Date) => {
     setStartDate(startDate)
     setEndDate(endDate)
     const newData = filterData(data, startDate, endDate)
@@ -106,7 +119,9 @@ export const Sentiment = () => {
   }
 
   const labels = filterData(data, startDate, endDate)?.map((obj) => obj.date)
-  const sentiment = filterData(data, startDate, endDate)?.map((obj) => obj.sentiment)
+  const sentiment = filterData(data, startDate, endDate)?.map(
+    (obj) => obj.sentiment,
+  )
 
   const sentimentData = {
     labels: labels,
@@ -114,14 +129,14 @@ export const Sentiment = () => {
       {
         label: 'Sentiment',
         data: sentiment,
-        borderColor: sentiment?.map((value) =>
+        borderColor: sentiment?.map((value: number) =>
           value > 0 ? 'rgba(255, 182, 193, 1)' : 'rgba(173, 216, 230, 1)',
         ),
         fill: false,
         tension: 0.1,
         borderWidth: 2,
         segment: {
-          borderColor: (ctx) =>
+          borderColor: (ctx: { p1: { parsed: { y: number } } }) =>
             ctx.p1.parsed.y > 0
               ? 'rgba(255, 182, 193, 1)'
               : 'rgba(173, 216, 230, 1)',
@@ -142,7 +157,9 @@ export const Sentiment = () => {
               value={dayjs(startDate)}
               sx={{ mx: 1 }}
               onChange={(value) => {
-                handleFilter(value.toDate(), endDate)
+                if (value) {
+                  handleFilter(value.toDate(), endDate)
+                }
               }}
               slotProps={{
                 day: {
@@ -169,7 +186,9 @@ export const Sentiment = () => {
               value={dayjs(endDate)}
               sx={{ mx: 1 }}
               onChange={(value) => {
-                handleFilter(startDate, value.toDate())
+                if (value) {
+                  handleFilter(startDate, value.toDate())
+                }
               }}
               slotProps={{
                 day: {
@@ -272,7 +291,7 @@ export const Sentiment = () => {
         </Box>
       </Box>
 
-      <Line options={options} data={sentimentData} sx={{ width: 'auto' }} />
+      <Line options={options} data={sentimentData} />
     </>
   )
 }
