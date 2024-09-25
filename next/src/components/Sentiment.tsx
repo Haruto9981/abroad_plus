@@ -83,7 +83,7 @@ export const Sentiment = () => {
     let startDate
 
     switch (range) {
-      case 'week':
+      case 'a week':
         startDate = new Date(now.setDate(now.getDate() - 7))
         break
       case 'a month':
@@ -99,7 +99,7 @@ export const Sentiment = () => {
         startDate = new Date(now.setFullYear(now.getFullYear() - 1))
         break
       default:
-        startDate = new Date(1)
+        startDate = new Date(0)
     }
     setStartDate(startDate)
     setEndDate(new Date())
