@@ -86,7 +86,7 @@ export const Sentiment = () => {
       case 'week':
         startDate = new Date(now.setDate(now.getDate() - 7))
         break
-      case 'a month':
+      case 'month':
         startDate = new Date(now.setMonth(now.getMonth() - 1))
         break
       case '3 months':
