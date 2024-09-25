@@ -99,7 +99,7 @@ export const Sentiment = () => {
         startDate = new Date(now.setFullYear(now.getFullYear() - 1))
         break
       default:
-        startDate = new Date(0)
+        startDate = new Date(1)
     }
     setStartDate(startDate)
     setEndDate(new Date())
