@@ -64,7 +64,11 @@ const SignUp: NextPage = () => {
       await axios({
         method: 'POST',
         url: url,
-        data: { ...data, confirm_success_url: confirmSuccessUrl },
+        data: {
+          ...data,
+          confirm_success_url: confirmSuccessUrl,
+          time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        },
         headers: headers,
       })
         .then((res: AxiosResponse) => {

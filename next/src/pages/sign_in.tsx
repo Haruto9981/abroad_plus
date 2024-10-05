@@ -10,6 +10,7 @@ import { useUserState, useSnackbarState } from '@/hooks/useGlobalState'
 type SignInFormData = {
   email: string
   password: string
+  time_zone: string
 }
 
 const SignIn: NextPage = () => {
@@ -41,7 +42,15 @@ const SignIn: NextPage = () => {
     const url = process.env.NEXT_PUBLIC_API_BASE_URL + '/auth/sign_in'
     const headers = { 'Content-Type': 'application/json' }
 
-    axios({ method: 'POST', url: url, data: data, headers: headers })
+    axios({
+      method: 'POST',
+      url: url,
+      data: {
+        ...data,
+        time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      },
+      headers: headers,
+    })
       .then((res: AxiosResponse) => {
         localStorage.setItem('access-token', res.headers['access-token'])
         localStorage.setItem('client', res.headers['client'])
