@@ -1,6 +1,7 @@
 import CommentIcon from '@mui/icons-material/Comment'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import PsychologyIcon from '@mui/icons-material/Psychology'
 import {
   Box,
   Button,
@@ -10,8 +11,9 @@ import {
   Modal,
 } from '@mui/material'
 import axios, { AxiosError } from 'axios'
+import Groq from 'groq-sdk'
 import { useRouter } from 'next/router'
-import { useState, useEffect, MouseEventHandler } from 'react'
+import { useState, useEffect, useRef, MouseEventHandler } from 'react'
 import LikesModal from '@/components/LikesModal'
 import { useUserState } from '@/hooks/useGlobalState'
 
@@ -40,6 +42,7 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
   const [LikedCount, setLikedCount] = useState<number>(0)
   const [open, setOpen] = useState<boolean>(false)
   const [translatedText, setTranslatedText] = useState('')
+  const [aiAdvice, setAiAdvice] = useState('')
 
   useEffect(() => {
     const favorites = props.favorites
@@ -102,6 +105,37 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
       })
   }
 
+  const handleAl = async (text: string) => {
+    const groq = new Groq({
+      apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY,
+      dangerouslyAllowBrowser: true,
+    })
+    const systemPrompt = {
+      role: 'system',
+      content:
+        'あなたはプロフェッショナルな英語教師です。質問には必ず日本語のみで簡潔に答えてください。',
+    }
+
+    const userInput =
+      '英文の文法の間違いについてわかりやすく説明してください。日本語のみで説明してくださいね。訂正後の文章は必要ないです。' +
+      text
+
+    const userPrompt = { role: 'user', content: userInput }
+
+    const chatHistory = [systemPrompt, userPrompt]
+
+    const getGroqChatCompletion = async () => {
+      return groq.chat.completions.create({
+        model: 'llama3-70b-8192',
+        messages: chatHistory as [],
+      })
+    }
+
+    const chatCompletion = await getGroqChatCompletion()
+
+    setAiAdvice(chatCompletion.choices[0]?.message?.content || '')
+  }
+
   const handleModalOpen: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
     setOpen(true)
@@ -113,6 +147,26 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
   }
 
   const isTopPage = router.pathname === '/current/diaries'
+
+  const TypingEffect = ({ text, speed }: { text: string; speed: number }) => {
+    const [displayedText, setDisplayedText] = useState('')
+    const indexRef = useRef(0)
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        if (indexRef.current < text.length) {
+          setDisplayedText(text.slice(0, indexRef.current + 1))
+          indexRef.current += 1
+        } else {
+          clearInterval(interval)
+        }
+      }, speed)
+
+      return () => clearInterval(interval)
+    }, [text, speed])
+
+    return <Typography>{displayedText}</Typography>
+  }
 
   return (
     <>
@@ -223,31 +277,71 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
           </Button>
         </Box>
       )}
-      {props.status === 'shared' && (
-        <Box sx={{ display: 'flex' }}>
-          <Box>
-            {!isLiked && (
-              <IconButton onClick={handleLikedChange}>
-                <FavoriteBorderIcon />
-              </IconButton>
-            )}
-            {isLiked && (
-              <IconButton onClick={handleDislikedChange}>
-                <FavoriteIcon color="secondary" />
-              </IconButton>
-            )}
+
+      {props.status === 'shared' ? (
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex' }}>
+            <Box>
+              {!isLiked && (
+                <IconButton onClick={handleLikedChange}>
+                  <FavoriteBorderIcon />
+                </IconButton>
+              )}
+              {isLiked && (
+                <IconButton onClick={handleDislikedChange}>
+                  <FavoriteIcon color="secondary" />
+                </IconButton>
+              )}
+            </Box>
+            <Tooltip title="Who likes">
+              <Typography sx={{ mt: 1, mr: 1.5 }} onClick={handleModalOpen}>
+                {LikedCount}
+              </Typography>
+            </Tooltip>
+            <IconButton>
+              <CommentIcon sx={{ mb: 1 }} />
+            </IconButton>
+            <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
           </Box>
-          <Tooltip title="Who likes">
-            <Typography sx={{ mt: 1, mr: 1.5 }} onClick={handleModalOpen}>
-              {LikedCount}
-            </Typography>
-          </Tooltip>
-          <IconButton>
-            <CommentIcon />
-          </IconButton>
-          <Typography sx={{ mt: 1 }}>{props.diaryComments.length}</Typography>
+          {!isTopPage && !aiAdvice && (
+            <>
+              <Tooltip title="Get Advice from AI">
+                <IconButton onClick={() => handleAl(props.content)}>
+                  <PsychologyIcon fontSize="large" />
+                </IconButton>
+              </Tooltip>
+            </>
+          )}
+        </Box>
+      ) : (
+        <>
+          {!isTopPage && !aiAdvice && (
+            <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+              <Tooltip title="Get Advice from AI">
+                <IconButton onClick={() => handleAl(props.content)}>
+                  <PsychologyIcon fontSize="large" />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )}
+        </>
+      )}
+      {aiAdvice && (
+        <Box>
+          <Typography
+            sx={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              lineHeight: 1.5,
+              mb: 1,
+            }}
+          >
+            AI Answer
+          </Typography>
+          <TypingEffect text={aiAdvice} speed={10} />
         </Box>
       )}
+
       <Modal open={open} onClose={handleModalClose}>
         <Box
           sx={{
