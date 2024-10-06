@@ -1,5 +1,6 @@
 import { Box } from '@mui/material'
 import {
+  ChartOptions,
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -13,6 +14,11 @@ import Error from '@/components/Error'
 import Loading from '@/components/Loading'
 import { fetcher } from '@/utils'
 
+type FrequenctVocabType = {
+  lemmatized: string
+  count: number
+}
+
 export const FrequentVocabBar = (props: { targetMonth: string }) => {
   ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
   const url =
@@ -24,14 +30,24 @@ export const FrequentVocabBar = (props: { targetMonth: string }) => {
   if (error) return <Error />
   if (!data) return <Loading />
 
-  const nounsLabel = data.nouns?.map((obj) => obj.lemmatized)
-  const nounsCount = data.nouns?.map((obj) => obj.count)
-  const verbsLabel = data.verbs?.map((obj) => obj.lemmatized)
-  const verbsCount = data.verbs?.map((obj) => obj.count)
-  const adjectivesLabel = data.adjectives?.map((obj) => obj.lemmatized)
-  const adjectivesCount = data.adjectives?.map((obj) => obj.count)
-  const adverbsLabel = data.adverbs?.map((obj) => obj.lemmatized)
-  const adverbsCount = data.adverbs?.map((obj) => obj.count)
+  const nounsLabel = data.nouns?.map(
+    (obj: FrequenctVocabType) => obj.lemmatized,
+  )
+  const nounsCount = data.nouns?.map((obj: FrequenctVocabType) => obj.count)
+  const verbsLabel = data.verbs?.map(
+    (obj: FrequenctVocabType) => obj.lemmatized,
+  )
+  const verbsCount = data.verbs?.map((obj: FrequenctVocabType) => obj.count)
+  const adjectivesLabel = data.adjectives?.map(
+    (obj: FrequenctVocabType) => obj.lemmatized,
+  )
+  const adjectivesCount = data.adjectives?.map(
+    (obj: FrequenctVocabType) => obj.count,
+  )
+  const adverbsLabel = data.adverbs?.map(
+    (obj: FrequenctVocabType) => obj.lemmatized,
+  )
+  const adverbsCount = data.adverbs?.map((obj: FrequenctVocabType) => obj.count)
 
   const nounsData = {
     labels: nounsLabel,
@@ -109,7 +125,7 @@ export const FrequentVocabBar = (props: { targetMonth: string }) => {
     ],
   }
 
-  const options = {
+  const options: ChartOptions<'bar'> = {
     indexAxis: 'y',
     responsive: true,
     plugins: {
@@ -130,12 +146,12 @@ export const FrequentVocabBar = (props: { targetMonth: string }) => {
         }}
       >
         <Box sx={{ flex: 1, minWidth: 0, maxWidth: '100%' }}>
-          <Bar options={options} data={nounsData} sx={{ width: '100%' }} />
-          <Bar options={options} data={verbsData} sx={{ width: '100%' }} />
+          <Bar options={options} data={nounsData} />
+          <Bar options={options} data={verbsData} />
         </Box>
         <Box sx={{ flex: 1, minWidth: 0, maxWidth: '100%' }}>
-          <Bar options={options} data={adjectivesData} sx={{ width: '100%' }} />
-          <Bar options={options} data={adverbsData} sx={{ width: '100%' }} />
+          <Bar options={options} data={adjectivesData} />
+          <Bar options={options} data={adverbsData} />
         </Box>
       </Box>
     </>
