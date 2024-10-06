@@ -246,18 +246,25 @@ const CurrentDiaries: NextPage = () => {
   return (
     <Box
       css={styles.pageMinHeight}
-      sx={{ backgroundColor: '#ffe0b6', display: { lg: 'flex'} }}
+      sx={{ backgroundColor: '#ffe0b6', display: { lg: 'flex' } }}
     >
-      <Container maxWidth="sm" sx={{pt: 4,display: {lg: 'block' }, }}>
+      <Container maxWidth="sm" sx={{ pt: 4, display: { lg: 'block' } }}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Card sx={{ borderRadius: 2, mb: 4 }}>
             <CardContent sx={{ p: 4 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography sx={{ mt: 2, fontSize: {lg: 20, md: 18, sm: 16, xs: 14} }}>
+                <Typography
+                  sx={{ mt: 2, fontSize: { lg: 20, md: 18, sm: 16, xs: 14 } }}
+                >
                   Diary Calender
                 </Typography>
                 <Typography
-                  sx={{ fontSize: {lg: 20, md: 18, sm: 16, xs: 12}, textAlign: 'right', mr: 4, my: 1 }}
+                  sx={{
+                    fontSize: { lg: 20, md: 18, sm: 16, xs: 12 },
+                    textAlign: 'right',
+                    mr: 4,
+                    my: 1,
+                  }}
                 >
                   Diary Records:{' '}
                   <span

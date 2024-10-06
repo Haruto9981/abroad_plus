@@ -174,7 +174,9 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
   return (
     <>
       <Typography sx={{ fontSize: 20, mt: 1, ml: 2 }}>Word Count</Typography>
-      <Box sx={{ display: { md: 'flex'}, justifyContent: 'space-between', my: 2 }}>
+      <Box
+        sx={{ display: { md: 'flex' }, justifyContent: 'space-between', my: 2 }}
+      >
         <Box>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
@@ -208,7 +210,7 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
               format="YYYY-MM-DD"
               label="To"
               value={dayjs(endDate)}
-              sx={{ mx: 1,  width: 140 }}
+              sx={{ mx: 1, width: 140 }}
               onChange={(value) => {
                 handleToChange(value)
               }}
@@ -231,7 +233,7 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
             />
           </LocalizationProvider>
         </Box>
-        <Box sx={{ mt: 1, ml: 1}}>
+        <Box sx={{ mt: 1, ml: 1 }}>
           <Button
             color="warning"
             variant="outlined"

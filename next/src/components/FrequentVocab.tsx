@@ -29,7 +29,13 @@ export const FrequentVocab = () => {
   }
   return (
     <>
-      <Box sx={{ display: {sm: 'flex', xs: 'block'}, justifyContent: 'space-between', mt: 5 }}>
+      <Box
+        sx={{
+          display: { sm: 'flex', xs: 'block' },
+          justifyContent: 'space-between',
+          mt: 5,
+        }}
+      >
         <Box>
           <Typography sx={{ fontSize: 20, mt: 1, ml: 2 }}>
             Word Frequency
