@@ -168,7 +168,7 @@ const Diary = ({
   }
 
   const isTopPage =
-    router.pathname === '/' || router.pathname === '/following_diaries'
+    router.pathname === '/' || router.pathname === '/following_diaries' || router.pathname !== '/' + user.name
 
   return (
     <>
