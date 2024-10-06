@@ -168,7 +168,7 @@ const Diary = ({
   }
 
   const isTopPage =
-    router.pathname === '/' || router.pathname === '/following_diaries' || router.pathname !== '/' + user.name
+    router.pathname === '/' || router.pathname === '/following_diaries'
 
   return (
     <>
@@ -280,7 +280,7 @@ const Diary = ({
         {!isTopPage && !translatedText && content}{' '}
         {translatedText && translatedText}
       </Typography>
-      {!isTopPage && !translatedText && (
+      {(!isTopPage && router.pathname !== '/[name]') && !translatedText && (
         <Box sx={{ display: 'flex', justifyContent: 'end' }}>
           <Button
             sx={{ color: 'gray', textTransform: 'none', fontSize: 14 }}
