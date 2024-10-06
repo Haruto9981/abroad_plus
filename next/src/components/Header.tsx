@@ -211,6 +211,14 @@ const Header: React.FC<Props> = ({ pageUrl }: Props) => {
                         Diary
                       </MenuItem>
                     </Link>
+                    <Link href="/current/analyze">
+                      <MenuItem sx={{ display: { sm: 'none' } }}>
+                        <ListItemIcon>
+                          <ArticleIcon fontSize="small" />
+                        </ListItemIcon>
+                        Analyze
+                      </MenuItem>
+                    </Link>
                     <Link href="/profile">
                       <MenuItem>
                         <ListItemIcon>

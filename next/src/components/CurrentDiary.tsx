@@ -13,7 +13,8 @@ import {
 import axios, { AxiosError } from 'axios'
 import Groq from 'groq-sdk'
 import { useRouter } from 'next/router'
-import { useState, useEffect, useRef, MouseEventHandler } from 'react'
+import { useState, useEffect, MouseEventHandler } from 'react'
+import TypingEffect from './TypingEffect'
 import LikesModal from '@/components/LikesModal'
 import { useUserState } from '@/hooks/useGlobalState'
 
@@ -147,27 +148,6 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
   }
 
   const isTopPage = router.pathname === '/current/diaries'
-
-  const TypingEffect = ({ text, speed }: { text: string; speed: number }) => {
-    const [displayedText, setDisplayedText] = useState('')
-    const indexRef = useRef(0)
-
-    useEffect(() => {
-      const interval = setInterval(() => {
-        if (indexRef.current < text.length) {
-          setDisplayedText(text.slice(0, indexRef.current + 1))
-          indexRef.current += 1
-        } else {
-          clearInterval(interval)
-        }
-      }, speed)
-
-      return () => clearInterval(interval)
-    }, [text, speed])
-
-    return <Typography>{displayedText}</Typography>
-  }
-
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

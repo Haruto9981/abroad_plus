@@ -246,25 +246,32 @@ const CurrentDiaries: NextPage = () => {
   return (
     <Box
       css={styles.pageMinHeight}
-      sx={{ backgroundColor: '#ffe0b6', display: 'flex' }}
+      sx={{ backgroundColor: '#ffe0b6', display: { lg: 'flex' } }}
     >
-      <Container maxWidth="sm" sx={{ display: { lg: 'none' } }}>
+      <Container maxWidth="sm" sx={{ pt: 4, display: { lg: 'block' } }}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Card sx={{ borderRadius: 2, mb: 4 }}>
             <CardContent sx={{ p: 4 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography sx={{ mt: 2, fontSize: 12 }}>
+                <Typography
+                  sx={{ mt: 2, fontSize: { lg: 20, md: 18, sm: 16, xs: 14 } }}
+                >
                   Diary Calender
                 </Typography>
                 <Typography
-                  sx={{ fontSize: 12, textAlign: 'right', mr: 4, my: 1 }}
+                  sx={{
+                    fontSize: { lg: 20, md: 18, sm: 16, xs: 12 },
+                    textAlign: 'right',
+                    mr: 4,
+                    my: 1,
+                  }}
                 >
                   Diary Records:{' '}
                   <span
                     style={{
                       fontWeight: 'bold',
                       color: '#ed1c24',
-                      fontSize: 18,
+                      fontSize: 30,
                     }}
                   >
                     {diaryCounter}
@@ -512,126 +519,6 @@ const CurrentDiaries: NextPage = () => {
             </Card>
           </Container>
         </Grid>
-      </Container>
-      <Container
-        maxWidth="sm"
-        sx={{
-          mt: 4,
-          display: { xs: 'none', lg: 'block' },
-        }}
-      >
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Card
-            sx={{
-              borderRadius: 2,
-              position: 'fixed',
-              minWidth: '550px',
-            }}
-          >
-            <CardContent sx={{ p: 4 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography sx={{ mt: 2, fontSize: 20 }}>
-                  Diary Calender
-                </Typography>
-                <Typography
-                  sx={{ fontSize: 20, textAlign: 'right', mr: 4, my: 1 }}
-                >
-                  Diary Records:{' '}
-                  <span
-                    style={{
-                      fontWeight: 'bold',
-                      color: '#ed1c24',
-                      fontSize: 30,
-                    }}
-                  >
-                    {diaryCounter}
-                  </span>{' '}
-                  / {daysInSelectedMonth} days
-                </Typography>
-              </Box>
-
-              <DateCalendar
-                onChange={handleDayChange}
-                onMonthChange={handleMonthChange}
-                views={['day']}
-                slots={{
-                  day: diaryWrittenDay,
-                }}
-                sx={{
-                  '& .MuiDayCalendar-header': {
-                    // Needed for weekday (ie S M T W T F S )adjustments (and padding if wanted)
-                    // Adjusts spacing between
-
-                    width: '100%',
-                    overflow: 'hidden',
-                    justifyContent: 'space-between',
-                    paddingLeft: '1em',
-                    paddingRight: '1em',
-                    // paddingTop: '1em',
-                    // paddingBottom: "1em",
-                  },
-                  '& .MuiDayCalendar-weekContainer': {
-                    // Adjusts spacing between days (ie 1, 2, 3.. 27, 28)
-                    justifyContent: 'center',
-                    overflow: 'hidden',
-                    width: '100%',
-                    margin: 0,
-                  },
-                  '& .MuiPickersDay-dayWithMargin': {
-                    // Grows width/height of day buttons
-                    width: 'calc(100% - 4px)',
-                    height: 'calc(100% - 4px)',
-                    aspectRatio: '1',
-                    // height: 'auto',
-
-                    fontSize: '1.0em',
-                  },
-                  '& .MuiBadge-root': {
-                    // Parent of button management
-                    aspectRatio: 1,
-                    width: '10%',
-                    display: 'flex',
-                    alignContent: 'center',
-                    justifyContent: 'center',
-                  },
-                  '& .MuiDayCalendar-weekDayLabel': {
-                    // Manages size of weekday labels
-                    aspectRatio: 1,
-                    width: 'calc(10% - 4px)', // deals with margin
-                    fontSize: '1.2em',
-                  },
-                  '& .MuiPickersCalendarHeader-root': {
-                    paddingLeft: 0,
-                  },
-                  '& .MuiPickersCalendarHeader-label': {
-                    // Manages month/year size
-                    fontSize: '1.3em',
-                  },
-                  '& .MuiDayCalendar-monthContainer': {
-                    // Not sure if needed, currently works tho
-                    width: '100%',
-                  },
-                  '& .MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer':
-                    {
-                      // Handles size of week row parent, 1.6 aspect is good for now
-                      aspectRatio: '1.6',
-                      overflow: 'hidden',
-                    },
-                  '& .MuiDayCalendar-slideTransition': {
-                    // Handles size of week row parent, 1.6 aspect is good for now
-                    // 1.2がベスト。1.6だとカレンダー下部が切れる。
-                    aspectRatio: 1.2,
-                    width: '100%',
-                    overflow: 'hidden',
-                  },
-
-                  width: '100%',
-                  maxHeight: '500%',
-                }}
-              />
-            </CardContent>
-          </Card>
-        </LocalizationProvider>
       </Container>
     </Box>
   )

@@ -174,14 +174,16 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
   return (
     <>
       <Typography sx={{ fontSize: 20, mt: 1, ml: 2 }}>Word Count</Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 2 }}>
+      <Box
+        sx={{ display: { md: 'flex' }, justifyContent: 'space-between', my: 2 }}
+      >
         <Box>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               format="YYYY-MM-DD"
               label="From"
               value={dayjs(startDate)}
-              sx={{ mx: 1 }}
+              sx={{ mx: 1, width: 140 }}
               onChange={(value) => {
                 handleFromChange(value)
               }}
@@ -208,7 +210,7 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
               format="YYYY-MM-DD"
               label="To"
               value={dayjs(endDate)}
-              sx={{ mx: 1 }}
+              sx={{ mx: 1, width: 140 }}
               onChange={(value) => {
                 handleToChange(value)
               }}
@@ -231,7 +233,7 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
             />
           </LocalizationProvider>
         </Box>
-        <Box sx={{ mt: 1, ml: 4 }}>
+        <Box sx={{ mt: 1, ml: 1 }}>
           <Button
             color="warning"
             variant="outlined"
@@ -241,6 +243,7 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
               textTransform: 'none',
               borderRadius: 2,
               boxShadow: 'none',
+              mt: 1,
               mr: 1,
             }}
             onClick={() => {
@@ -259,6 +262,7 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
 
               borderRadius: 2,
               boxShadow: 'none',
+              mt: 1,
               mr: 1,
             }}
             onClick={() => {
@@ -277,6 +281,7 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
 
               borderRadius: 2,
               boxShadow: 'none',
+              mt: 1,
               mr: 1,
             }}
             onClick={() => {
@@ -294,6 +299,7 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
               textTransform: 'none',
               borderRadius: 2,
               boxShadow: 'none',
+              mt: 1,
               mr: 1,
             }}
             onClick={() => {
@@ -311,6 +317,7 @@ export const ChartBar = ({ diaries }: CurrentDiaryProps) => {
               textTransform: 'none',
               borderRadius: 2,
               boxShadow: 'none',
+              mt: 1,
               mr: 1,
             }}
             onClick={() => {

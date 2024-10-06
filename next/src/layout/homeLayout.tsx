@@ -74,7 +74,7 @@ const Layout = ({ children, pageUrl }: LayoutProps) => {
         </Card>
       </Container>
       <Container
-        sx={{ width: '400px', py: 4, display: { xs: 'none', lg: 'block' } }}
+        sx={{ width: '400px', py: 4, display: { xs: 'none', xl: 'block' } }}
       >
         <Card>
           <CardContent>

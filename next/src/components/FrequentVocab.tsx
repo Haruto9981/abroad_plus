@@ -29,14 +29,20 @@ export const FrequentVocab = () => {
   }
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 5 }}>
+      <Box
+        sx={{
+          display: { sm: 'flex', xs: 'block' },
+          justifyContent: 'space-between',
+          mt: 5,
+        }}
+      >
         <Box>
           <Typography sx={{ fontSize: 20, mt: 1, ml: 2 }}>
             Word Frequency
           </Typography>
         </Box>
 
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', mt: 1 }}>
           <Typography sx={{ fontSize: 20, mt: 0.5, ml: 2, mr: 2 }}>
             {targetMonth}
           </Typography>
@@ -47,7 +53,6 @@ export const FrequentVocab = () => {
               color: 'black',
               borderColor: '#c0c0c0',
               textTransform: 'none',
-
               borderRadius: 2,
               boxShadow: 'none',
               mr: 1,
