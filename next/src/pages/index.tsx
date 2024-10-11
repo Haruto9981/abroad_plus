@@ -93,7 +93,7 @@ const Index: NextPage = () => {
                 diaryComments={diary.diaryComments}
               />
             </Link>
-            <Divider sx={{ my: 2 }} />
+            <Divider />
           </Grid>
         ))}
       </Grid>

@@ -1,4 +1,4 @@
-import { Box, Container, Card, Divider, CardContent } from '@mui/material'
+import { Box, Container, Card, Divider } from '@mui/material'
 import Tabs from '@mui/material/Tabs'
 import LinkTab from '@/components/HomeLinkTab'
 import ProfileCard from '@/components/ProfileCard'
@@ -59,27 +59,23 @@ const Layout = ({ children, pageUrl }: LayoutProps) => {
       </Container>
       <Container maxWidth="sm" sx={{ py: 4 }}>
         <Card sx={{ borderRadius: 2 }}>
-          <CardContent>
-            <Tabs value={pageUrl || false} centered>
-              <LinkTab label="All" href="/" value="/" />
-              <LinkTab
-                label="Following"
-                href="/following_diaries"
-                value="/following_diaries"
-              />
-            </Tabs>
-            <Divider sx={{ mb: 2 }} />
-            <Box>{children}</Box>
-          </CardContent>
+          <Tabs value={pageUrl || false} centered>
+            <LinkTab label="All" href="/" value="/" />
+            <LinkTab
+              label="Following"
+              href="/following_diaries"
+              value="/following_diaries"
+            />
+          </Tabs>
+          <Divider />
+          <Box>{children}</Box>
         </Card>
       </Container>
       <Container
         sx={{ width: '400px', py: 4, display: { xs: 'none', xl: 'block' } }}
       >
         <Card>
-          <CardContent>
-            <RecommendedUser />
-          </CardContent>
+          <RecommendedUser />
         </Card>
       </Container>
     </Box>

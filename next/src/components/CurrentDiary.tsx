@@ -149,7 +149,16 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
 
   const isTopPage = router.pathname === '/current/diaries'
   return (
-    <>
+    <Box
+      sx={{
+        p: 2,
+        ...(isTopPage && {
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+          },
+        }),
+      }}
+    >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex' }}>
           <Box>
@@ -335,14 +344,13 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
             bgcolor: 'background.paper',
             border: '0.5px solid #000',
             boxShadow: 24,
-            p: 4,
             borderRadius: 2,
           }}
         >
           <LikesModal id={props.id} />
         </Box>
       </Modal>
-    </>
+    </Box>
   )
 }
 
