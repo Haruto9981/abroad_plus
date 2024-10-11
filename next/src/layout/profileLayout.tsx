@@ -1,4 +1,4 @@
-import { Box, Container, Card, CardContent } from '@mui/material'
+import { Box, Container, Card } from '@mui/material'
 import camelcaseKeys from 'camelcase-keys'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
@@ -43,9 +43,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         />
       </Container>
       <Container maxWidth="sm" sx={{ py: 6 }}>
-        <Card sx={{ borderRadius: 2 }}>
-          {children}
-        </Card>
+        <Card sx={{ borderRadius: 2 }}>{children}</Card>
       </Container>
     </Box>
   )

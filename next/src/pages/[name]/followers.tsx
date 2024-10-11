@@ -76,30 +76,36 @@ const Followers: NextPage = () => {
   return (
     <Layout>
       <Typography sx={{ fontSize: 20, m: 2 }}>Followers</Typography>
-      <Divider/>
+      <Divider />
       {followers.length === 0 && (
         <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
           No followers
         </Typography>
       )}
       {followers.map((follower: Followers, i: number) => (
-        <Link href={`/${follower.name}`}>
-          <Box key={i} sx={{ display: 'flex', p: 1, "&:hover": {
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-      } }}>
-              <IconButton>
-                {follower.image.url ? (
-                  <Avatar
-                    src={follower.image.url}
-                    sx={{ width: 50, height: 50 }}
-                  ></Avatar>
-                ) : (
-                  <Avatar sx={{ width: 50, height: 50 }}>
-                    <PersonIcon />
-                  </Avatar>
-                )}
-              </IconButton>
-           
+        <Link href={`/${follower.name}`} key={i}>
+          <Box
+            sx={{
+              display: 'flex',
+              p: 1,
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.05)',
+              },
+            }}
+          >
+            <IconButton>
+              {follower.image.url ? (
+                <Avatar
+                  src={follower.image.url}
+                  sx={{ width: 50, height: 50 }}
+                ></Avatar>
+              ) : (
+                <Avatar sx={{ width: 50, height: 50 }}>
+                  <PersonIcon />
+                </Avatar>
+              )}
+            </IconButton>
+
             <Box sx={{ width: '100%', mt: 1 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex' }}>
@@ -189,11 +195,11 @@ const Followers: NextPage = () => {
                 </Button>
               ))}
           </Box>
-          </Link>
+        </Link>
       ))}
       {followers.length !== 0 && (
         <>
-          <Divider/>
+          <Divider />
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
             <Pagination
               count={meta.totalPages}

@@ -83,24 +83,29 @@ const Following: NextPage = () => {
         </Typography>
       )}
       {following_users.map((following_user: Following, i: number) => (
-        <Link href={`/${following_user.name}`}>
-          <Box key={i} sx={{ display: 'flex', p: 1, "&:hover": {
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-      } }}>
-            
-              <IconButton>
-                {following_user.image.url ? (
-                  <Avatar
-                    src={following_user.image.url}
-                    sx={{ width: 50, height: 50 }}
-                  ></Avatar>
-                ) : (
-                  <Avatar sx={{ width: 50, height: 50 }}>
-                    <PersonIcon />
-                  </Avatar>
-                )}
-              </IconButton>
-            
+        <Link href={`/${following_user.name}`} key={i}>
+          <Box
+            sx={{
+              display: 'flex',
+              p: 1,
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.05)',
+              },
+            }}
+          >
+            <IconButton>
+              {following_user.image.url ? (
+                <Avatar
+                  src={following_user.image.url}
+                  sx={{ width: 50, height: 50 }}
+                ></Avatar>
+              ) : (
+                <Avatar sx={{ width: 50, height: 50 }}>
+                  <PersonIcon />
+                </Avatar>
+              )}
+            </IconButton>
+
             <Box sx={{ width: '100%', mt: 1 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex' }}>
@@ -190,11 +195,11 @@ const Following: NextPage = () => {
                 </Button>
               ))}
           </Box>
-          </Link>
+        </Link>
       ))}
       {following_users.length !== 0 && (
         <>
-          <Divider/>
+          <Divider />
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
             <Pagination
               count={meta.totalPages}

@@ -171,11 +171,17 @@ const Diary = ({
     router.pathname === '/' || router.pathname === '/following_diaries'
 
   return (
-    <Box sx={{px: 2, pt: 2,  ...((isTopPage || router.pathname === '/[name]') && {
-      "&:hover": {
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-      }
-    })}}>
+    <Box
+      sx={{
+        px: 2,
+        pt: 2,
+        ...((isTopPage || router.pathname === '/[name]') && {
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+          },
+        }),
+      }}
+    >
       <Box sx={{ display: 'flex' }}>
         <Link href={`/${userName}`}>
           <IconButton

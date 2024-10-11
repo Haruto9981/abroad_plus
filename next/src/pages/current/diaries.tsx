@@ -366,156 +366,162 @@ const CurrentDiaries: NextPage = () => {
         <Grid container spacing={2}>
           <Container>
             <Card sx={{ borderRadius: 2 }}>
-              
-                {!diariesInSpecificMonth && !diariesInSpecificDay && (
-                  <>
-                    <Box>
-                      <Typography sx={{ fontSize: 24, m: 2 }}>
-                        Recent Diaries
-                      </Typography>
-                    </Box>
-                    <Divider/>
-                    {firstThirty.length === 0 ? (
-                      <Typography
-                        sx={{ textAlign: 'center', color: 'gray', m: 2 }}
-                      >
-                        No diaries
-                      </Typography>
-                    ) : (
-                      <>
-                        {firstThirty.map(
-                          (diary: CurrentDiaryProps, i: number) => (
-                            <Grid key={i} item xs={12} md={12}>
-                              <Link href={'/current/diaries/' + diary.id}>
-                                <CurrentUserDiary
-                                  id={diary.id}
-                                  title={diary.title}
-                                  content={diary.content}
-                                  status={diary.status}
-                                  image={diary.image.url}
-                                  wordCount={diary.wordCount}
-                                  day={diary.day}
-                                  month={diary.monthName}
-                                  year={diary.year}
-                                  wDay={diary.wDay}
-                                  favorites={diary.favorites}
-                                  diaryComments={diary.diaryComments}
-                                />
-                              </Link>
-                              <Divider/>
-                            </Grid>
-                          ),
-                        )}
-                      </>
-                    )}
-                  </>
-                )}
-                {diariesInSpecificMonth && (
-                  <>
-                    <Box
-                      sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}
+              {!diariesInSpecificMonth && !diariesInSpecificDay && (
+                <>
+                  <Box>
+                    <Typography sx={{ fontSize: 24, m: 2 }}>
+                      Recent Diaries
+                    </Typography>
+                  </Box>
+                  <Divider />
+                  {firstThirty.length === 0 ? (
+                    <Typography
+                      sx={{ textAlign: 'center', color: 'gray', m: 2 }}
                     >
-                      <Typography sx={{ fontSize: 24 }}>Diaries</Typography>
-                      <Typography
-                        sx={{
-                          fontSize: 24,
-                          ml: 2,
-                          display: { xs: 'none', lg: 'block' },
-                        }}
-                      >
-                        {yearMonth}
-                      </Typography>
-                    </Box>
-                    <Divider/>
-                    {diariesInSpecificMonth.length === 0 ? (
-                      <Typography
-                        sx={{ textAlign: 'center', color: 'gray', mt: 2 }}
-                      >
-                        No diaries
-                      </Typography>
-                    ) : (
-                      <>
-                        {diariesInSpecificMonth.map(
-                          (diary: CurrentDiaryProps, i: number) => (
-                            <Grid key={i} item xs={12} md={12}>
-                              <Link href={'/current/diaries/' + diary.id}>
-                                <CurrentUserDiary
-                                  id={diary.id}
-                                  title={diary.title}
-                                  content={diary.content}
-                                  status={diary.status}
-                                  image={diary.image.url}
-                                  wordCount={diary.wordCount}
-                                  day={diary.day}
-                                  month={diary.monthName}
-                                  year={diary.year}
-                                  wDay={diary.wDay}
-                                  favorites={diary.favorites}
-                                  diaryComments={diary.diaryComments}
-                                />
-                              </Link>
-                              <Divider />
-                            </Grid>
-                          ),
-                        )}
-                      </>
-                    )}
-                  </>
-                )}
-                {diariesInSpecificDay && (
-                  <>
-                    <Box
-                      sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}
+                      No diaries
+                    </Typography>
+                  ) : (
+                    <>
+                      {firstThirty.map(
+                        (diary: CurrentDiaryProps, i: number) => (
+                          <Grid key={i} item xs={12} md={12}>
+                            <Link href={'/current/diaries/' + diary.id}>
+                              <CurrentUserDiary
+                                id={diary.id}
+                                title={diary.title}
+                                content={diary.content}
+                                status={diary.status}
+                                image={diary.image.url}
+                                wordCount={diary.wordCount}
+                                day={diary.day}
+                                month={diary.monthName}
+                                year={diary.year}
+                                wDay={diary.wDay}
+                                favorites={diary.favorites}
+                                diaryComments={diary.diaryComments}
+                              />
+                            </Link>
+                            <Divider />
+                          </Grid>
+                        ),
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+              {diariesInSpecificMonth && (
+                <>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      p: 2,
+                    }}
+                  >
+                    <Typography sx={{ fontSize: 24 }}>Diaries</Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 24,
+                        ml: 2,
+                        display: { xs: 'none', lg: 'block' },
+                      }}
                     >
-                      <Typography sx={{ fontSize: 24 }}>Diaries</Typography>
-                      <Typography
-                        sx={{
-                          fontSize: 24,
-                          ml: 2,
-                          display: { xs: 'none', lg: 'block' },
-                        }}
-                      >
-                        {yearMonthDay}
-                      </Typography>
-                    </Box>
-                    <Divider/>
+                      {yearMonth}
+                    </Typography>
+                  </Box>
+                  <Divider />
+                  {diariesInSpecificMonth.length === 0 ? (
+                    <Typography
+                      sx={{ textAlign: 'center', color: 'gray', mt: 2 }}
+                    >
+                      No diaries
+                    </Typography>
+                  ) : (
+                    <>
+                      {diariesInSpecificMonth.map(
+                        (diary: CurrentDiaryProps, i: number) => (
+                          <Grid key={i} item xs={12} md={12}>
+                            <Link href={'/current/diaries/' + diary.id}>
+                              <CurrentUserDiary
+                                id={diary.id}
+                                title={diary.title}
+                                content={diary.content}
+                                status={diary.status}
+                                image={diary.image.url}
+                                wordCount={diary.wordCount}
+                                day={diary.day}
+                                month={diary.monthName}
+                                year={diary.year}
+                                wDay={diary.wDay}
+                                favorites={diary.favorites}
+                                diaryComments={diary.diaryComments}
+                              />
+                            </Link>
+                            <Divider />
+                          </Grid>
+                        ),
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+              {diariesInSpecificDay && (
+                <>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      p: 2,
+                    }}
+                  >
+                    <Typography sx={{ fontSize: 24 }}>Diaries</Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 24,
+                        ml: 2,
+                        display: { xs: 'none', lg: 'block' },
+                      }}
+                    >
+                      {yearMonthDay}
+                    </Typography>
+                  </Box>
+                  <Divider />
 
-                    {diariesInSpecificDay.length === 0 ? (
-                      <Typography
-                        sx={{ textAlign: 'center', color: 'gray', mt: 2 }}
-                      >
-                        No diaries
-                      </Typography>
-                    ) : (
-                      <>
-                        {diariesInSpecificDay.map(
-                          (diary: CurrentDiaryProps, i: number) => (
-                            <Grid key={i} item xs={12} md={12}>
-                              <Link href={'/current/diaries/' + diary.id}>
-                                <CurrentUserDiary
-                                  id={diary.id}
-                                  title={diary.title}
-                                  content={diary.content}
-                                  status={diary.status}
-                                  image={diary.image.url}
-                                  wordCount={diary.wordCount}
-                                  day={diary.day}
-                                  month={diary.monthName}
-                                  year={diary.year}
-                                  wDay={diary.wDay}
-                                  favorites={diary.favorites}
-                                  diaryComments={diary.diaryComments}
-                                />
-                              </Link>
-                              <Divider />
-                            </Grid>
-                          ),
-                        )}
-                      </>
-                    )}
-                  </>
-                )}
-             
+                  {diariesInSpecificDay.length === 0 ? (
+                    <Typography
+                      sx={{ textAlign: 'center', color: 'gray', mt: 2 }}
+                    >
+                      No diaries
+                    </Typography>
+                  ) : (
+                    <>
+                      {diariesInSpecificDay.map(
+                        (diary: CurrentDiaryProps, i: number) => (
+                          <Grid key={i} item xs={12} md={12}>
+                            <Link href={'/current/diaries/' + diary.id}>
+                              <CurrentUserDiary
+                                id={diary.id}
+                                title={diary.title}
+                                content={diary.content}
+                                status={diary.status}
+                                image={diary.image.url}
+                                wordCount={diary.wordCount}
+                                day={diary.day}
+                                month={diary.monthName}
+                                year={diary.year}
+                                wDay={diary.wDay}
+                                favorites={diary.favorites}
+                                diaryComments={diary.diaryComments}
+                              />
+                            </Link>
+                            <Divider />
+                          </Grid>
+                        ),
+                      )}
+                    </>
+                  )}
+                </>
+              )}
             </Card>
           </Container>
         </Grid>

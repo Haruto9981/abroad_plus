@@ -149,11 +149,16 @@ const CurrentUserDiary = (props: CurrentDiaryProps) => {
 
   const isTopPage = router.pathname === '/current/diaries'
   return (
-    <Box sx={{p: 2, ...((isTopPage) && {
-      "&:hover": {
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-      }
-    })}}>
+    <Box
+      sx={{
+        p: 2,
+        ...(isTopPage && {
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+          },
+        }),
+      }}
+    >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex' }}>
           <Box>

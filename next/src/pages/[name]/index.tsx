@@ -76,7 +76,7 @@ const UserProfile: NextPage = () => {
   return (
     <Layout>
       <Typography sx={{ fontSize: 20, p: 2 }}>Diaries</Typography>
-      <Divider/>
+      <Divider />
       {diaries.length === 0 && (
         <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
           No diaries

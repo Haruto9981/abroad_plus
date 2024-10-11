@@ -6,7 +6,6 @@ import {
   Tooltip,
   IconButton,
   Card,
-  CardContent,
 } from '@mui/material'
 import camelcaseKeys from 'camelcase-keys'
 import type { NextPage } from 'next'
@@ -82,27 +81,27 @@ const DiaryDetail: NextPage = () => {
           </Link>
         </Box>
         <Card sx={{ borderRadius: 2 }}>
-            <Diary
-              id={diary.id}
-              title={diary.title}
-              content={diary.content}
-              image={diary.image.url}
-              wordCount={diary.wordCount}
-              day={diary.day}
-              month={diary.monthName}
-              year={diary.year}
-              wDay={diary.wDay}
-              userId={diary.user.id}
-              userName={diary.user.name}
-              userFirstName={diary.user.first_name}
-              userLastName={diary.user.last_name}
-              userCountry={diary.user.country}
-              userUni={diary.user.uni}
-              userBio={diary.user.bio}
-              userImage={diary.user.image.url}
-              favorites={diary.favorites}
-              diaryComments={diary.diaryComments}
-            />
+          <Diary
+            id={diary.id}
+            title={diary.title}
+            content={diary.content}
+            image={diary.image.url}
+            wordCount={diary.wordCount}
+            day={diary.day}
+            month={diary.monthName}
+            year={diary.year}
+            wDay={diary.wDay}
+            userId={diary.user.id}
+            userName={diary.user.name}
+            userFirstName={diary.user.first_name}
+            userLastName={diary.user.last_name}
+            userCountry={diary.user.country}
+            userUni={diary.user.uni}
+            userBio={diary.user.bio}
+            userImage={diary.user.image.url}
+            favorites={diary.favorites}
+            diaryComments={diary.diaryComments}
+          />
         </Card>
         <Box sx={{ my: 4 }}>
           <Comment id={diary.id} />

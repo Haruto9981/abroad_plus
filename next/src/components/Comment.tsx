@@ -1,36 +1,24 @@
-import { css } from '@emotion/react'
-import DeleteIcon from '@mui/icons-material/Delete'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import PersonIcon from '@mui/icons-material/Person'
 import {
   Box,
   Button,
-  Modal,
   Card,
   CardContent,
-  IconButton,
   Divider,
   TextField,
-  Avatar,
   Typography,
-  Tooltip,
   Stack,
 } from '@mui/material'
-import Popover from '@mui/material/Popover'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import useSWR from 'swr'
+import CommentCard from '@/components/CommentCard'
 import Error from '@/components/Error'
 import Loading from '@/components/Loading'
-import ProfileHoverCard from '@/components/ProfileHoverCard'
-import { useUserState, useSnackbarState } from '@/hooks/useGlobalState'
+import { useSnackbarState } from '@/hooks/useGlobalState'
 import { fetcher } from '@/utils'
-import CommentCard from '@/components/CommentCard'
 
 type diaryIdProps = {
   id: string
@@ -59,16 +47,11 @@ type CommentFormData = {
   comment: string
 }
 
-const imageCss = css({ marginTop: '4px' })
-
 const Comment = (props: diaryIdProps) => {
-  const [user] = useUserState()
   const router = useRouter()
   const [, setSnackbar] = useSnackbarState()
-  const [open, setOpen] = useState<boolean>(false)
-  const [commentId, setCommentId] = useState<number>(0)
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [, setOpen] = useState<boolean>(false)
+
   const url =
     process.env.NEXT_PUBLIC_API_BASE_URL +
     '/diaries/' +
@@ -153,7 +136,6 @@ const Comment = (props: diaryIdProps) => {
           pathname: pathname,
         })
         mutateComments()
-        setCommentId(0)
       })
       .catch((e: AxiosError<{ error: string }>) => {
         console.log(e.message)
@@ -205,14 +187,16 @@ const Comment = (props: diaryIdProps) => {
           </Button>
         </Stack>
         {comments.map((comment: CommentProps, i: number) => (
-          <CommentCard
-           id={comment.id}
-           comment={comment.comment}
-           userId={comment.userId}
-           fromToday={comment.fromToday}
-           user={comment.user}
-           onDelete={handleDeleteChange}
-           />    
+          <Box key={i}>
+            <CommentCard
+              id={comment.id}
+              comment={comment.comment}
+              userId={comment.userId}
+              fromToday={comment.fromToday}
+              user={comment.user}
+              onDelete={handleDeleteChange}
+            />
+          </Box>
         ))}
       </CardContent>
     </Card>

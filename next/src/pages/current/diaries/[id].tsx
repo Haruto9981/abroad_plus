@@ -11,7 +11,6 @@ import {
   Tooltip,
   IconButton,
   Card,
-  CardContent,
 } from '@mui/material'
 import axios, { AxiosError } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
@@ -149,22 +148,20 @@ const CurrentDiaryDetail: NextPage = () => {
             </Box>
           </Box>
           <Card sx={{ borderRadius: 2 }}>
-            
-              <CurrentUserDiary
-                id={diary.id}
-                title={diary.title}
-                content={diary.content}
-                status={diary.status}
-                image={diary.image.url}
-                wordCount={diary.wordCount}
-                day={diary.day}
-                month={diary.monthName}
-                year={diary.year}
-                wDay={diary.wDay}
-                favorites={diary.favorites}
-                diaryComments={diary.diaryComments}
-              />
-           
+            <CurrentUserDiary
+              id={diary.id}
+              title={diary.title}
+              content={diary.content}
+              status={diary.status}
+              image={diary.image.url}
+              wordCount={diary.wordCount}
+              day={diary.day}
+              month={diary.monthName}
+              year={diary.year}
+              wDay={diary.wDay}
+              favorites={diary.favorites}
+              diaryComments={diary.diaryComments}
+            />
           </Card>
 
           {diary.status === 'shared' && (

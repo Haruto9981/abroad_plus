@@ -80,13 +80,18 @@ const LikesModal = (props: diaryIdProps) => {
       )}
       {favorites.map((favorite: Favorite, i: number) => (
         <>
-          <Divider/>
+          <Divider />
           <Link href={`/${favorite.user.name}`}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', "&:hover": {
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-      } }}>
-            <Box key={i} sx={{ display: 'flex', p: 1 }}>
-              
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                },
+              }}
+            >
+              <Box key={i} sx={{ display: 'flex', p: 1 }}>
                 <IconButton>
                   {favorite.user.image.url ? (
                     <Avatar
@@ -99,97 +104,97 @@ const LikesModal = (props: diaryIdProps) => {
                     </Avatar>
                   )}
                 </IconButton>
-             
-              <Box sx={{ width: '100%', mt: 1 }}>
-                <Box sx={{ display: { sm: 'flex' } }}>
-                  <Link href={`/${favorite.user.name}`}>
-                    <Typography
-                      sx={{
-                        mr: 1,
-                        fontSize: { xs: 14, sm: 16 },
-                        fontWeight: 'bold',
-                        '&:hover': {
-                          textDecoration: 'underline',
-                        },
-                      }}
-                    >
-                      @{favorite.user.name}
-                    </Typography>
-                  </Link>
-                  <Box sx={{ display: 'flex' }}>
-                    {favorite.user.country && (
-                      <Tooltip title={favorite.user.country}>
-                        <Image
-                          css={imageCss}
-                          src={`/${favorite.user.country.toLowerCase()}.png`}
-                          height={15}
-                          width={30}
-                          alt="国旗"
-                        />
-                      </Tooltip>
-                    )}
-                    {favorite.user.uni && (
-                      <Box sx={{ mx: 1 }}>
-                        <Tooltip title={favorite.user.uni}>
+
+                <Box sx={{ width: '100%', mt: 1 }}>
+                  <Box sx={{ display: { sm: 'flex' } }}>
+                    <Link href={`/${favorite.user.name}`}>
+                      <Typography
+                        sx={{
+                          mr: 1,
+                          fontSize: { xs: 14, sm: 16 },
+                          fontWeight: 'bold',
+                          '&:hover': {
+                            textDecoration: 'underline',
+                          },
+                        }}
+                      >
+                        @{favorite.user.name}
+                      </Typography>
+                    </Link>
+                    <Box sx={{ display: 'flex' }}>
+                      {favorite.user.country && (
+                        <Tooltip title={favorite.user.country}>
                           <Image
-                            src={`/${favorite.user.uni.toLowerCase()}.png`}
-                            height={22}
-                            width={22}
-                            alt="Uni flag"
+                            css={imageCss}
+                            src={`/${favorite.user.country.toLowerCase()}.png`}
+                            height={15}
+                            width={30}
+                            alt="国旗"
                           />
                         </Tooltip>
-                      </Box>
-                    )}
+                      )}
+                      {favorite.user.uni && (
+                        <Box sx={{ mx: 1 }}>
+                          <Tooltip title={favorite.user.uni}>
+                            <Image
+                              src={`/${favorite.user.uni.toLowerCase()}.png`}
+                              height={22}
+                              width={22}
+                              alt="Uni flag"
+                            />
+                          </Tooltip>
+                        </Box>
+                      )}
+                    </Box>
                   </Box>
                 </Box>
               </Box>
+              {user.id !== favorite.user.id &&
+                (!getUserFollowingIdArray(user.following, user).includes(
+                  favorite.user.id,
+                ) ? (
+                  <Button
+                    onClick={(e) =>
+                      handleFollowChange(favorite.user.id, e, user, setUser)
+                    }
+                    variant="contained"
+                    color="warning"
+                    type="submit"
+                    sx={{
+                      fontWeight: 'bold',
+                      color: 'white',
+                      textTransform: 'none',
+                      width: 100,
+                      height: 40,
+                      mr: 2,
+                      my: 2,
+                    }}
+                  >
+                    follow
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={(e) =>
+                      handleUnfollowChange(favorite.user.id, e, user, setUser)
+                    }
+                    variant="outlined"
+                    color="warning"
+                    type="submit"
+                    sx={{
+                      fontWeight: 'bold',
+                      textTransform: 'none',
+                      boxShadow: 'none',
+                      border: '1.5px solid #f5a500',
+                      width: 100,
+                      height: 40,
+                      mr: 2,
+                      my: 2,
+                    }}
+                  >
+                    unfollow
+                  </Button>
+                ))}
             </Box>
-            {user.id !== favorite.user.id &&
-              (!getUserFollowingIdArray(user.following, user).includes(
-                favorite.user.id,
-              ) ? (
-                <Button
-                  onClick={(e) =>
-                    handleFollowChange(favorite.user.id, e, user, setUser)
-                  }
-                  variant="contained"
-                  color="warning"
-                  type="submit"
-                  sx={{
-                    fontWeight: 'bold',
-                    color: 'white',
-                    textTransform: 'none',
-                    width: 100,
-                    height: 40,
-                    mr: 2,
-                    my: 2,
-                  }}
-                >
-                  follow
-                </Button>
-              ) : (
-                <Button
-                  onClick={(e) =>
-                    handleUnfollowChange(favorite.user.id, e, user, setUser)
-                  }
-                  variant="outlined"
-                  color="warning"
-                  type="submit"
-                  sx={{
-                    fontWeight: 'bold',
-                    textTransform: 'none',
-                    boxShadow: 'none',
-                    border: '1.5px solid #f5a500',
-                    width: 100,
-                    height: 40,
-                    mr: 2,
-                    my: 2,
-                  }}
-                >
-                  unfollow
-                </Button>
-              ))}
-          </Box>
           </Link>
         </>
       ))}
