@@ -75,10 +75,10 @@ const UserProfile: NextPage = () => {
 
   return (
     <Layout>
-      <Typography sx={{ fontSize: 20, mb: 2 }}>Diaries</Typography>
-      <Divider sx={{ my: 2 }} />
+      <Typography sx={{ fontSize: 20, p: 2 }}>Diaries</Typography>
+      <Divider/>
       {diaries.length === 0 && (
-        <Typography sx={{ textAlign: 'center', color: 'gray', mt: 2 }}>
+        <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
           No diaries
         </Typography>
       )}
@@ -108,7 +108,7 @@ const UserProfile: NextPage = () => {
                 diaryComments={diary.diaryComments}
               />
             </Link>
-            <Divider sx={{ my: 2 }} />
+            <Divider />
           </Grid>
         ))}
       </Grid>

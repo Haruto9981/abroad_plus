@@ -59,7 +59,6 @@ const Layout = ({ children, pageUrl }: LayoutProps) => {
       </Container>
       <Container maxWidth="sm" sx={{ py: 4 }}>
         <Card sx={{ borderRadius: 2 }}>
-          <CardContent>
             <Tabs value={pageUrl || false} centered>
               <LinkTab label="All" href="/" value="/" />
               <LinkTab
@@ -68,18 +67,17 @@ const Layout = ({ children, pageUrl }: LayoutProps) => {
                 value="/following_diaries"
               />
             </Tabs>
-            <Divider sx={{ mb: 2 }} />
+            <Divider />
             <Box>{children}</Box>
-          </CardContent>
         </Card>
       </Container>
       <Container
         sx={{ width: '400px', py: 4, display: { xs: 'none', xl: 'block' } }}
       >
         <Card>
-          <CardContent>
+         
             <RecommendedUser />
-          </CardContent>
+          
         </Card>
       </Container>
     </Box>

@@ -82,7 +82,6 @@ const DiaryDetail: NextPage = () => {
           </Link>
         </Box>
         <Card sx={{ borderRadius: 2 }}>
-          <CardContent>
             <Diary
               id={diary.id}
               title={diary.title}
@@ -104,7 +103,6 @@ const DiaryDetail: NextPage = () => {
               favorites={diary.favorites}
               diaryComments={diary.diaryComments}
             />
-          </CardContent>
         </Card>
         <Box sx={{ my: 4 }}>
           <Comment id={diary.id} />

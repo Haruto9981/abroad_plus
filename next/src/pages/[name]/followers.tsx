@@ -75,17 +75,18 @@ const Followers: NextPage = () => {
 
   return (
     <Layout>
-      <Typography sx={{ fontSize: 20, mb: 2 }}>Followers</Typography>
-      <Divider sx={{ mt: 2 }} />
+      <Typography sx={{ fontSize: 20, m: 2 }}>Followers</Typography>
+      <Divider/>
       {followers.length === 0 && (
-        <Typography sx={{ textAlign: 'center', color: 'gray', mt: 2 }}>
+        <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
           No followers
         </Typography>
       )}
       {followers.map((follower: Followers, i: number) => (
-        <>
-          <Box key={i} sx={{ display: 'flex', mt: 1 }}>
-            <Link href={`/${follower.name}`}>
+        <Link href={`/${follower.name}`}>
+          <Box key={i} sx={{ display: 'flex', p: 1, "&:hover": {
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+      } }}>
               <IconButton>
                 {follower.image.url ? (
                   <Avatar
@@ -98,7 +99,7 @@ const Followers: NextPage = () => {
                   </Avatar>
                 )}
               </IconButton>
-            </Link>
+           
             <Box sx={{ width: '100%', mt: 1 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex' }}>
@@ -188,12 +189,12 @@ const Followers: NextPage = () => {
                 </Button>
               ))}
           </Box>
-        </>
+          </Link>
       ))}
       {followers.length !== 0 && (
         <>
-          <Divider sx={{ my: 2 }} />
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+          <Divider/>
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
             <Pagination
               count={meta.totalPages}
               page={meta.currentPage}

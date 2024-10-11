@@ -72,7 +72,7 @@ const LikesModal = (props: diaryIdProps) => {
 
   return (
     <Box>
-      <Typography sx={{ fontSize: 20, mb: 2 }}>Likes</Typography>
+      <Typography sx={{ fontSize: 20, m: 2 }}>Likes</Typography>
       {favorites.length === 0 && (
         <Typography sx={{ textAlign: 'center', color: 'gray', my: 2 }}>
           No likes
@@ -80,10 +80,13 @@ const LikesModal = (props: diaryIdProps) => {
       )}
       {favorites.map((favorite: Favorite, i: number) => (
         <>
-          <Divider sx={{ mt: 1, mb: 1 }} />
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Box key={i} sx={{ display: 'flex', mt: 1 }}>
-              <Link href={`/${favorite.user.name}`}>
+          <Divider/>
+          <Link href={`/${favorite.user.name}`}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', "&:hover": {
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+      } }}>
+            <Box key={i} sx={{ display: 'flex', p: 1 }}>
+              
                 <IconButton>
                   {favorite.user.image.url ? (
                     <Avatar
@@ -96,7 +99,7 @@ const LikesModal = (props: diaryIdProps) => {
                     </Avatar>
                   )}
                 </IconButton>
-              </Link>
+             
               <Box sx={{ width: '100%', mt: 1 }}>
                 <Box sx={{ display: { sm: 'flex' } }}>
                   <Link href={`/${favorite.user.name}`}>
@@ -158,6 +161,7 @@ const LikesModal = (props: diaryIdProps) => {
                     textTransform: 'none',
                     width: 100,
                     height: 40,
+                    mr: 2,
                     my: 2,
                   }}
                 >
@@ -178,6 +182,7 @@ const LikesModal = (props: diaryIdProps) => {
                     border: '1.5px solid #f5a500',
                     width: 100,
                     height: 40,
+                    mr: 2,
                     my: 2,
                   }}
                 >
@@ -185,6 +190,7 @@ const LikesModal = (props: diaryIdProps) => {
                 </Button>
               ))}
           </Box>
+          </Link>
         </>
       ))}
     </Box>

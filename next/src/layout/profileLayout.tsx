@@ -44,7 +44,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       </Container>
       <Container maxWidth="sm" sx={{ py: 6 }}>
         <Card sx={{ borderRadius: 2 }}>
-          <CardContent>{children}</CardContent>
+          {children}
         </Card>
       </Container>
     </Box>

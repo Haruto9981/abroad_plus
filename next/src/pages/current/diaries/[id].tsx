@@ -149,7 +149,7 @@ const CurrentDiaryDetail: NextPage = () => {
             </Box>
           </Box>
           <Card sx={{ borderRadius: 2 }}>
-            <CardContent>
+            
               <CurrentUserDiary
                 id={diary.id}
                 title={diary.title}
@@ -164,7 +164,7 @@ const CurrentDiaryDetail: NextPage = () => {
                 favorites={diary.favorites}
                 diaryComments={diary.diaryComments}
               />
-            </CardContent>
+           
           </Card>
 
           {diary.status === 'shared' && (

@@ -48,7 +48,7 @@ const RecommendedUser = () => {
 
   return (
     <Box>
-      <Typography sx={{ fontSize: 18, mb: 2 }}>Who to follow</Typography>
+      <Typography sx={{ fontSize: 18, m: 2 }}>Who to follow</Typography>
       <Divider sx={{ mt: 2 }} />
       {recommendedUsers.length === 0 && (
         <Typography sx={{ textAlign: 'center', color: 'gray', mt: 4, mb: 2 }}>
@@ -56,8 +56,11 @@ const RecommendedUser = () => {
         </Typography>
       )}
       {recommendedUsers.map((recommendedUser: RecommendedUsers, i: number) => (
-        <Box key={i} sx={{ display: 'flex', mt: 1 }}>
-          <Link href={`/${recommendedUser.name}`}>
+        <Link href={`/${recommendedUser.name}`}>
+        <Box key={i} sx={{ display: 'flex', p: 1,  "&:hover": {
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+      } }}>
+          
             <IconButton>
               {recommendedUser.image.url ? (
                 <Avatar
@@ -70,7 +73,7 @@ const RecommendedUser = () => {
                 </Avatar>
               )}
             </IconButton>
-          </Link>
+         
           <Box sx={{ width: '100%', mt: 1 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Box>
@@ -159,6 +162,7 @@ const RecommendedUser = () => {
               </Button>
             ))}
         </Box>
+         </Link>
       ))}
     </Box>
   )

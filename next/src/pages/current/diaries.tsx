@@ -366,18 +366,18 @@ const CurrentDiaries: NextPage = () => {
         <Grid container spacing={2}>
           <Container>
             <Card sx={{ borderRadius: 2 }}>
-              <CardContent>
+              
                 {!diariesInSpecificMonth && !diariesInSpecificDay && (
                   <>
                     <Box>
-                      <Typography sx={{ fontSize: 24, ml: 2 }}>
+                      <Typography sx={{ fontSize: 24, m: 2 }}>
                         Recent Diaries
                       </Typography>
                     </Box>
-                    <Divider sx={{ mt: 2, mb: 2 }} />
+                    <Divider/>
                     {firstThirty.length === 0 ? (
                       <Typography
-                        sx={{ textAlign: 'center', color: 'gray', mt: 2 }}
+                        sx={{ textAlign: 'center', color: 'gray', m: 2 }}
                       >
                         No diaries
                       </Typography>
@@ -402,7 +402,7 @@ const CurrentDiaries: NextPage = () => {
                                   diaryComments={diary.diaryComments}
                                 />
                               </Link>
-                              <Divider sx={{ mt: 2, mb: 2 }} />
+                              <Divider/>
                             </Grid>
                           ),
                         )}
@@ -413,7 +413,7 @@ const CurrentDiaries: NextPage = () => {
                 {diariesInSpecificMonth && (
                   <>
                     <Box
-                      sx={{ display: 'flex', justifyContent: 'space-between' }}
+                      sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}
                     >
                       <Typography sx={{ fontSize: 24 }}>Diaries</Typography>
                       <Typography
@@ -426,7 +426,7 @@ const CurrentDiaries: NextPage = () => {
                         {yearMonth}
                       </Typography>
                     </Box>
-                    <Divider sx={{ mt: 2, mb: 2 }} />
+                    <Divider/>
                     {diariesInSpecificMonth.length === 0 ? (
                       <Typography
                         sx={{ textAlign: 'center', color: 'gray', mt: 2 }}
@@ -454,7 +454,7 @@ const CurrentDiaries: NextPage = () => {
                                   diaryComments={diary.diaryComments}
                                 />
                               </Link>
-                              <Divider sx={{ mt: 2, mb: 2 }} />
+                              <Divider />
                             </Grid>
                           ),
                         )}
@@ -465,7 +465,7 @@ const CurrentDiaries: NextPage = () => {
                 {diariesInSpecificDay && (
                   <>
                     <Box
-                      sx={{ display: 'flex', justifyContent: 'space-between' }}
+                      sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}
                     >
                       <Typography sx={{ fontSize: 24 }}>Diaries</Typography>
                       <Typography
@@ -478,7 +478,7 @@ const CurrentDiaries: NextPage = () => {
                         {yearMonthDay}
                       </Typography>
                     </Box>
-                    <Divider sx={{ mt: 2, mb: 2 }} />
+                    <Divider/>
 
                     {diariesInSpecificDay.length === 0 ? (
                       <Typography
@@ -507,7 +507,7 @@ const CurrentDiaries: NextPage = () => {
                                   diaryComments={diary.diaryComments}
                                 />
                               </Link>
-                              <Divider sx={{ mt: 2, mb: 2 }} />
+                              <Divider />
                             </Grid>
                           ),
                         )}
@@ -515,7 +515,7 @@ const CurrentDiaries: NextPage = () => {
                     )}
                   </>
                 )}
-              </CardContent>
+             
             </Card>
           </Container>
         </Grid>
